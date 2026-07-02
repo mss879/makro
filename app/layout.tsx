@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { preconnect } from "react-dom";
 import { Rosario } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -60,10 +59,6 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // The hero poster and a few treated photos load straight from Unsplash;
-  // warming the connection shaves the TLS handshake off first paint.
-  preconnect("https://images.unsplash.com");
-
   return (
     <html
       lang="en"

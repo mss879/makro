@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { IMG, unsplash } from "@/lib/images";
 import Magnetic from "@/components/anim/Magnetic";
 
 // White logo tab — a trapezoid with straight diagonal shoulders that tapers
@@ -129,7 +128,6 @@ export default function Hero() {
           <video
             data-hero-img
             src="/hero.mp4"
-            poster={unsplash(IMG.penthouse, 1600)}
             autoPlay
             muted
             loop

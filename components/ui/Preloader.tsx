@@ -6,7 +6,9 @@ import { PeakMark } from "@/components/brand/PeakMark";
 
 /**
  * Intro curtain: the twin-peak mark draws itself while a counter runs 0→100,
- * then the panels split away to reveal the site. Shown once per session.
+ * then the panels split away to reveal the site. Runs on every full page
+ * load (client-side navigations don't remount it), doubling as cover while
+ * the hero video buffers.
  */
 export default function Preloader() {
   const root = useRef<HTMLDivElement>(null);
@@ -14,11 +16,6 @@ export default function Preloader() {
 
   useGSAP(
     () => {
-      if (typeof window !== "undefined" && sessionStorage.getItem("makro_intro")) {
-        setDone(true);
-        return;
-      }
-
       const el = root.current;
       if (!el) return;
       document.body.style.overflow = "hidden";
@@ -32,7 +29,6 @@ export default function Preloader() {
 
       const finish = () => {
         document.body.style.overflow = "";
-        sessionStorage.setItem("makro_intro", "1");
         setDone(true);
       };
 
