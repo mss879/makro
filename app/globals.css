@@ -1,26 +1,231 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   MAKRO DEVELOPERS — Brand Design System
+   Palette (brand guideline): 70% Pure Black / 20% Pure White / 10% Rose Gold
+   Type: TAN Garland display (self-hosted) · Rosario body
+   ============================================================ */
+
+@theme {
+  /* Core brand palette — the only approved colours */
+  --color-ink: #050203; /* Pure Black */
+  --color-bone: #ffffff; /* Pure White */
+  --color-rose: #e2a388; /* Rose Gold */
+
+  /* Disciplined tints/shades of the palette for depth & UI */
+  --color-ink-900: #050203;
+  --color-ink-800: #0b0806;
+  --color-ink-700: #12100e;
+  --color-ink-600: #1b1815;
+  --color-carbon: #0a0705;
+  --color-smoke: #17130f;
+  --color-rose-soft: #edc4b1;
+  --color-rose-deep: #c98567;
+  --color-mist: #a9a19c; /* warm muted text (shade between black/white) */
+  --color-fog: #6f6863;
+
+  /* Line colours */
+  --color-hair: rgba(255, 255, 255, 0.1);
+  --color-hair-strong: rgba(255, 255, 255, 0.18);
+
+  /* Typography — TAN Garland (brand primary), high-contrast serif fallbacks.
+     TAN Garland ships Regular only: never fake italics or weights on it. */
+  --font-display: var(--font-tan-garland), Didot, "Times New Roman", serif;
+  --font-body: var(--font-rosario), ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ---------- Base ---------- */
+@layer base {
+  * {
+    border-color: var(--color-hair);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    scroll-behavior: auto; /* Lenis drives smooth scroll */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-rose);
+    color: var(--color-ink);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-600);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-rose-deep);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------- Utilities ---------- */
+@layer utilities {
+  /* Rising-text reveal mask.
+     TAN Garland is a high-contrast display face with tall extenders
+     (cap-height 1.0em, ascent 1.02em, descent 0.37em, extreme glyphs to
+     1.58em). Our display line-heights (0.92–1.02) are deliberately tight,
+     so inside an `overflow: hidden` reveal mask the glyph tops/bottoms get
+     clipped. The vertical padding gives glyphs the room they need; the
+     equal negative margin cancels the layout impact so the leading stays
+     exactly as tight as designed — only the clipping goes away. */
+  .reveal-mask {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.4em;
+    margin-block: -0.4em;
+  }
+  .reveal-mask-inline {
+    display: inline-block;
+    overflow: hidden;
+    padding-block: 0.4em;
+    margin-block: -0.4em;
+    vertical-align: bottom;
+  }
+
+  /* Eyebrow / kicker label — Rosario, uppercase, letterspaced */
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    font-size: 0.7rem;
+  }
+
+  .display-fluid {
+    font-size: clamp(2.6rem, 8vw, 8.5rem);
+    line-height: 0.92;
+  }
+
+  .display-lg {
+    font-size: clamp(2.2rem, 5.5vw, 5rem);
+    line-height: 0.98;
+  }
+
+  .display-md {
+    font-size: clamp(1.9rem, 3.6vw, 3.2rem);
+    line-height: 1.02;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .metal-rose {
+    background: linear-gradient(
+      92deg,
+      #f4d4c2 0%,
+      #e2a388 28%,
+      #b87a5c 52%,
+      #f0c8b4 74%,
+      #d18e6f 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* background-clip: text only paints inside the element's box; TAN
+       Garland glyphs overflow the tight display line boxes, so extend the
+       paint area (and cancel the layout impact) or glyph tops/bottoms
+       render transparent. */
+    padding-block: 0.4em;
+    margin-block: -0.4em;
+  }
+
+  .rose-gradient-text {
+    background: linear-gradient(
+      100deg,
+      var(--color-rose-soft) 0%,
+      var(--color-rose) 42%,
+      var(--color-rose-deep) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    z-index: 60;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Brand image treatment — ties disparate photos to the palette */
+  .img-warm {
+    filter: saturate(0.82) contrast(1.04) brightness(0.94);
+  }
+  .img-mono {
+    filter: grayscale(1) contrast(1.08) brightness(0.96);
+  }
+
+  .edge-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .will-reveal {
+    opacity: 0;
+  }
+
+  .line-hair {
+    height: 1px;
+    background: var(--color-hair);
+  }
+
+  .container-edge {
+    padding-inline: clamp(1.25rem, 5vw, 6.5rem);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Hide default cursor on fine-pointer devices where custom cursor runs */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-none-desktop {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .will-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

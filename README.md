@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Makro Developers — Website
 
-## Getting Started
+A high-end, animated marketing website for **Makro Developers**, a Sri Lankan
+property developer and subsidiary of the Wheels Lanka Group.
 
-First, run the development server:
+Built strictly to the official **Makro Developers Brand Identity Guide**:
+
+- **Palette** — Pure Black `#050203`, Pure White `#FFFFFF`, Rose Gold `#E2A388`, applied at the guideline's 70 / 20 / 10 ratio.
+- **Type** — Cormorant Garamond (a refined, high-contrast serif in the spirit of the brand's *TAN Garland*) for display, **Rosario** for body — exactly as specified.
+- **Logomark** — the twin-peaks "M" is recreated as clean SVG and used throughout (nav, preloader, 3D hero, watermarks, bullets, favicon).
+- **Voice** — expertise, quiet confidence and assurance, per the guideline.
+- **Imagery** — warm golden-hour and dramatic monochrome architecture, tonally unified with a brand image treatment.
+
+## Stack
+
+- **Next.js 16** (App Router) · **React 19** · **TypeScript**
+- **Tailwind CSS v4** (brand design tokens in `app/globals.css`)
+- **GSAP + ScrollTrigger** (`@gsap/react`) — reveals, pinned horizontal gallery, counters, marquee, preloader
+- **Three.js + React Three Fiber + drei** — the metallic twin-peak WebGL hero
+- **Lenis** — smooth scrolling
+
+## Pages
+
+| Route | Description |
+| --- | --- |
+| `/` | Home — 9 sections incl. WebGL hero, pinned project gallery, differentiators, testimonials |
+| `/about` | Company story, values, Wheels Lanka Group, timeline |
+| `/projects` | Filterable portfolio grid |
+| `/projects/[slug]` | Individual development pages (6, statically generated) |
+| `/approach` | Process, services and standards |
+| `/sustainability` | Commitments and practices |
+| `/contact` | Enquiry form with validation and success state |
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run start   # serve the production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Notes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Photography is loaded from the Unsplash CDN (configured in `next.config.ts`).
+  Swap the IDs in `lib/images.ts` for Makro's own project photography when available.
+- Copy for every page lives in `lib/site.ts`, `lib/projects.ts` and within each page.
+- The intro preloader shows once per browser session.
