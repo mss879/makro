@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IMG } from "@/lib/images";
+import { BRAND } from "@/lib/images";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -19,8 +19,8 @@ export default function BrandStatement() {
         {/* Left — image + floating credential */}
         <div className="relative lg:col-span-5">
           <ParallaxImage
-            id={IMG.concreteLines}
-            alt="Architectural detail of a Makro development"
+            id={BRAND.monoCorner}
+            alt="A Makro development rising to a sharp architectural corner"
             treatment="mono"
             className="aspect-[4/5] w-full"
             sizes="(max-width: 1024px) 100vw, 40vw"

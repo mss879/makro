@@ -165,16 +165,16 @@ export default function Navbar() {
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.04]">
           <PeakMark className="h-[70vh] w-auto text-rose" strokeWidth={2} />
         </div>
-        <nav className="relative flex flex-col gap-2">
+        <nav className="relative flex flex-col">
           {NAV.map((item, i) => (
             <div key={item.href} className="reveal-mask">
               <Link
                 data-mlink
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="flex items-baseline gap-4 font-display text-5xl leading-tight text-bone transition-colors hover:text-rose sm:text-6xl"
+                className="flex items-baseline gap-5 font-body text-5xl font-light leading-[1.25] tracking-tight text-bone transition-colors hover:text-rose sm:text-6xl"
               >
-                <span className="font-body text-xs text-fog">0{i + 1}</span>
+                <span className="font-body text-xs tracking-normal text-fog">0{i + 1}</span>
                 {item.label}
               </Link>
             </div>

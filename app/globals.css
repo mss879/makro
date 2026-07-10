@@ -54,7 +54,10 @@
     background: var(--color-ink);
     color: var(--color-bone);
     font-family: var(--font-body);
-    font-weight: 300;
+    /* Rosario is self-hosted as static 400/700 faces — 400 is the regular
+       body weight; don't request lighter weights that would silently
+       resolve to the 400 face anyway. */
+    font-weight: 400;
     letter-spacing: 0.01em;
     overflow-x: hidden;
   }
@@ -64,10 +67,13 @@
     color: var(--color-ink);
   }
 
+  /* TAN Garland has tall ascenders and deep swash descenders (ascent
+     1.02em, descent 0.37em) — leading below ~1.1 makes multi-line
+     headings physically collide. Keep every display line-height >= 1.1. */
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     font-weight: 400;
-    line-height: 0.98;
+    line-height: 1.12;
     letter-spacing: -0.01em;
   }
 
@@ -121,17 +127,17 @@
 
   .display-fluid {
     font-size: clamp(2.6rem, 8vw, 8.5rem);
-    line-height: 0.92;
+    line-height: 1.1;
   }
 
   .display-lg {
     font-size: clamp(2.2rem, 5.5vw, 5rem);
-    line-height: 0.98;
+    line-height: 1.12;
   }
 
   .display-md {
     font-size: clamp(1.9rem, 3.6vw, 3.2rem);
-    line-height: 1.02;
+    line-height: 1.14;
   }
 
   .text-balance {
@@ -213,13 +219,6 @@
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
-  }
-}
-
-/* Hide default cursor on fine-pointer devices where custom cursor runs */
-@media (hover: hover) and (pointer: fine) {
-  .cursor-none-desktop {
-    cursor: none;
   }
 }
 

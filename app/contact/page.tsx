@@ -1,16 +1,29 @@
-import type { Metadata } from "next";
+import Link from "next/link";
 import { SITE, SOCIALS } from "@/lib/site";
+import { IMG } from "@/lib/images";
+import { pageMetadata, breadcrumbSchema, webPageSchema, localBusinessSchema } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 import ContactForm from "@/components/contact/ContactForm";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import Drift from "@/components/anim/Drift";
 import { PeakMark } from "@/components/brand/PeakMark";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Speak with Makro Developers about a residential or commercial development, an investment opportunity, or a general enquiry.",
-};
+const DESCRIPTION =
+  "Contact Makro Developers in Colombo, Sri Lanka — enquire about luxury apartments, villas, Grade-A commercial space or investment opportunities. Call, email or visit our Colombo 07 office.";
+
+export const metadata = pageMetadata({
+  title: "Contact a Property Developer in Colombo",
+  description: DESCRIPTION,
+  path: "/contact",
+  imageId: IMG.cityNight,
+  keywords: [
+    "contact Makro Developers",
+    "property developer Colombo contact",
+    "property enquiry Sri Lanka",
+    "real estate developer phone number Colombo",
+  ],
+});
 
 const DETAILS = [
   { label: "Email", value: SITE.email, href: `mailto:${SITE.email}` },
@@ -22,6 +35,18 @@ const DETAILS = [
 export default function ContactPage() {
   return (
     <section className="relative overflow-hidden bg-ink pb-24 pt-40 md:pb-32">
+      <JsonLd
+        data={[
+          webPageSchema({
+            type: "ContactPage",
+            name: "Contact Makro Developers",
+            description: DESCRIPTION,
+            path: "/contact",
+          }),
+          localBusinessSchema(),
+          breadcrumbSchema([{ name: "Contact", path: "/contact" }]),
+        ]}
+      />
       <Drift className="pointer-events-none absolute -right-20 top-24 opacity-[0.05]">
         <PeakMark className="h-[40rem] w-auto text-rose" strokeWidth={1.5} />
       </Drift>
@@ -34,7 +59,7 @@ export default function ContactPage() {
         <TextReveal
           as="h1"
           text="Let's build something lasting."
-          className="mt-6 max-w-4xl font-display display-fluid text-bone"
+          className="mt-6 max-w-3xl font-display display-lg text-bone"
         />
         <Reveal delay={0.1}>
           <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
@@ -82,6 +107,24 @@ export default function ContactPage() {
             <p className="mt-8 flex items-center gap-3 font-body text-xs text-fog">
               <PeakMark className="h-4 w-auto text-rose" strokeWidth={11} />
               A subsidiary of the {SITE.parent}
+            </p>
+
+            <p className="mt-8 border-t border-hair pt-6 font-body text-sm text-fog">
+              Prefer to browse first? Explore{" "}
+              <Link
+                href="/projects"
+                className="text-mist underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+              >
+                our developments
+              </Link>{" "}
+              or read the{" "}
+              <Link
+                href="/faq"
+                className="text-mist underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+              >
+                frequently asked questions
+              </Link>
+              .
             </p>
           </div>
 

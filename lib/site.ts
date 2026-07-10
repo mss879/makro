@@ -17,7 +17,20 @@ export const NAV = [
   { label: "Projects", href: "/projects" },
   { label: "Approach", href: "/approach" },
   { label: "Sustainability", href: "/sustainability" },
+  { label: "Insights", href: "/insights" },
   { label: "Contact", href: "/contact" },
+];
+
+/** Secondary pages surfaced in the footer rather than the main nav. */
+export const NAV_SECONDARY = [
+  { label: "FAQ", href: "/faq" },
+  { label: "Careers", href: "/careers" },
+  { label: "Insights", href: "/insights" },
+];
+
+export const NAV_LEGAL = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms of Use", href: "/terms-of-use" },
 ];
 
 export const SOCIALS = [

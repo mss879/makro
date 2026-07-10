@@ -1,16 +1,29 @@
-import type { Metadata } from "next";
-import { IMG } from "@/lib/images";
+import Link from "next/link";
+import { BRAND, IMG } from "@/lib/images";
+import { pageMetadata, breadcrumbSchema, webPageSchema } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 import PageHero from "@/components/ui/PageHero";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import { PeakMark } from "@/components/brand/PeakMark";
 
-export const metadata: Metadata = {
-  title: "Our Approach",
-  description:
-    "How Makro Developers creates lasting value — thoughtful planning, quality execution and strategic investment, from feasibility to handover and beyond.",
-};
+const DESCRIPTION =
+  "How Makro Developers creates lasting value in Sri Lankan real estate — a four-stage development process of thoughtful planning, climate-aware design, disciplined construction and after-handover care.";
+
+export const metadata = pageMetadata({
+  title: "Our Approach to Property Development",
+  description: DESCRIPTION,
+  path: "/approach",
+  imageId: BRAND.textureAscent,
+  keywords: [
+    "property development process",
+    "how property developers work",
+    "construction quality Sri Lanka",
+    "residential development process",
+    "commercial development Sri Lanka",
+  ],
+});
 
 const STEPS = [
   {
@@ -65,12 +78,22 @@ const SERVICES = [
 export default function ApproachPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageSchema({
+            name: "Our Approach — Makro Developers",
+            description: DESCRIPTION,
+            path: "/approach",
+          }),
+          breadcrumbSchema([{ name: "Approach", path: "/approach" }]),
+        ]}
+      />
       <PageHero
         eyebrow="Our Approach"
         title="How lasting value gets built."
         intro="A disciplined process that turns land and capital into developments worth inheriting."
-        imageId={IMG.angularGlass}
-        treatment="mono"
+        imageId={BRAND.textureAscent}
+        treatment="warm"
       />
 
       {/* Process — alternating rows */}
@@ -166,6 +189,22 @@ export default function ApproachPage() {
           <p className="mt-8 font-body text-sm uppercase tracking-[0.3em] text-rose">
             The future built well
           </p>
+
+          <Reveal className="mt-14 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/projects"
+              className="group inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+            >
+              See the results
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </Link>
+            <Link
+              href="/sustainability"
+              className="inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+            >
+              Building responsibly
+            </Link>
+          </Reveal>
         </div>
       </section>
     </>

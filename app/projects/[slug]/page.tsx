@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject, PROJECTS, PROJECT_SLUGS } from "@/lib/projects";
+import { getProject, PROJECTS, PROJECT_SLUGS, type Project } from "@/lib/projects";
+import { pageMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 import ProjectHero from "@/components/projects/ProjectHero";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import TextReveal from "@/components/anim/TextReveal";
@@ -12,6 +14,34 @@ export function generateStaticParams() {
   return PROJECT_SLUGS.map((slug) => ({ slug }));
 }
 
+/** Keyword-bearing title suffix by development type. */
+function seoTitle(project: Project): string {
+  const place = project.location.split(",")[0].trim();
+  const kind =
+    project.type === "Residential"
+      ? "Luxury Residences"
+      : project.type === "Commercial"
+        ? "Grade-A Commercial Space"
+        : "Mixed-Use Development";
+  return `${project.name} — ${kind} in ${place}`;
+}
+
+/** Each project funnels readers to the most relevant guide. */
+const RELATED_INSIGHT: Record<Project["type"], { href: string; label: string }> = {
+  Residential: {
+    href: "/insights/buying-an-apartment-in-colombo-guide",
+    label: "Guide: buying an apartment in Colombo",
+  },
+  Commercial: {
+    href: "/insights/grade-a-office-space-colombo",
+    label: "Guide: what Grade-A office space means",
+  },
+  "Mixed-Use": {
+    href: "/insights/sri-lanka-real-estate-investment-guide",
+    label: "Guide: investing in Sri Lankan real estate",
+  },
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -20,10 +50,18 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return { title: "Project" };
-  return {
-    title: project.name,
-    description: project.summary,
-  };
+  return pageMetadata({
+    title: seoTitle(project),
+    description: `${project.summary} ${project.status} · ${project.location}.`,
+    path: `/projects/${project.slug}`,
+    imageId: project.cover,
+    keywords: [
+      project.name,
+      `${project.type.toLowerCase()} development ${project.location.split(",")[0].trim()}`,
+      "Makro Developers project",
+      "property development Sri Lanka",
+    ],
+  });
 }
 
 export default async function ProjectDetailPage({
@@ -37,9 +75,19 @@ export default async function ProjectDetailPage({
 
   const idx = PROJECTS.findIndex((p) => p.slug === slug);
   const next = PROJECTS[(idx + 1) % PROJECTS.length];
+  const relatedInsight = RELATED_INSIGHT[project.type];
 
   return (
     <>
+      <JsonLd
+        data={[
+          projectSchema(project),
+          breadcrumbSchema([
+            { name: "Projects", path: "/projects" },
+            { name: project.name, path: `/projects/${project.slug}` },
+          ]),
+        ]}
+      />
       <ProjectHero project={project} />
 
       {/* Overview + specs */}
@@ -88,6 +136,20 @@ export default async function ProjectDetailPage({
                 Enquire about this project
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
+              <div className="mt-6 space-y-2 border-t border-hair pt-5">
+                <Link
+                  href="/projects"
+                  className="block font-body text-sm text-mist transition-colors hover:text-rose"
+                >
+                  ← All developments
+                </Link>
+                <Link
+                  href={relatedInsight.href}
+                  className="block font-body text-sm text-mist transition-colors hover:text-rose"
+                >
+                  {relatedInsight.label} →
+                </Link>
+              </div>
             </Reveal>
           </div>
         </div>

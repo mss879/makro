@@ -1,16 +1,29 @@
-import type { Metadata } from "next";
-import { IMG } from "@/lib/images";
+import Link from "next/link";
+import { BRAND, IMG } from "@/lib/images";
+import { pageMetadata, breadcrumbSchema, webPageSchema } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 import PageHero from "@/components/ui/PageHero";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import { PeakMark } from "@/components/brand/PeakMark";
 
-export const metadata: Metadata = {
-  title: "Sustainability",
-  description:
-    "Makro Developers is committed to sustainable growth and lasting value — building responsibly for people, place and the long term.",
-};
+const DESCRIPTION =
+  "Sustainable property development in Sri Lanka — Makro Developers builds climate-conscious residential and commercial projects with passive cooling, solar-ready services and durable materials for lasting value.";
+
+export const metadata = pageMetadata({
+  title: "Sustainable Property Development",
+  description: DESCRIPTION,
+  path: "/sustainability",
+  imageId: IMG.woodFacade,
+  keywords: [
+    "sustainable property development Sri Lanka",
+    "green building Sri Lanka",
+    "climate-conscious design",
+    "eco-friendly construction Colombo",
+    "sustainable real estate",
+  ],
+});
 
 const PILLARS = [
   {
@@ -43,6 +56,16 @@ const PRACTICES = [
 export default function SustainabilityPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageSchema({
+            name: "Sustainability — Makro Developers",
+            description: DESCRIPTION,
+            path: "/sustainability",
+          }),
+          breadcrumbSchema([{ name: "Sustainability", path: "/sustainability" }]),
+        ]}
+      />
       <PageHero
         eyebrow="Sustainability"
         title="Built responsibly. Built to last."
@@ -120,8 +143,8 @@ export default function SustainabilityPage() {
       <section className="relative bg-ink py-24 md:py-32">
         <div className="container-edge grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
           <ParallaxImage
-            id={IMG.terracottaVilla}
-            alt="A sustainable Makro development"
+            id={BRAND.lifestyleSuite}
+            alt="A warm, naturally lit interior — the everyday comfort responsible design delivers"
             treatment="warm"
             className="aspect-[4/5] w-full"
             sizes="50vw"
@@ -154,6 +177,22 @@ export default function SustainabilityPage() {
                 </Reveal>
               ))}
             </div>
+
+            <Reveal delay={0.15} className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/approach"
+                className="group inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+              >
+                Part of how we build
+                <span className="text-rose transition-transform duration-500 group-hover:translate-x-1">→</span>
+              </Link>
+              <Link
+                href="/projects"
+                className="font-body text-sm text-mist underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+              >
+                See it in our developments
+              </Link>
+            </Reveal>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { NAV, SITE, SOCIALS } from "@/lib/site";
+import { NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/site";
 import { PeakMark } from "@/components/brand/PeakMark";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -38,8 +38,8 @@ export default function Footer() {
         </div>
 
         {/* Columns */}
-        <Reveal className="grid grid-cols-2 gap-10 py-16 md:grid-cols-4">
-          <div className="col-span-2 md:col-span-1">
+        <Reveal className="grid grid-cols-2 gap-10 py-16 md:grid-cols-3 lg:grid-cols-5">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <Image
               src="/logo-black.png"
               alt="Makro Developers"
@@ -55,7 +55,23 @@ export default function Footer() {
           <div>
             <p className="eyebrow text-fog">Explore</p>
             <ul className="mt-5 space-y-3">
-              {NAV.map((item) => (
+              {NAV.filter((item) => item.href !== "/insights").map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="font-body text-sm text-mist transition-colors hover:text-rose"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="eyebrow text-fog">Discover</p>
+            <ul className="mt-5 space-y-3">
+              {NAV_SECONDARY.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -109,9 +125,18 @@ export default function Footer() {
           <p>
             © {new Date().getFullYear()} {SITE.legal}. A subsidiary of the {SITE.parent}.
           </p>
-          <p className="flex items-center gap-2">
-            The future built well.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {NAV_LEGAL.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="transition-colors hover:text-rose"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <p>The future built well.</p>
+          </div>
         </div>
       </div>
     </footer>

@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { IMG } from "@/lib/images";
+import { BRAND, IMG } from "@/lib/images";
+import { pageMetadata, breadcrumbSchema, webPageSchema } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 import PageHero from "@/components/ui/PageHero";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import TextReveal from "@/components/anim/TextReveal";
@@ -8,11 +9,22 @@ import Reveal from "@/components/anim/Reveal";
 import ValueCard from "@/components/ui/ValueCard";
 import { PeakMark } from "@/components/brand/PeakMark";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Makro Developers is a Sri Lankan property developer and a fully owned subsidiary of the Wheels Lanka Group — combining corporate strength with a focused approach to residential and commercial development.",
-};
+const DESCRIPTION =
+  "Makro Developers is a Sri Lankan property developer and a fully owned subsidiary of the Wheels Lanka Group — combining corporate strength with a focused approach to residential and commercial development in Colombo and beyond.";
+
+export const metadata = pageMetadata({
+  title: "About Us — A Sri Lankan Property Developer",
+  description: DESCRIPTION,
+  path: "/about",
+  imageId: IMG.towersUp,
+  keywords: [
+    "about Makro Developers",
+    "Sri Lankan property developer",
+    "Wheels Lanka Group subsidiary",
+    "real estate development company Colombo",
+    "trusted property developer Sri Lanka",
+  ],
+});
 
 const VALUES = [
   {
@@ -59,11 +71,22 @@ const TIMELINE = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPageSchema({
+            type: "AboutPage",
+            name: "About Makro Developers",
+            description: DESCRIPTION,
+            path: "/about",
+          }),
+          breadcrumbSchema([{ name: "About", path: "/about" }]),
+        ]}
+      />
       <PageHero
         eyebrow="About Makro"
         title="Shaping how Sri Lanka lives."
         intro="A Sri Lankan property developer pairing corporate strength with an uncompromising approach to building well."
-        imageId={IMG.towersUp}
+        imageId={BRAND.monoGrid}
         treatment="mono"
       />
 
@@ -93,9 +116,14 @@ export default function AboutPage() {
             <Reveal delay={0.1}>
               <p className="font-body text-lg leading-relaxed text-mist">
                 Since our first development over six years ago, we&rsquo;ve held
-                to one commitment — long-term value through thoughtful planning,
-                quality execution and strategic investment.{" "}
-                <span className="text-bone">The future, built well.</span>
+                to one commitment — long-term value through{" "}
+                <Link
+                  href="/approach"
+                  className="text-bone underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+                >
+                  thoughtful planning and quality execution
+                </Link>
+                . <span className="text-bone">The future, built well.</span>
               </p>
             </Reveal>
           </div>
@@ -103,15 +131,15 @@ export default function AboutPage() {
 
         <div className="container-edge mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
           <ParallaxImage
-            id={IMG.concreteLines}
-            alt="Structural detail"
+            id={BRAND.monoCorner}
+            alt="Structural detail of a development rising to a sharp corner"
             treatment="mono"
             className="aspect-[3/4] md:col-span-1"
             sizes="33vw"
           />
           <ParallaxImage
-            id={IMG.duskHouse}
-            alt="A Makro residential development at dusk"
+            id={BRAND.lifestylePool}
+            alt="Resident beside the pool of a warm, architecturally crafted Makro home"
             treatment="warm"
             className="aspect-[3/4] md:col-span-2"
             sizes="66vw"
@@ -219,13 +247,34 @@ export default function AboutPage() {
             <p className="max-w-xl font-display text-2xl text-bone">
               Curious where we are building next?
             </p>
-            <Link
-              href="/projects"
-              className="group inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
-            >
-              Explore our projects
-              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-            </Link>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/approach"
+                className="group inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+              >
+                How we build
+              </Link>
+              <Link
+                href="/projects"
+                className="group inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+              >
+                Explore our projects
+                <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+          </Reveal>
+
+          <Reveal className="mt-10">
+            <p className="font-body text-sm text-fog">
+              Deciding who to build with?{" "}
+              <Link
+                href="/insights/how-to-choose-a-property-developer-in-sri-lanka"
+                className="text-mist underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+              >
+                Read our guide to choosing a property developer in Sri Lanka
+              </Link>
+              .
+            </p>
           </Reveal>
         </div>
       </section>

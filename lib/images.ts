@@ -6,8 +6,36 @@
  */
 
 export function unsplash(id: string, w = 1600, q = 80): string {
+  if (id.startsWith("/")) return id; // local brand asset — serve as-is
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=${q}`;
 }
+
+/** 1200×630 crop for Open Graph / Twitter cards and structured-data images. */
+export function ogImage(id: string): string {
+  if (id.startsWith("/")) return id; // local brand asset (resolved via metadataBase)
+  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&h=630&q=80`;
+}
+
+/**
+ * Client-supplied brand imagery (from `Branding-images/`, optimised into
+ * public/brand). Each asset has an assigned editorial role — keep these
+ * pairings when reusing:
+ *  - mono*      dramatic B&W architecture (guideline "mono" treatment)
+ *  - texture*   abstract rose-gold/copper brand visuals for concept pages
+ *  - lifestyle* warm golden-hour interiors/exteriors (guideline "warm")
+ */
+export const BRAND = {
+  monoCorner: "/brand/mono-corner.jpg", // upward building corner — ascent motif
+  monoGrid: "/brand/mono-grid.jpg", // gridded façade — discipline, precision
+  towersRender: "/brand/towers-render.jpg", // residential towers render
+  texturePeaks: "/brand/texture-peaks.jpg", // peak-grid relief texture
+  textureAscent: "/brand/texture-ascent.jpg", // ascending copper folds
+  textureFlow: "/brand/texture-flow.jpg", // flowing copper lines
+  textureWaves: "/brand/texture-waves.jpg", // rising layered curves
+  lifestyleLoft: "/brand/lifestyle-loft.jpg", // warm loft living room
+  lifestylePool: "/brand/lifestyle-pool.jpg", // poolside architecture, terracotta
+  lifestyleSuite: "/brand/lifestyle-suite.jpg", // golden-hour suite, skyline view
+} as const;
 
 export const IMG = {
   // Architectural exteriors
