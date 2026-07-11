@@ -22,10 +22,10 @@ export default function BrandStatement() {
             id={BRAND.monoCorner}
             alt="A Makro development rising to a sharp architectural corner"
             treatment="mono"
-            className="aspect-[4/5] w-full"
+            className="aspect-[3/4] w-full md:aspect-[4/5]"
             sizes="(max-width: 1024px) 100vw, 40vw"
           />
-          <Reveal className="absolute -bottom-8 -right-4 w-56 border border-hair bg-carbon/90 p-6 backdrop-blur-md md:right-8">
+          <Reveal className="absolute -bottom-8 right-0 w-52 border border-hair bg-carbon/90 p-5 backdrop-blur-md md:right-8 md:w-56 md:p-6">
             <PeakMark className="h-6 w-auto text-rose" strokeWidth={9} />
             <p className="mt-4 font-display text-4xl text-bone">6+</p>
             <p className="mt-1 font-body text-sm text-mist">

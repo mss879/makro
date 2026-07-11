@@ -15,6 +15,12 @@ type Props = {
   priority?: boolean;
   sizes?: string;
   width?: number;
+  /** Constant zoom of the inner layer — gives the parallax room to travel. */
+  zoom?: number;
+  /** Seconds for the clip-path reveal. */
+  revealDuration?: number;
+  /** Starting clip inset, e.g. "14% 8% 14% 8%" — how far the frame grows. */
+  revealInset?: string;
 };
 
 /** Scroll-parallax image with a clip-path reveal and brand tonal treatment. */
@@ -28,6 +34,9 @@ export default function ParallaxImage({
   priority = false,
   sizes = "(max-width: 768px) 100vw, 50vw",
   width = 1600,
+  zoom = 1.18,
+  revealDuration = 1.4,
+  revealInset = "14% 8% 14% 8%",
 }: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
@@ -40,15 +49,18 @@ export default function ParallaxImage({
 
       gsap.fromTo(
         w,
-        { clipPath: "inset(14% 8% 14% 8%)" },
+        { clipPath: `inset(${revealInset})` },
         {
           clipPath: "inset(0% 0% 0% 0%)",
-          duration: 1.4,
+          duration: revealDuration,
           ease: "power3.out",
           scrollTrigger: { trigger: w, start: "top 85%" },
         }
       );
 
+      // Base zoom lives here (not a CSS class) so it can vary per instance;
+      // GSAP composes it with the parallax translate into one transform.
+      gsap.set(el, { scale: zoom });
       gsap.fromTo(
         el,
         { yPercent: -parallax },
@@ -67,7 +79,7 @@ export default function ParallaxImage({
 
   return (
     <div ref={wrap} className={`relative overflow-hidden bg-ink-700 ${className ?? ""}`}>
-      <div ref={inner} className="absolute inset-0 scale-[1.18]">
+      <div ref={inner} className="absolute inset-0">
         <Image
           src={unsplash(id, width)}
           alt={alt}

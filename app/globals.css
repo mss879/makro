@@ -125,8 +125,10 @@
     font-size: 0.7rem;
   }
 
+  /* Hero display heading — floors on mobile, scales up through the mid
+     range (tablet/large-phone), and caps so it stays composed on desktop. */
   .display-fluid {
-    font-size: clamp(2.6rem, 8vw, 8.5rem);
+    font-size: clamp(2.6rem, 11vw, 6.4rem);
     line-height: 1.1;
   }
 
@@ -138,6 +140,20 @@
   .display-md {
     font-size: clamp(1.9rem, 3.6vw, 3.2rem);
     line-height: 1.14;
+  }
+
+  /* TAN Garland's tall extenders make the tight display leading read as
+     overlapping rows at phone sizes — open it up below sm only. */
+  @media (max-width: 639px) {
+    .display-fluid {
+      line-height: 1.16;
+    }
+    .display-lg {
+      line-height: 1.2;
+    }
+    .display-md {
+      line-height: 1.26;
+    }
   }
 
   .text-balance {

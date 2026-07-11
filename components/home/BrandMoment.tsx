@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { gsap, useGSAP } from "@/lib/gsap";
 import TextReveal from "@/components/anim/TextReveal";
+import { PeakMark } from "@/components/brand/PeakMark";
 
 const HeroScene = dynamic(() => import("@/components/three/HeroScene"), {
   ssr: false,
@@ -18,6 +19,10 @@ export default function BrandMoment() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Phones skip the WebGL sculpture entirely — on a short mobile canvas it
+    // reads as a cropped slab, and Three.js is dead weight there. They get a
+    // clean static peak mark instead (rendered below).
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
@@ -47,9 +52,14 @@ export default function BrandMoment() {
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[92vh] items-center justify-center overflow-hidden bg-ink"
+      className="relative flex min-h-[58svh] items-center justify-center overflow-hidden bg-ink py-20 md:min-h-[92vh] md:py-0"
     >
-      <div className="absolute inset-0 z-0">{showScene && <HeroScene />}</div>
+      {/* Desktop: WebGL sculpture */}
+      <div className="absolute inset-0 z-0 hidden md:block">{showScene && <HeroScene />}</div>
+      {/* Mobile: faint static peak mark — clean, light, on-brand */}
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center md:hidden">
+        <PeakMark className="h-[38svh] w-auto text-rose/[0.13]" strokeWidth={2} />
+      </div>
       <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,2,3,0.9)_100%)]" />
 
       <div className="container-edge relative z-20 text-center">

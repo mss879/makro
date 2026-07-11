@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/site";
+import { CREATOR, NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/site";
 import { PeakMark } from "@/components/brand/PeakMark";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -137,6 +137,29 @@ export default function Footer() {
             ))}
             <p>The future built well.</p>
           </div>
+        </div>
+
+        {/* Agency credit — designed & built by ARC AI. A dofollow, referrer-
+            preserving link so the agency earns the attributed backlink. */}
+        <div className="mt-8 flex justify-center">
+          <a
+            href={CREATOR.url}
+            target="_blank"
+            rel="noopener"
+            title={`${CREATOR.name} — ${CREATOR.tagline}`}
+            className="group inline-flex items-center gap-3"
+          >
+            <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-fog transition-colors group-hover:text-mist">
+              Designed &amp; built by
+            </span>
+            <Image
+              src="/arclogo.webp"
+              alt={`${CREATOR.name} — ${CREATOR.tagline}`}
+              width={350}
+              height={180}
+              className="h-6 w-auto opacity-90 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:opacity-100"
+            />
+          </a>
         </div>
       </div>
     </footer>

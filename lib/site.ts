@@ -38,3 +38,14 @@ export const SOCIALS = [
   { label: "LinkedIn", href: "#" },
   { label: "Facebook", href: "#" },
 ];
+
+/**
+ * Agency credit — ARC AI designed & built this website. Surfaced as a
+ * footer credit (logo + dofollow link) and as the WebSite schema's
+ * `creator`, giving the agency an attributed backlink from every page.
+ */
+export const CREATOR = {
+  name: "ARC AI",
+  url: "https://www.arcai.agency",
+  tagline: "AI web design & development agency",
+};

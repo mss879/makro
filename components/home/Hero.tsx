@@ -95,12 +95,13 @@ export default function Hero() {
   );
 
   return (
-    <section ref={root} className="relative px-[10px] pt-[10px]">
-      {/* White logo island — straight diagonal shoulders, set into the frame's top edge */}
+    <section ref={root} className="relative sm:px-[10px] sm:pt-[10px]">
+      {/* White logo island — straight diagonal shoulders, set into the frame's
+          top edge. Phones skip it: the solid white navbar carries the brand. */}
       <Link
         href="/"
         aria-label="Makro Developers — home"
-        className="group absolute left-1/2 top-[10px] z-20 h-[62px] w-[270px] -translate-x-1/2 md:h-[72px] md:w-[300px] 2xl:h-[78px] 2xl:w-[340px]"
+        className="group absolute left-1/2 top-[10px] z-20 hidden -translate-x-1/2 sm:block sm:h-[62px] sm:w-[270px] md:h-[72px] md:w-[300px] 2xl:h-[78px] 2xl:w-[340px]"
       >
         <svg
           viewBox={`0 0 ${TAB.w} ${TAB.h}`}
@@ -122,7 +123,8 @@ export default function Hero() {
         </span>
       </Link>
 
-      <div className="relative h-[calc(100svh-10px)] min-h-[640px] overflow-hidden rounded-[1.6rem]">
+      {/* Full-bleed on phones; framed with rounded corners from sm up */}
+      <div className="relative h-[100svh] min-h-[640px] overflow-hidden sm:h-[calc(100svh-10px)] sm:rounded-[1.6rem]">
         {/* Hero video */}
         <div className="absolute inset-0">
           <video
@@ -150,16 +152,16 @@ export default function Hero() {
                 </span>
               </span>
               <span className="reveal-mask">
-                <span data-h-word className="inline-block metal-rose">
+                <span data-h-word className="inline-block">
                   built well.
                 </span>
               </span>
             </h1>
 
             <div className="mt-7 flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-end">
-              <p data-h-fade className="max-w-md font-body text-lg leading-relaxed text-bone/85">
+              <p data-h-fade className="max-w-sm text-balance font-body text-base leading-relaxed text-bone/85 sm:text-lg md:max-w-md lg:max-w-xl">
                 Makro Developers delivers premium residential and commercial
-                developments across Sri Lanka — addresses you&rsquo;re proud to
+                developments across Sri Lanka. Addresses you&rsquo;re proud to
                 call your own.
               </p>
 

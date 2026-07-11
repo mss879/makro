@@ -129,20 +129,17 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="container-edge mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
-          <ParallaxImage
-            id={BRAND.monoCorner}
-            alt="Structural detail of a development rising to a sharp corner"
-            treatment="mono"
-            className="aspect-[3/4] md:col-span-1"
-            sizes="33vw"
-          />
+        <div className="container-edge mt-16">
           <ParallaxImage
             id={BRAND.lifestylePool}
             alt="Resident beside the pool of a warm, architecturally crafted Makro home"
             treatment="warm"
-            className="aspect-[3/4] md:col-span-2"
-            sizes="66vw"
+            className="mx-auto aspect-[4/5] w-full max-w-3xl sm:aspect-[3/2]"
+            sizes="(max-width: 640px) 100vw, 768px"
+            zoom={1.06}
+            parallax={3}
+            revealDuration={2.2}
+            revealInset="6% 4% 6% 4%"
           />
         </div>
       </section>

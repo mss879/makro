@@ -20,9 +20,9 @@ export default function Stats() {
               i !== 0 ? "lg:border-l lg:border-hair" : ""
             } ${i % 2 !== 0 ? "border-l border-hair lg:border-l" : ""} ${
               i >= 2 ? "border-t border-hair lg:border-t-0" : ""
-            } px-6 md:px-10`}
+            } px-5 md:px-10`}
           >
-            <div className="flex items-baseline gap-1 font-display text-6xl text-bone md:text-7xl">
+            <div className="flex items-baseline gap-1 font-display text-5xl text-bone md:text-7xl">
               <AnimatedNumber value={s.value} />
               <span className="text-rose">{s.suffix}</span>
             </div>

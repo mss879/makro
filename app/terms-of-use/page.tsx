@@ -76,6 +76,7 @@ export default function TermsOfUsePage() {
             <p className="mt-6 font-body text-base leading-relaxed text-mist">
               {DESCRIPTION}
             </p>
+            <p className="mt-4 font-body text-sm text-fog">Last updated 10 July 2026</p>
           </Reveal>
 
           <div className="mt-16 space-y-12">

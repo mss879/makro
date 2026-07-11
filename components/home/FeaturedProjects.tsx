@@ -14,27 +14,24 @@ export default function FeaturedProjects() {
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
+      // All breakpoints: pin the section and translate the track
+      // horizontally as the page scrolls — phones included.
+      const t = track.current;
+      const sec = section.current;
+      if (!t || !sec) return;
 
-      // Desktop: pin the section and translate the track horizontally.
-      mm.add("(min-width: 1024px)", () => {
-        const t = track.current;
-        const sec = section.current;
-        if (!t || !sec) return;
-
-        gsap.to(t, {
-          x: () => -(t.scrollWidth - window.innerWidth + 40),
-          ease: "none",
-          scrollTrigger: {
-            trigger: sec,
-            start: "top top",
-            end: () => `+=${t.scrollWidth - window.innerWidth + 40}`,
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            anticipatePin: 1,
-          },
-        });
+      gsap.to(t, {
+        x: () => -(t.scrollWidth - window.innerWidth + 40),
+        ease: "none",
+        scrollTrigger: {
+          trigger: sec,
+          start: "top top",
+          end: () => `+=${t.scrollWidth - window.innerWidth + 40}`,
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
       });
 
       // Recompute once images have loaded (layout height changes positions).
@@ -47,7 +44,6 @@ export default function FeaturedProjects() {
         clearTimeout(to1);
         clearTimeout(to2);
         window.removeEventListener("load", refresh);
-        mm.revert();
       };
     },
     { scope: section }
@@ -56,9 +52,9 @@ export default function FeaturedProjects() {
   return (
     <section
       ref={section}
-      className="relative overflow-hidden bg-ink py-20 lg:h-screen lg:py-0"
+      className="relative h-[100svh] overflow-hidden bg-ink lg:h-screen"
     >
-      <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto px-6 lg:h-full lg:items-center lg:overflow-visible lg:px-0 lg:snap-none">
+      <div className="flex h-full items-center px-6 lg:px-0">
         <div ref={track} className="flex w-max gap-6 md:gap-8">
           {/* Intro panel */}
           <div className="flex w-[80vw] shrink-0 snap-start flex-col justify-center sm:w-[58vw] lg:w-[34vw] lg:pl-[6.5vw] lg:pr-6">
@@ -85,7 +81,7 @@ export default function FeaturedProjects() {
                 →
               </span>
             </Link>
-            <p className="mt-10 hidden items-center gap-3 font-body text-xs text-fog lg:flex">
+            <p className="mt-10 flex items-center gap-3 font-body text-xs text-fog">
               <span className="inline-block h-px w-6 bg-fog" /> Scroll to explore →
             </p>
           </div>

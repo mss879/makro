@@ -107,7 +107,7 @@ export default function Preloader() {
         ))}
       </div>
       <div className="pl-mark absolute inset-0 flex flex-col items-center justify-center">
-        <PeakMark className="h-24 w-auto text-rose md:h-32" strokeWidth={4} animated />
+        <PeakMark className="h-24 w-auto text-bone md:h-32" strokeWidth={4} animated />
         <div className="mt-8 flex items-center gap-3 font-body text-mist">
           <span className="eyebrow">Makro Developers</span>
           <span className="pl-count font-display text-2xl text-bone">000</span>

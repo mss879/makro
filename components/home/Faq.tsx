@@ -37,7 +37,7 @@ export default function Faq() {
               </p>
               <Link
                 href="/contact"
-                className="group mt-6 inline-flex items-center gap-3 font-body text-bone transition-colors hover:text-rose"
+                className="group mt-6 flex w-fit items-center gap-3 font-body text-bone transition-colors hover:text-rose"
               >
                 <PeakMark className="h-4 w-auto text-rose" strokeWidth={11} />
                 Ask us directly
@@ -45,7 +45,7 @@ export default function Faq() {
               </Link>
               <Link
                 href="/faq"
-                className="group mt-4 inline-flex items-center gap-3 font-body text-sm text-mist transition-colors hover:text-rose"
+                className="group mt-4 flex w-fit items-center gap-3 font-body text-sm text-mist transition-colors hover:text-rose"
               >
                 View all questions
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>

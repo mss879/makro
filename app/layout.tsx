@@ -2,12 +2,11 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SITE } from "@/lib/site";
-import { organizationSchema, websiteSchema } from "@/lib/seo";
+import { organizationSchema, websiteSchema, creatorSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import Cursor from "@/components/ui/Cursor";
 import Preloader from "@/components/ui/Preloader";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 
@@ -96,9 +95,8 @@ export default function RootLayout({
       className={`${tanGarland.variable} ${rosario.variable} h-full antialiased`}
     >
       <body className="grain relative min-h-full bg-ink text-bone">
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <JsonLd data={[organizationSchema(), websiteSchema(), creatorSchema()]} />
         <Preloader />
-        <Cursor />
         <ScrollProgress />
         <SmoothScroll>
           <Navbar />

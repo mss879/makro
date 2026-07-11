@@ -17,7 +17,7 @@ export default function HeroScene() {
     <Canvas
       dpr={[1, 1.8]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0, portrait ? 10 : 7], fov: portrait ? 40 : 34 }}
+      camera={{ position: [0, 0, portrait ? 13 : 7], fov: portrait ? 38 : 34 }}
       className="!absolute inset-0"
     >
       <Suspense fallback={null}>

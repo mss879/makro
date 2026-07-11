@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE } from "./site";
+import { SITE, CREATOR } from "./site";
 import { ogImage } from "./images";
 import type { Project } from "./projects";
 import type { Insight } from "./insights";
@@ -113,7 +113,27 @@ export function websiteSchema() {
     name: SITE.name,
     url: SITE.url,
     publisher: { "@id": ORG_ID },
+    // Attributes authorship of the site to the agency that built it.
+    creator: { "@id": CREATOR_ID },
     inLanguage: "en",
+  };
+}
+
+const CREATOR_ID = `${CREATOR.url}/#organization`;
+
+/**
+ * Organization node for ARC AI — the agency that designed & built this
+ * site. Emitted site-wide from the root layout so the WebSite `creator`
+ * reference resolves and the agency earns a schema-level attributed link.
+ */
+export function creatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": CREATOR_ID,
+    name: CREATOR.name,
+    url: CREATOR.url,
+    description: CREATOR.tagline,
   };
 }
 
