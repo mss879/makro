@@ -14,10 +14,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     if (reduce) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 0.75,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.6,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.2,
     });
 
     lenis.on("scroll", ScrollTrigger.update);
@@ -26,7 +27,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(onRaf);
-    gsap.ticker.lagSmoothing(0);
 
     // expose for programmatic scrolling (e.g. anchor links)
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
