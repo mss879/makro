@@ -15,9 +15,9 @@ export default function Footer() {
         <PeakMark className="h-[42rem] w-auto text-rose" strokeWidth={1.5} />
       </Drift>
 
-      <div className="container-edge relative py-20 md:py-28">
+      <div className="container-edge relative py-12 md:py-16">
         {/* CTA */}
-        <div className="flex flex-col items-start justify-between gap-10 border-b border-hair pb-16 lg:flex-row lg:items-end">
+        <div className="flex flex-col items-start justify-between gap-10 border-b border-hair pb-10 md:pb-12 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow text-rose">Let&rsquo;s build something lasting</p>
             <TextReveal
@@ -38,7 +38,7 @@ export default function Footer() {
         </div>
 
         {/* Columns */}
-        <Reveal className="grid grid-cols-2 gap-10 py-16 md:grid-cols-3 lg:grid-cols-5">
+        <Reveal className="grid grid-cols-2 gap-10 py-10 md:py-12 md:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <Image
               src="/logo-black.png"
@@ -121,7 +121,7 @@ export default function Footer() {
         </Reveal>
 
         {/* Legal */}
-        <div className="flex flex-col items-start justify-between gap-4 border-t border-hair pt-8 font-body text-xs text-fog sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 border-t border-hair pt-6 font-body text-xs text-fog sm:flex-row sm:items-center">
           <p>
             © {new Date().getFullYear()} {SITE.legal}. A subsidiary of the {SITE.parent}.
           </p>
@@ -141,7 +141,7 @@ export default function Footer() {
 
         {/* Agency credit — designed & built by ARC AI. A dofollow, referrer-
             preserving link so the agency earns the attributed backlink. */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <a
             href={CREATOR.url}
             target="_blank"

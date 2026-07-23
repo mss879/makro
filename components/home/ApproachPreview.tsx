@@ -13,7 +13,7 @@ const STEPS = [
   {
     n: "02",
     title: "Design",
-    body: "Layouts considered from the inside out — natural light, ventilation and daily function.",
+    body: "Layouts considered from the inside out, prioritizing natural light, ventilation and daily function.",
   },
   {
     n: "03",

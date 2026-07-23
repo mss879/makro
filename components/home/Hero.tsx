@@ -25,24 +25,10 @@ export default function Hero() {
       const el = root.current;
       if (!el) return;
 
-      // Ken Burns: image settles in, then drifts continuously
+      // Keep hero video framed 1:1 inside the hero area without zooming/cropping behind navbar
       const img = el.querySelector("[data-hero-img]");
       if (img) {
-        gsap.fromTo(img, { scale: 1.35 }, { scale: 1.08, duration: 2.4, ease: "power3.out" });
-        gsap.to(img, {
-          scale: 1.16,
-          duration: 14,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          delay: 2.4,
-        });
-        // Parallax on scroll
-        gsap.to(img, {
-          yPercent: 16,
-          ease: "none",
-          scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
-        });
+        gsap.set(img, { scale: 1, yPercent: 0 });
       }
 
       const tl = gsap.timeline({ delay: 0.35 });
@@ -77,7 +63,7 @@ export default function Hero() {
         <div className="absolute inset-0">
           <video
             data-hero-img
-            src="/hero.mp4"
+            src="/Building_push_cinematic_video_1080p_202607231223.mp4"
             autoPlay
             muted
             loop
@@ -85,6 +71,7 @@ export default function Hero() {
             preload="auto"
             className="img-warm absolute inset-0 h-full w-full object-cover"
           />
+          {/* Dark gradients for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/50" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink/60 via-transparent to-transparent" />
         </div>
@@ -96,21 +83,21 @@ export default function Hero() {
             {/* flex-col stops the reveal-masks' negative block margins from
                 collapsing, which used to add a phantom 0.4em gap between
                 the two heading rows. */}
-            <h1 className="flex flex-col font-display display-fluid leading-[1.05] text-bone">
-              <span className="reveal-mask">
-                <span data-h-word className="inline-block">
-                  The future,
+            <div className="flex flex-col items-start gap-6">
+              <h1 className="flex flex-col font-display display-fluid leading-[1.05] text-bone">
+                <span className="reveal-mask">
+                  <span data-h-word className="inline-block">
+                    The future,
+                  </span>
                 </span>
-              </span>
-              <span className="reveal-mask">
-                <span data-h-word className="inline-block">
-                  built well.
+                <span className="reveal-mask">
+                  <span data-h-word className="inline-block">
+                    built well.
+                  </span>
                 </span>
-              </span>
-            </h1>
+              </h1>
 
-            <div className="mt-7 flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-end">
-              <p data-h-fade className="max-w-sm text-balance font-body text-base leading-relaxed text-bone/85 sm:text-lg md:max-w-md lg:max-w-xl">
+              <p data-h-fade className="max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg">
                 Premium residential and commercial developments across Sri
                 Lanka, built on disciplined planning and uncompromising
                 execution.

@@ -33,7 +33,7 @@ export default function Home() {
   // Emit <link rel="preload" as="video"> so the hero video downloads with
   // the document — while the preloader curtain runs — instead of waiting
   // for hydration to mount the <video> element.
-  preload("/hero.mp4", { as: "video", type: "video/mp4", fetchPriority: "high" });
+  preload("/Building_push_cinematic_video_1080p_202607231223.mp4", { as: "video", type: "video/mp4", fetchPriority: "high" });
 
   return (
     <>
