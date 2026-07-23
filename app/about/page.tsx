@@ -28,43 +28,43 @@ export const metadata = pageMetadata({
 
 const VALUES = [
   {
-    title: "Prestigious",
-    body: "A premium, aspirational brand admired for excellence and considered, bespoke solutions.",
+    title: "Disciplined",
+    body: "Every decision, from planning to material selection, is measured against the same standard — regardless of budget or market segment.",
   },
   {
     title: "Innovative",
-    body: "Constantly evolving our design and construction methods to meet modern living and global standards.",
+    body: "We continually refine our design and construction methods to meet modern living demands without abandoning what endures.",
   },
   {
     title: "Trustworthy",
-    body: "Building reliable, lasting relationships with clients, partners and the communities we develop within.",
+    body: "We build relationships on delivering exactly what we promise — to customers, partners and communities alike.",
   },
   {
     title: "Modern",
-    body: "Embracing contemporary design and intelligent solutions that feel effortless to live and work in.",
+    body: "Our architecture embraces contemporary design and thinking, without chasing trends that date quickly.",
   },
 ];
 
 const TIMELINE = [
   {
-    year: "The beginning",
-    title: "Founded within a group of strength",
-    body: "Makro Developers is established as a fully owned subsidiary of the Wheels Lanka Group, pairing corporate stability with a specialist focus on real estate.",
-  },
-  {
-    year: "6+ years ago",
-    title: "First development delivered",
-    body: "Our first project is completed and handed over — proof of a model built on thoughtful planning and quality execution.",
+    year: "2013",
+    title: "A dedicated development arm",
+    body: "Makro Developers is incorporated as the real estate development arm of the Wheels Lanka Group, created to build its own reputation within Sri Lanka’s property industry.",
   },
   {
     year: "Since",
-    title: "A growing portfolio",
-    body: "We continue to pursue opportunities that create long-term value across residential and commercial developments in Sri Lanka.",
+    title: "Building a disciplined track record",
+    body: "Every project has been measured against the same standard of planning, design and execution — regardless of scale, location or market segment.",
+  },
+  {
+    year: "Today",
+    title: "A flagship standard, in motion",
+    body: "Makro Heights, our flagship residential development in Dehiwala, is designed to become the first public demonstration of everything The Makro Standard represents.",
   },
   {
     year: "Ahead",
-    title: "The future, built well",
-    body: "A pipeline of considered developments — each chosen for its potential to shape how Sri Lanka lives and works.",
+    title: "A heritage in the making",
+    body: "Our ambition extends beyond individual projects — to become one of Sri Lanka’s heritage developer brands, recognised for consistency across generations.",
   },
 ];
 
@@ -85,45 +85,50 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About Makro"
         title="Shaping how Sri Lanka lives."
-        intro="A Sri Lankan property developer pairing corporate strength with an uncompromising approach to building well."
+        intro="We design and build developments that set a new standard for craftsmanship, trust and long-term value — for the people who will live, work and invest in them."
         imageId={BRAND.monoGrid}
         treatment="mono"
       />
 
       {/* Story */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="section-light relative py-24 md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-4">
               <span className="line-hair w-10" />
-              <span className="eyebrow text-rose">Who We Are</span>
+              <span className="eyebrow text-rose-deep">Who We Are</span>
             </div>
             <TextReveal
               as="h2"
               text="A new standard of craftsmanship, trust and value."
-              className="mt-6 font-display display-md text-bone"
+              className="mt-6 font-display display-md text-ink"
             />
           </div>
           <div className="space-y-6 lg:col-span-5 lg:col-start-8">
             <Reveal>
               <p className="font-body text-lg leading-relaxed text-mist">
-                Makro Developers is a property development company in Sri Lanka
-                focused on residential and commercial developments — a fully
-                owned subsidiary of the Wheels Lanka Group, combining corporate
-                stability with a specialist&rsquo;s focus on real estate.
+                Makro Developers is a wholly owned subsidiary of the Wheels
+                Lanka Group, established to focus entirely on residential and
+                commercial property development. Being part of an established,
+                diversified business group gives us the financial strength,
+                governance and long-term stability to take on developments with
+                confidence — and every Makro project carries that backing.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="font-body text-lg leading-relaxed text-mist">
-                Since our first development over six years ago, we&rsquo;ve held
-                to one commitment — long-term value through{" "}
+                We approach every development as a long-term commitment rather
+                than a single sale, from the first feasibility study to long
+                after the keys have changed hands. That commitment is what we
+                call The Standard Above — the benchmark against which every
+                decision we make is measured.{" "}
                 <Link
                   href="/approach"
-                  className="text-bone underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+                  className="text-ink underline decoration-rose-deep/50 underline-offset-4 transition-colors hover:text-rose-deep"
                 >
-                  thoughtful planning and quality execution
+                  Learn what The Standard Above means to us
                 </Link>
-                . <span className="text-bone">The future, built well.</span>
+                .
               </p>
             </Reveal>
           </div>
@@ -145,16 +150,16 @@ export default function AboutPage() {
       </section>
 
       {/* Values / personality */}
-      <section className="relative bg-carbon py-24 md:py-32">
+      <section className="section-light relative py-24 md:py-32">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
-            <span className="eyebrow text-rose">What Defines Us</span>
+            <span className="eyebrow text-rose-deep">What Defines Us</span>
           </div>
           <TextReveal
             as="h2"
             text="The traits behind everything we build."
-            className="mt-6 max-w-3xl font-display display-md text-bone"
+            className="mt-6 max-w-3xl font-display display-md text-ink"
           />
           <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map((v, i) => (
@@ -192,46 +197,98 @@ export default function AboutPage() {
             />
             <Reveal delay={0.1}>
               <p className="mt-8 font-body text-lg leading-relaxed text-mist">
-                Being part of an established group gives every Makro development
-                something rare in real estate: staying power. Capital
-                discipline, a long-term view — and the confidence that the
-                projects we begin are the projects we finish.
+                Makro Developers operates with the backing of the Wheels Lanka
+                Group, one of Sri Lanka&rsquo;s established diversified business
+                groups. That relationship brings capital discipline,
+                professional governance and a long-term outlook to every
+                development we undertake — meaning every Makro project is
+                supported by more than a single balance sheet.
               </p>
             </Reveal>
             <Reveal delay={0.15} className="mt-8 flex items-center gap-3">
               <PeakMark className="h-4 w-auto text-rose" strokeWidth={11} />
               <span className="font-body text-sm text-bone">
-                A fully owned subsidiary of the Wheels Lanka Group
+                A fully owned subsidiary of the Wheels Lanka Group.
               </span>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="relative bg-carbon py-24 md:py-32">
+      {/* Why Makro — the full-length reasons; the home page carries only
+          one-line versions of these (client direction, July 2026) */}
+      <section className="section-light relative py-24 md:py-32">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
-            <span className="eyebrow text-rose">Our Journey</span>
+            <span className="eyebrow text-rose-deep">Why Makro</span>
+          </div>
+          <TextReveal
+            as="h2"
+            text="Why buyers and investors choose Makro."
+            className="mt-6 max-w-3xl font-display display-md text-ink"
+          />
+          <div className="mt-14 grid grid-cols-1 gap-x-12 gap-y-12 md:grid-cols-2">
+            {[
+              {
+                title: "Local insight, international standard",
+                body: "We understand Sri Lanka — its planning regulations, its climate, and the way people actually live here. That local depth is paired with planning, engineering and design discipline benchmarked against international standards.",
+              },
+              {
+                title: "The strength of a group behind us",
+                body: "Makro Developers is a wholly owned subsidiary of the Wheels Lanka Group, giving every development the financial strength, governance and long-term stability of an established business group behind it.",
+              },
+              {
+                title: "Built to endure, not to impress",
+                body: "We measure success by how a building performs decades after handover, not how it photographs on completion day. Every material, layout and system is chosen for lasting value over short-term impression.",
+              },
+              {
+                title: "A relationship, not a transaction",
+                body: "Our responsibility to a customer doesn't end at handover. From the first enquiry through years of ownership, we remain accountable for what we've built and responsive to the people who live in it.",
+              },
+            ].map((r, i) => (
+              <Reveal key={r.title} delay={i * 0.06} className="border-t border-hair pt-6">
+                <div className="flex items-baseline gap-4">
+                  <span className="font-body text-sm text-rose-deep">0{i + 1}</span>
+                  <div>
+                    <h3 className="font-display text-2xl leading-tight text-ink md:text-3xl">
+                      {r.title}
+                    </h3>
+                    <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-mist">
+                      {r.body}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="section-light relative py-24 md:py-32">
+        <div className="container-edge">
+          <div className="flex items-center gap-4">
+            <span className="line-hair w-10" />
+            <span className="eyebrow text-rose-deep">Our Journey</span>
           </div>
           <TextReveal
             as="h2"
             text="A short history, a long-term view."
-            className="mt-6 max-w-3xl font-display display-md text-bone"
+            className="mt-6 max-w-3xl font-display display-md text-ink"
           />
           <div className="mt-14 grid grid-cols-1 gap-px border border-hair bg-hair md:grid-cols-2 lg:grid-cols-4">
             {TIMELINE.map((t, i) => (
               <Reveal
                 key={t.title}
                 delay={i * 0.08}
-                className="flex min-h-[20rem] flex-col justify-between bg-ink p-8"
+                className="flex min-h-[20rem] flex-col justify-between bg-shell p-8"
               >
-                <span className="font-body text-xs uppercase tracking-[0.25em] text-rose">
+                <span className="font-body text-xs uppercase tracking-[0.25em] text-rose-deep">
                   {t.year}
                 </span>
                 <div>
-                  <h3 className="font-display text-2xl text-bone">{t.title}</h3>
+                  <h3 className="font-display text-2xl text-ink">{t.title}</h3>
                   <p className="mt-3 font-body text-sm leading-relaxed text-mist">
                     {t.body}
                   </p>
@@ -241,19 +298,19 @@ export default function AboutPage() {
           </div>
 
           <Reveal className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-hair pt-10">
-            <p className="max-w-xl font-display text-2xl text-bone">
+            <p className="max-w-xl font-display text-2xl text-ink">
               Curious where we are building next?
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/approach"
-                className="group inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+                className="group inline-flex items-center gap-3 border border-hair-strong px-7 py-4 font-body text-ink transition-colors hover:border-rose-deep hover:text-rose-deep"
               >
                 How we build
               </Link>
               <Link
                 href="/projects"
-                className="group inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                className="group inline-flex items-center gap-3 bg-ink px-7 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink"
               >
                 Explore our projects
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
@@ -263,12 +320,12 @@ export default function AboutPage() {
 
           <Reveal className="mt-10">
             <p className="font-body text-sm text-fog">
-              Deciding who to build with?{" "}
+              Deciding who to build your future with?{" "}
               <Link
                 href="/insights/how-to-choose-a-property-developer-in-sri-lanka"
-                className="text-mist underline decoration-rose/50 underline-offset-4 transition-colors hover:text-rose"
+                className="text-mist underline decoration-rose-deep/50 underline-offset-4 transition-colors hover:text-rose-deep"
               >
-                Read our guide to choosing a property developer in Sri Lanka
+                Read our guide to choosing a developer in Sri Lanka
               </Link>
               .
             </p>

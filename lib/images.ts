@@ -35,6 +35,15 @@ export const BRAND = {
   lifestyleLoft: "/brand/lifestyle-loft.jpg", // warm loft living room
   lifestylePool: "/brand/lifestyle-pool.jpg", // poolside architecture, terracotta
   lifestyleSuite: "/brand/lifestyle-suite.jpg", // golden-hour suite, skyline view
+  interludeFacade: "/brand/interlude-facade.jpg", // AI-generated (Higgsfield, July 2026) golden-hour facade — home interlude
+  serviceResidential: "/brand/service-residential.jpg", // AI-generated (Higgsfield) terracotta residence — services card 01
+  serviceCommercial: "/brand/service-commercial.jpg", // AI-generated (Higgsfield) dusk tower — services card 02
+  serviceValue: "/brand/service-value.jpg", // AI-generated (Higgsfield) ascending facade steps — services card 03
+  statementCorner: "/brand/statement-corner.jpg", // AI-generated (Higgsfield) terracotta corner rising like the twin peaks — home brand statement
+  swTower: "/brand/sw-tower.jpg", // AI-generated (Higgsfield) golden-hour condominium tower — Selected Work cover panel
+  swRooftop: "/brand/sw-rooftop.jpg", // AI-generated (Higgsfield) dusk rooftop amenity deck — Selected Work panel
+  swBalcony: "/brand/sw-balcony.jpg", // AI-generated (Higgsfield) golden-hour private balcony — Selected Work panel
+  whyCourtyard: "/brand/why-courtyard.jpg", // AI-generated (Higgsfield) terracotta courtyard — Why Makro still image
 } as const;
 
 export const IMG = {

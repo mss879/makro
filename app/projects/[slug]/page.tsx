@@ -74,7 +74,7 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   const idx = PROJECTS.findIndex((p) => p.slug === slug);
-  const next = PROJECTS[(idx + 1) % PROJECTS.length];
+  const next = PROJECTS.length > 1 ? PROJECTS[(idx + 1) % PROJECTS.length] : null;
   const relatedInsight = RELATED_INSIGHT[project.type];
 
   return (
@@ -129,9 +129,14 @@ export default async function ProjectDetailPage({
                   </div>
                 ))}
               </dl>
+              {project.specsNote && (
+                <p className="mt-4 font-body text-xs leading-relaxed text-fog">
+                  {project.specsNote}
+                </p>
+              )}
               <Link
                 href="/contact"
-                className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full bg-rose px-6 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                className="group mt-8 flex w-full items-center justify-center gap-3 bg-rose px-6 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
               >
                 Enquire about this project
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
@@ -219,25 +224,27 @@ export default async function ProjectDetailPage({
         </div>
       </section>
 
-      {/* Next project */}
-      <section className="relative overflow-hidden border-t border-hair bg-carbon">
-        <Link href={`/projects/${next.slug}`} className="group block">
-          <div className="container-edge flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
-            <div>
-              <span className="eyebrow text-fog">Next project</span>
-              <h3 className="mt-3 font-display text-4xl text-bone transition-colors group-hover:text-rose md:text-6xl">
-                {next.name}
-              </h3>
-              <p className="mt-2 font-body text-sm text-mist">
-                {next.type} · {next.location}
-              </p>
+      {/* Next project — only when there is another project to link to */}
+      {next && (
+        <section className="relative overflow-hidden border-t border-hair bg-carbon">
+          <Link href={`/projects/${next.slug}`} className="group block">
+            <div className="container-edge flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
+              <div>
+                <span className="eyebrow text-fog">Next project</span>
+                <h3 className="mt-3 font-display text-4xl text-bone transition-colors group-hover:text-rose md:text-6xl">
+                  {next.name}
+                </h3>
+                <p className="mt-2 font-body text-sm text-mist">
+                  {next.type} · {next.location}
+                </p>
+              </div>
+              <span className="flex h-16 w-16 items-center justify-center border border-hair-strong text-2xl text-bone transition-all duration-500 group-hover:border-rose group-hover:bg-rose group-hover:text-ink">
+                →
+              </span>
             </div>
-            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-hair-strong text-2xl text-bone transition-all duration-500 group-hover:border-rose group-hover:bg-rose group-hover:text-ink">
-              →
-            </span>
-          </div>
-        </Link>
-      </section>
+          </Link>
+        </section>
+      )}
     </>
   );
 }

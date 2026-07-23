@@ -8,16 +8,16 @@ import Stats from "@/components/home/Stats";
 import Services from "@/components/home/Services";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
 import WhyMakro from "@/components/home/WhyMakro";
-import BrandMoment from "@/components/home/BrandMoment";
+import Interlude from "@/components/home/Interlude";
 import ApproachPreview from "@/components/home/ApproachPreview";
 import GroupBacking from "@/components/home/GroupBacking";
 import Faq from "@/components/home/Faq";
-import Marquee from "@/components/anim/Marquee";
+import BlogPreview from "@/components/home/BlogPreview";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — Luxury Property Developer in Colombo, Sri Lanka` },
   description:
-    "Makro Developers builds premium residential and commercial properties in Colombo and across Sri Lanka. A Wheels Lanka Group company delivering luxury apartments, villas and Grade-A offices — the future built well.",
+    "Makro Developers builds premium residential and commercial properties in Colombo and across Sri Lanka. The Wheels Lanka Group company behind Makro Heights in Dehiwala — the future built well.",
   alternates: { canonical: SITE.url },
   openGraph: {
     title: `${SITE.name} — ${SITE.tagline}`,
@@ -41,21 +41,20 @@ export default function Home() {
       <BrandStatement />
       <Stats />
       <Services />
+      {/* Full-bleed visual pause (normcph.com reference) — placed right
+          after What We Do at the client's request */}
+      <Interlude
+        image={BRAND.interludeFacade}
+        alt="Golden-hour light across the facade of a modern Makro residential development"
+        eyebrow="The Standard Above"
+        line="Every decision measured against a higher benchmark."
+      />
       <FeaturedProjects />
       <WhyMakro />
-      <BrandMoment />
-      <Marquee
-        items={[
-          "The future built well",
-          "Precision",
-          "Craftsmanship",
-          "Enduring value",
-          "Trust",
-        ]}
-      />
       <ApproachPreview />
       <GroupBacking />
       <Faq />
+      <BlogPreview />
     </>
   );
 }

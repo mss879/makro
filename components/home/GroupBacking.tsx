@@ -71,9 +71,12 @@ export default function GroupBacking() {
 
           <Reveal delay={0.1}>
             <p className="mt-8 max-w-2xl font-body text-lg leading-relaxed text-mist">
-              Makro Developers is a fully owned subsidiary of the Wheels Lanka
-              Group, whose scale and long-term outlook underpin everything we
-              build. The projects we start, we finish.
+              Makro Developers is a wholly owned subsidiary of the Wheels Lanka
+              Group, one of Sri Lanka&rsquo;s established diversified business
+              groups. That relationship gives every development the financial
+              strength, governance and long-term stability to be delivered with
+              confidence — while Makro remains singularly focused on property
+              development.
             </p>
           </Reveal>
 

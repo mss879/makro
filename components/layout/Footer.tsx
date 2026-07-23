@@ -29,7 +29,7 @@ export default function Footer() {
           <Magnetic strength={0.4}>
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-4 rounded-full bg-rose px-8 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+              className="group inline-flex items-center gap-4 bg-rose px-8 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
             >
               <span className="text-lg">Start a conversation</span>
               <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
@@ -55,7 +55,7 @@ export default function Footer() {
           <div>
             <p className="eyebrow text-fog">Explore</p>
             <ul className="mt-5 space-y-3">
-              {NAV.filter((item) => item.href !== "/insights").map((item) => (
+              {NAV.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

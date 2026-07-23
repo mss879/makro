@@ -38,7 +38,7 @@ export default function InsightsPage() {
         ]}
       />
       <PageHero
-        eyebrow="Insights"
+        eyebrow="Blog"
         title="Know before you build, buy or invest."
         intro="Considered guides to Sri Lankan property — written by the people who plan, build and deliver it."
         imageId={BRAND.lifestyleLoft}
@@ -88,14 +88,14 @@ export default function InsightsPage() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/projects"
-                className="group inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                className="group inline-flex items-center gap-3 bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
               >
                 Explore our projects
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
               <Link
                 href="/faq"
-                className="inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+                className="inline-flex items-center gap-3 border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
               >
                 Quick answers
               </Link>

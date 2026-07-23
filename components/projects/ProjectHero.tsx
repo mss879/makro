@@ -50,11 +50,11 @@ export default function ProjectHero({ project }: { project: Project }) {
 
       <div className="container-edge relative w-full">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-hair-strong bg-ink/40 px-4 py-1.5 font-body text-xs text-bone backdrop-blur-md">
+          <span className="border border-hair-strong bg-ink/40 px-4 py-1.5 font-body text-xs text-bone backdrop-blur-md">
             {project.type}
           </span>
-          <span className="flex items-center gap-2 rounded-full border border-hair-strong bg-ink/40 px-4 py-1.5 font-body text-xs text-bone backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-rose" />
+          <span className="flex items-center gap-2 border border-hair-strong bg-ink/40 px-4 py-1.5 font-body text-xs text-bone backdrop-blur-md">
+            <span className="h-1.5 w-1.5 bg-rose" />
             {project.status}
           </span>
           <span className="font-body text-xs uppercase tracking-[0.25em] text-rose">

@@ -8,7 +8,7 @@ import ProjectsGrid from "@/components/projects/ProjectsGrid";
 import Reveal from "@/components/anim/Reveal";
 
 const DESCRIPTION =
-  "Explore Makro Developers' portfolio of residential and commercial property developments across Sri Lanka — luxury apartments, waterfront villas and Grade-A offices, completed, selling and in planning.";
+  "Explore the Makro Developers portfolio — led by Makro Heights, our flagship residential condominium on Rohini Place in Dehiwala, with further residential and commercial developments in planning across Sri Lanka.";
 
 export const metadata = pageMetadata({
   title: "Property Developments in Sri Lanka",
@@ -19,8 +19,8 @@ export const metadata = pageMetadata({
     "property developments Sri Lanka",
     "luxury apartments Colombo",
     "apartments for sale Colombo",
-    "villas for sale Sri Lanka",
-    "commercial property Colombo",
+    "apartments in Dehiwala",
+    "Makro Heights Dehiwala",
     "new developments Sri Lanka",
   ],
 });

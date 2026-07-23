@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { IMG, unsplash } from "@/lib/images";
+import { BRAND } from "@/lib/images";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import { PeakMark } from "@/components/brand/PeakMark";
@@ -9,44 +9,44 @@ const SERVICES = [
   {
     n: "01",
     title: "Residential Development",
-    body: "Homes and communities — from private villas to multi-unit residences — planned around comfort, privacy and the way modern families live.",
-    image: IMG.terracottaVilla,
+    body: "Residential developments that balance thoughtful planning with everyday livability — homes built to be lived in for decades.",
+    image: BRAND.serviceResidential,
   },
   {
     n: "02",
     title: "Commercial Development",
-    body: "Grade-A offices, retail and mixed-use landmarks, engineered for performance and the businesses shaping Sri Lanka's next decade.",
-    image: IMG.towersUp,
+    body: "Commercial spaces engineered for long-term performance and tenant confidence, from feasibility through to handover.",
+    image: BRAND.serviceCommercial,
   },
   {
     n: "03",
     title: "Investment & Value",
-    body: "A disciplined, long-term approach to site selection and capital — pursuing opportunities that create durable value for investors.",
-    image: IMG.angularGlass,
+    body: "Every development is structured to protect and grow its value — confident, long-term returns on a Makro address.",
+    image: BRAND.serviceValue,
   },
 ];
 
 export default function Services() {
   return (
-    <section className="relative bg-ink py-24 md:py-32">
+    <section className="section-light relative py-24 md:py-32">
       <div className="container-edge">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <div className="flex items-center gap-4">
-              <span className="font-body text-xs text-rose">01</span>
+              <span className="font-body text-xs text-rose-deep">01</span>
               <span className="line-hair w-10" />
-              <span className="eyebrow text-rose">What We Do</span>
+              <span className="eyebrow text-rose-deep">What We Do</span>
             </div>
             <TextReveal
               as="h2"
               text="Focused expertise, end to end."
-              className="mt-6 font-display display-md text-bone"
+              className="mt-6 font-display display-md text-ink"
             />
           </div>
           <Reveal>
             <Link
               href="/approach"
-              className="group inline-flex items-center gap-3 border-b border-hair-strong pb-2 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+              className="group inline-flex items-center gap-3 border-b border-hair-strong pb-2 font-body text-ink transition-colors hover:border-rose-deep hover:text-rose-deep"
             >
               See how we work
               <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
@@ -54,39 +54,46 @@ export default function Services() {
           </Reveal>
         </div>
 
+        {/* Image cards on the cream field. The imagery stays fully visible
+            (client direction — no dark hover-reveal); a bottom scrim keeps
+            the text legible. Title and body live in fixed-height rows so
+            all three cards align horizontally regardless of text length. */}
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
           {SERVICES.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.1}>
               <Link
                 href="/approach"
-                className="group relative flex h-[30rem] flex-col justify-between overflow-hidden rounded-2xl border border-hair p-8"
+                className="group relative flex h-[30rem] flex-col justify-between overflow-hidden bg-ink-700 p-8"
               >
-                {/* Reveal image */}
-                <div className="absolute inset-0 -z-10">
+                <div className="absolute inset-0 -z-0">
                   <Image
-                    src={unsplash(s.image, 900)}
+                    src={s.image}
                     alt={s.title}
                     fill
-                    sizes="33vw"
-                    className="img-mono scale-110 object-cover opacity-20 transition-all duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-hover:opacity-70 group-hover:[filter:saturate(0.85)_contrast(1.05)]"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="img-warm object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/40 transition-opacity duration-700 group-hover:from-ink group-hover:via-ink/50" />
+                  {/* Legibility scrims — light at the top, firm at the base */}
+                  <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-ink/45 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-ink/90 via-ink/45 to-transparent" />
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-5xl text-rose/70 transition-colors group-hover:text-rose">
-                    {s.n}
-                  </span>
-                  <PeakMark className="h-5 w-auto text-rose opacity-50 transition-opacity duration-500 group-hover:opacity-100" strokeWidth={10} />
+                <div className="relative flex items-center justify-between">
+                  <span className="font-display text-5xl text-rose">{s.n}</span>
+                  <PeakMark className="h-5 w-auto text-rose" strokeWidth={10} />
                 </div>
 
-                <div>
-                  <h3 className="font-display text-3xl text-bone">{s.title}</h3>
-                  <p className="mt-4 font-body text-sm leading-relaxed text-mist transition-colors group-hover:text-bone/90">
+                <div className="relative">
+                  {/* Fixed rows lock the baseline across cards */}
+                  <h3 className="flex h-[4.6rem] items-end font-display text-[1.7rem] leading-[1.15] text-bone">
+                    {s.title}
+                  </h3>
+                  <p className="mt-3 line-clamp-3 min-h-[4rem] font-body text-sm leading-relaxed text-white/80">
                     {s.body}
                   </p>
-                  <span className="mt-6 inline-flex items-center gap-2 font-body text-sm text-rose opacity-0 transition-all duration-500 group-hover:opacity-100">
-                    Learn more <span>→</span>
+                  <span className="mt-5 inline-flex items-center gap-2 font-body text-sm text-rose">
+                    Learn more
+                    <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
                   </span>
                 </div>
               </Link>

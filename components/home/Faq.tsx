@@ -11,41 +11,41 @@ export default function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative overflow-hidden bg-carbon py-24 md:py-32">
-      <div className="pointer-events-none absolute -left-20 bottom-0 opacity-[0.05]">
-        <PeakMark className="h-[34rem] w-auto text-rose" strokeWidth={2} />
+    <section className="section-light relative overflow-hidden py-24 md:py-32">
+      <div className="pointer-events-none absolute -left-20 bottom-0 opacity-[0.06]">
+        <PeakMark className="h-[34rem] w-auto text-rose-deep" strokeWidth={2} />
       </div>
 
       <div className="container-edge relative grid grid-cols-1 gap-14 lg:grid-cols-12">
         {/* Left heading */}
         <div className="lg:col-span-4">
-          <div className="lg:sticky lg:top-28">
+          <div className="lg:sticky lg:top-[calc(var(--nav-h)+2rem)]">
             <div className="flex items-center gap-4">
-              <span className="font-body text-xs text-rose">06</span>
+              <span className="font-body text-xs text-rose-deep">06</span>
               <span className="line-hair w-10" />
-              <span className="eyebrow text-rose">Questions</span>
+              <span className="eyebrow text-rose-deep">Questions</span>
             </div>
             <TextReveal
               as="h2"
               text="Things people often ask."
-              className="mt-6 font-display display-md text-bone"
+              className="mt-6 font-display display-md text-ink"
             />
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-sm font-body text-base leading-relaxed text-mist">
-                Can&rsquo;t find what you&rsquo;re looking for? We&rsquo;re happy
-                to talk it through.
+                Can&rsquo;t find what you&rsquo;re looking for? Ask us directly,
+                or browse the full FAQ.
               </p>
               <Link
                 href="/contact"
-                className="group mt-6 flex w-fit items-center gap-3 font-body text-bone transition-colors hover:text-rose"
+                className="group mt-6 flex w-fit items-center gap-3 font-body text-ink transition-colors hover:text-rose-deep"
               >
-                <PeakMark className="h-4 w-auto text-rose" strokeWidth={11} />
+                <PeakMark className="h-4 w-auto text-rose-deep" strokeWidth={11} />
                 Ask us directly
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
               <Link
                 href="/faq"
-                className="group mt-4 flex w-fit items-center gap-3 font-body text-sm text-mist transition-colors hover:text-rose"
+                className="group mt-4 flex w-fit items-center gap-3 font-body text-sm text-mist transition-colors hover:text-rose-deep"
               >
                 View all questions
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
@@ -68,15 +68,15 @@ export default function Faq() {
                   >
                     <span
                       className={`font-display text-2xl leading-tight transition-colors md:text-3xl ${
-                        isOpen ? "text-rose" : "text-bone"
+                        isOpen ? "text-rose-deep" : "text-ink"
                       }`}
                     >
                       {item.q}
                     </span>
                     <span className="relative flex h-6 w-6 shrink-0 items-center justify-center">
-                      <span className="absolute h-px w-4 bg-rose" />
+                      <span className="absolute h-px w-4 bg-rose-deep" />
                       <span
-                        className={`absolute h-4 w-px bg-rose transition-transform duration-500 ${
+                        className={`absolute h-4 w-px bg-rose-deep transition-transform duration-500 ${
                           isOpen ? "rotate-90 scale-0" : "rotate-0"
                         }`}
                       />

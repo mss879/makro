@@ -10,26 +10,22 @@ import Footer from "@/components/layout/Footer";
 import Preloader from "@/components/ui/Preloader";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 
-// BRAND PRIMARY DISPLAY FONT — TAN Garland (licensed, client-provided).
-// Self-hosted from app/fonts; system serifs cover the brief swap window.
-const tanGarland = localFont({
-  src: [{ path: "./fonts/TANGarland.woff2", weight: "400", style: "normal" }],
-  variable: "--font-tan-garland",
+// BRAND PRIMARY DISPLAY FONT — Marcellus (OFL, self-hosted). A classical,
+// inscription-derived serif: architectural and quietly premium without the
+// decorative swashes of the previous display face. Single 400 weight —
+// never fake bolds or italics on it.
+const marcellus = localFont({
+  src: [{ path: "./fonts/Marcellus-Regular.woff2", weight: "400", style: "normal" }],
+  variable: "--font-marcellus",
   display: "swap",
-  fallback: ["Didot", "Times New Roman", "serif"],
+  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
-// Secondary / body face — Rosario, self-hosted from the client's licensed
-// files (Font/rosario, OFL) rather than Google Fonts. Static faces only:
-// 400 + 700 with true italics.
-const rosario = localFont({
-  src: [
-    { path: "./fonts/Rosario-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/Rosario-Italic.woff2", weight: "400", style: "italic" },
-    { path: "./fonts/Rosario-Bold.woff2", weight: "700", style: "normal" },
-    { path: "./fonts/Rosario-BoldItalic.woff2", weight: "700", style: "italic" },
-  ],
-  variable: "--font-rosario",
+// Secondary / body face — Manrope (OFL, self-hosted variable file,
+// weights 200–800). Clean modern grotesque for UI and long-form copy.
+const manrope = localFont({
+  src: [{ path: "./fonts/Manrope-Variable.woff2", weight: "200 800", style: "normal" }],
+  variable: "--font-manrope",
   display: "swap",
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
@@ -81,7 +77,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050203",
+  themeColor: "#f2ecdc",
   width: "device-width",
   initialScale: 1,
 };
@@ -92,7 +88,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${tanGarland.variable} ${rosario.variable} h-full antialiased`}
+      className={`${marcellus.variable} ${manrope.variable} h-full antialiased`}
     >
       <body className="grain relative min-h-full bg-ink text-bone">
         <JsonLd data={[organizationSchema(), websiteSchema(), creatorSchema()]} />

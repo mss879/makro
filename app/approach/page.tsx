@@ -193,14 +193,14 @@ export default function ApproachPage() {
           <Reveal className="mt-14 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/projects"
-              className="group inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+              className="group inline-flex items-center gap-3 bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
             >
               See the results
               <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
             </Link>
             <Link
               href="/sustainability"
-              className="inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+              className="inline-flex items-center gap-3 border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
             >
               Building responsibly
             </Link>

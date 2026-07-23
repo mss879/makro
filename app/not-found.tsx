@@ -18,7 +18,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="group mt-10 inline-flex items-center gap-3 rounded-full bg-rose px-8 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+          className="group mt-10 inline-flex items-center gap-3 bg-rose px-8 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
         >
           Return home
           <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>

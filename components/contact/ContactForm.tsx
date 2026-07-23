@@ -61,17 +61,17 @@ export default function ContactForm() {
     return (
       <div
         ref={success}
-        className="flex min-h-[30rem] flex-col items-center justify-center border border-hair bg-carbon p-10 text-center"
+        className="flex min-h-[30rem] flex-col items-center justify-center border border-hair bg-shell p-10 text-center"
       >
-        <PeakMark className="h-16 w-auto text-rose" strokeWidth={5} animated />
-        <h3 className="mt-8 font-display text-4xl text-bone">Thank you.</h3>
+        <PeakMark className="h-16 w-auto text-rose-deep" strokeWidth={5} animated />
+        <h3 className="mt-8 font-display text-4xl text-ink">Thank you.</h3>
         <p className="mt-4 max-w-sm font-body text-mist">
-          Your enquiry has reached us. A member of the Makro Developers team will
-          be in touch shortly — we look forward to speaking with you.
+          We&rsquo;ve received your enquiry and a member of our team will be in
+          touch within one business day.
         </p>
         <button
           onClick={() => setSent(false)}
-          className="mt-8 font-body text-sm text-rose underline-offset-4 hover:underline"
+          className="mt-8 font-body text-sm text-rose-deep underline-offset-4 hover:underline"
         >
           Send another message
         </button>
@@ -80,7 +80,7 @@ export default function ContactForm() {
   }
 
   const fieldClass = (name: string) =>
-    `w-full border-b bg-transparent py-4 font-body text-bone placeholder-fog outline-none transition-colors focus:border-rose ${
+    `w-full border-b bg-transparent py-4 font-body text-ink placeholder-fog outline-none transition-colors focus:border-rose-deep ${
       errors[name] ? "border-rose-deep" : "border-hair-strong"
     }`;
 
@@ -88,30 +88,36 @@ export default function ContactForm() {
     <form ref={form} onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         <div>
-          <label className="eyebrow text-fog">Full name *</label>
+          <label className="eyebrow text-fog">Full name*</label>
           <input name="name" placeholder="Your name" className={`mt-2 ${fieldClass("name")}`} />
+          {errors.name && (
+            <p className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
+          )}
         </div>
         <div>
-          <label className="eyebrow text-fog">Email *</label>
+          <label className="eyebrow text-fog">Email*</label>
           <input
             name="email"
             type="email"
             placeholder="you@email.com"
             className={`mt-2 ${fieldClass("email")}`}
           />
+          {errors.email && (
+            <p className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
+          )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         <div>
-          <label className="eyebrow text-fog">Phone</label>
+          <label className="eyebrow text-fog">Phone (optional)</label>
           <input name="phone" placeholder="+94 …" className={`mt-2 ${fieldClass("phone")}`} />
         </div>
         <div>
-          <label className="eyebrow text-fog">I&rsquo;m interested in</label>
+          <label className="eyebrow text-fog">I&rsquo;m interested in*</label>
           <select name="interest" className={`mt-2 ${fieldClass("interest")} cursor-pointer`}>
             {INTERESTS.map((o) => (
-              <option key={o} value={o} className="bg-ink text-bone">
+              <option key={o} value={o} className="bg-bone text-ink">
                 {o}
               </option>
             ))}
@@ -122,11 +128,11 @@ export default function ContactForm() {
       <div>
         <label className="eyebrow text-fog">Project of interest</label>
         <select name="project" className={`mt-2 ${fieldClass("project")} cursor-pointer`}>
-          <option value="" className="bg-ink text-bone">
+          <option value="" className="bg-bone text-ink">
             No specific project
           </option>
           {PROJECTS.map((p) => (
-            <option key={p.slug} value={p.name} className="bg-ink text-bone">
+            <option key={p.slug} value={p.name} className="bg-bone text-ink">
               {p.name}
             </option>
           ))}
@@ -134,24 +140,21 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="eyebrow text-fog">Message *</label>
+        <label className="eyebrow text-fog">Message*</label>
         <textarea
           name="message"
           rows={4}
           placeholder="Tell us how we can help…"
           className={`mt-2 resize-none ${fieldClass("message")}`}
         />
+        {errors.message && (
+          <p className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
+        )}
       </div>
-
-      {Object.keys(errors).length > 0 && (
-        <p className="font-body text-sm text-rose-deep">
-          Please complete the required fields marked with *.
-        </p>
-      )}
 
       <button
         type="submit"
-        className="group inline-flex items-center justify-center gap-3 self-start rounded-full bg-rose px-8 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+        className="group inline-flex items-center justify-center gap-3 self-start bg-ink px-8 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink"
       >
         Send enquiry
         <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>

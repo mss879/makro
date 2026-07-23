@@ -94,7 +94,7 @@ export const INSIGHTS: Insight[] = [
       },
     ],
     related: ["how-to-choose-a-property-developer-in-sri-lanka", "sri-lanka-real-estate-investment-guide"],
-    relatedProjects: ["the-ridgeline-residences", "the-atelier-lofts"],
+    relatedProjects: ["makro-heights"],
   },
   {
     slug: "sri-lanka-real-estate-investment-guide",
@@ -154,7 +154,7 @@ export const INSIGHTS: Insight[] = [
       },
     ],
     related: ["buying-an-apartment-in-colombo-guide", "grade-a-office-space-colombo"],
-    relatedProjects: ["serein-waterfront", "altair-commercial-tower"],
+    relatedProjects: ["makro-heights"],
   },
   {
     slug: "grade-a-office-space-colombo",
@@ -203,12 +203,12 @@ export const INSIGHTS: Insight[] = [
         heading: "Why it matters to investors.",
         paras: [
           "Specification is what separates assets that re-let quickly at premium rents from those that discount every cycle. A commercial building engineered to international standards holds tenants, holds rents and holds value.",
-          "It is why Altair Commercial Tower was engineered around column-light plates, redundant services and a high-performance façade — the specification global occupiers audit for, delivered in the heart of Colombo 02.",
+          "It is why every commercial space Makro plans is engineered around column-light plates, redundant services and a high-performance façade from the first feasibility study — the specification global occupiers audit for, held to the same standard that governs every Makro development.",
         ],
       },
     ],
     related: ["sri-lanka-real-estate-investment-guide", "how-to-choose-a-property-developer-in-sri-lanka"],
-    relatedProjects: ["altair-commercial-tower", "horizon-business-quarter"],
+    relatedProjects: ["makro-heights"],
   },
   {
     slug: "how-to-choose-a-property-developer-in-sri-lanka",
@@ -235,7 +235,7 @@ export const INSIGHTS: Insight[] = [
       {
         heading: "One — a track record you can walk through.",
         paras: [
-          "Completed, occupied, ageing-well buildings are the only evidence that matters. Visit a project the developer handed over years ago and look at how it has weathered. Meridian Park Homes, delivered in 2023 and fully occupied since, is the reference we offer buyers — because a working precedent beats any promise.",
+          "Completed, occupied, ageing-well buildings are the only evidence that matters. Visit a project the developer handed over years ago and look at how it has weathered. And where a developer's flagship is still in planning — as Makro Heights is — scrutinise what you can verify instead: the group behind it, the professionals it has appointed and the standards it publishes. Substance you can check beats any promise.",
         ],
       },
       {
@@ -264,7 +264,7 @@ export const INSIGHTS: Insight[] = [
       },
     ],
     related: ["buying-an-apartment-in-colombo-guide", "grade-a-office-space-colombo"],
-    relatedProjects: ["meridian-park-homes", "the-ridgeline-residences"],
+    relatedProjects: ["makro-heights"],
   },
 ];
 

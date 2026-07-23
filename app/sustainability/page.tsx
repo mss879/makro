@@ -181,7 +181,7 @@ export default function SustainabilityPage() {
             <Reveal delay={0.15} className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 href="/approach"
-                className="group inline-flex items-center gap-3 rounded-full border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+                className="group inline-flex items-center gap-3 border border-hair-strong px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
               >
                 Part of how we build
                 <span className="text-rose transition-transform duration-500 group-hover:translate-x-1">→</span>

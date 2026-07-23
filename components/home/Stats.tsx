@@ -9,8 +9,11 @@ const STATS = [
 ];
 
 export default function Stats() {
+  // Deliberately a BLACK band: it breaks up the white run between the
+  // brand statement and services, keeping the page black-led per the
+  // brand's 70/20/10 ratio.
   return (
-    <section className="relative border-y border-hair bg-carbon">
+    <section className="relative border-y border-hair bg-ink">
       <div className="container-edge grid grid-cols-2 lg:grid-cols-4">
         {STATS.map((s, i) => (
           <Reveal

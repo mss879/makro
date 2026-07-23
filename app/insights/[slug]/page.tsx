@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getInsight, INSIGHT_SLUGS } from "@/lib/insights";
-import { getProject } from "@/lib/projects";
+import { getProject, PROJECTS } from "@/lib/projects";
 import { pageMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import ParallaxImage from "@/components/ui/ParallaxImage";
@@ -50,7 +50,9 @@ export default async function InsightPage({
   if (!insight) notFound();
 
   const related = insight.related.map(getInsight).filter(Boolean);
-  const projects = insight.relatedProjects.map(getProject).filter(Boolean);
+  const relatedProjects = insight.relatedProjects.map(getProject).filter(Boolean);
+  /* Insights may still reference retired project slugs — fall back to the live portfolio. */
+  const projects = relatedProjects.length > 0 ? relatedProjects : PROJECTS;
 
   return (
     <>
@@ -150,7 +152,7 @@ export default async function InsightPage({
               </p>
               <Link
                 href="/contact"
-                className="group mt-7 inline-flex items-center gap-3 rounded-full bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                className="group mt-7 inline-flex items-center gap-3 bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
               >
                 Start a conversation
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>

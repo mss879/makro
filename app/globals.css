@@ -3,7 +3,7 @@
 /* ============================================================
    MAKRO DEVELOPERS — Brand Design System
    Palette (brand guideline): 70% Pure Black / 20% Pure White / 10% Rose Gold
-   Type: TAN Garland display (self-hosted) · Rosario body
+   Type: Marcellus display (self-hosted) · Manrope body
    ============================================================ */
 
 @theme {
@@ -28,10 +28,26 @@
   --color-hair: rgba(255, 255, 255, 0.1);
   --color-hair-strong: rgba(255, 255, 255, 0.18);
 
-  /* Typography — TAN Garland (brand primary), high-contrast serif fallbacks.
-     TAN Garland ships Regular only: never fake italics or weights on it. */
-  --font-display: var(--font-tan-garland), Didot, "Times New Roman", serif;
-  --font-body: var(--font-rosario), ui-sans-serif, system-ui, sans-serif;
+  /* Typography — Marcellus (brand display, classical/architectural serif),
+     Manrope body. Marcellus ships Regular only: never fake italics or
+     weights on it. */
+  --font-display: var(--font-marcellus), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* Warm cream — light-section surface (client direction, July 2026:
+     softer than pure white, in the family of the normcph.com reference
+     but deepened a step so it unmistakably reads cream, not white).
+     Pure white (--color-bone) remains for text on dark surfaces. */
+  --color-cream: #f2ecdc;
+
+  /* Warm paper tint for panels/cards sitting on cream sections — one
+     step deeper than cream so tiles still read against it */
+  --color-shell: #e8e0cc;
+
+  /* Rose accent that self-adjusts for contrast: rose on dark sections,
+     rose-deep inside `.section-light`. Prefer text-accent for eyebrows,
+     indices and accent strokes in shared components. */
+  --color-accent: #e2a388;
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -44,6 +60,16 @@
     border-color: var(--color-hair);
   }
 
+  /* Sticky white navbar height — full-viewport heroes subtract this. */
+  :root {
+    --nav-h: 4rem;
+  }
+  @media (min-width: 768px) {
+    :root {
+      --nav-h: 5rem;
+    }
+  }
+
   html {
     scroll-behavior: auto; /* Lenis drives smooth scroll */
     -webkit-font-smoothing: antialiased;
@@ -54,11 +80,8 @@
     background: var(--color-ink);
     color: var(--color-bone);
     font-family: var(--font-body);
-    /* Rosario is self-hosted as static 400/700 faces — 400 is the regular
-       body weight; don't request lighter weights that would silently
-       resolve to the 400 face anyway. */
     font-weight: 400;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
     overflow-x: hidden;
   }
 
@@ -67,14 +90,13 @@
     color: var(--color-ink);
   }
 
-  /* TAN Garland has tall ascenders and deep swash descenders (ascent
-     1.02em, descent 0.37em) — leading below ~1.1 makes multi-line
-     headings physically collide. Keep every display line-height >= 1.1. */
+  /* Marcellus is a wide classical face — it wants a touch of air, never
+     negative tracking. Single 400 weight across all headings. */
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     font-weight: 400;
     line-height: 1.12;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.005em;
   }
 
   /* Custom scrollbar */
@@ -95,13 +117,9 @@
 /* ---------- Utilities ---------- */
 @layer utilities {
   /* Rising-text reveal mask.
-     TAN Garland is a high-contrast display face with tall extenders
-     (cap-height 1.0em, ascent 1.02em, descent 0.37em, extreme glyphs to
-     1.58em). Our display line-heights (0.92–1.02) are deliberately tight,
-     so inside an `overflow: hidden` reveal mask the glyph tops/bottoms get
-     clipped. The vertical padding gives glyphs the room they need; the
-     equal negative margin cancels the layout impact so the leading stays
-     exactly as tight as designed — only the clipping goes away. */
+     The vertical padding gives glyph extenders room inside the
+     `overflow: hidden` mask; the equal negative margin cancels the layout
+     impact so the leading stays exactly as designed. */
   .reveal-mask {
     display: block;
     overflow: hidden;
@@ -116,12 +134,12 @@
     vertical-align: bottom;
   }
 
-  /* Eyebrow / kicker label — Rosario, uppercase, letterspaced */
+  /* Eyebrow / kicker label — Manrope, uppercase, letterspaced */
   .eyebrow {
     font-family: var(--font-body);
-    font-weight: 400;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.34em;
+    letter-spacing: 0.32em;
     font-size: 0.7rem;
   }
 
@@ -142,17 +160,17 @@
     line-height: 1.14;
   }
 
-  /* TAN Garland's tall extenders make the tight display leading read as
-     overlapping rows at phone sizes — open it up below sm only. */
+  /* Slightly more open leading at phone sizes keeps multi-line display
+     headings composed. */
   @media (max-width: 639px) {
     .display-fluid {
-      line-height: 1.16;
+      line-height: 1.14;
     }
     .display-lg {
-      line-height: 1.2;
+      line-height: 1.18;
     }
     .display-md {
-      line-height: 1.26;
+      line-height: 1.22;
     }
   }
 
@@ -160,22 +178,23 @@
     text-wrap: balance;
   }
 
+  /* Metallic rose-gold sheen built ONLY from the declared brand tints
+     (rose-soft → rose → rose-deep) so no out-of-palette hex ships. */
   .metal-rose {
     background: linear-gradient(
       92deg,
-      #f4d4c2 0%,
-      #e2a388 28%,
-      #b87a5c 52%,
-      #f0c8b4 74%,
-      #d18e6f 100%
+      var(--color-rose-soft) 0%,
+      var(--color-rose) 30%,
+      var(--color-rose-deep) 55%,
+      var(--color-rose-soft) 78%,
+      var(--color-rose-deep) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    /* background-clip: text only paints inside the element's box; TAN
-       Garland glyphs overflow the tight display line boxes, so extend the
-       paint area (and cancel the layout impact) or glyph tops/bottoms
-       render transparent. */
+    /* background-clip: text only paints inside the element's box; extend
+       the paint area (and cancel the layout impact) so glyph extenders
+       never render transparent. */
     padding-block: 0.4em;
     margin-block: -0.4em;
   }
@@ -223,6 +242,23 @@
   .line-hair {
     height: 1px;
     background: var(--color-hair);
+  }
+
+  /* ---------- Light section theme ----------
+     Scope a section with `section-light` and the shared colour tokens
+     flip for a warm cream background: hairlines and muted text darken,
+     so components built with border-hair / text-mist / text-fog /
+     line-hair read correctly without per-element overrides. Explicit
+     text-bone / bg-ink usages must still be swapped by hand inside
+     light sections. */
+  .section-light {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    --color-hair: rgba(5, 2, 3, 0.12);
+    --color-hair-strong: rgba(5, 2, 3, 0.26);
+    --color-mist: #675f5a; /* muted warm grey on white */
+    --color-fog: #9c938d;
+    --color-accent: var(--color-rose-deep);
   }
 
   .container-edge {
