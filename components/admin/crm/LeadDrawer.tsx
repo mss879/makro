@@ -1,0 +1,200 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { Badge, buttonClass, formatDate } from "@/components/admin/ui";
+import { createClient } from "@/lib/supabase/client";
+import type { InquiryRow, LeadRow } from "@/lib/supabase/types";
+import { formatValue } from "./LeadCard";
+
+function Row({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="border-b border-ink/10 py-3">
+      <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+        {label}
+      </p>
+      <div className="mt-1 font-body text-sm text-ink">{children}</div>
+    </div>
+  );
+}
+
+/**
+ * Read-only detail view. Everything on the lead, plus the message from the
+ * contact-form inquiry it came from — fetched here with the browser client so
+ * the board doesn't have to carry every inquiry body around with it.
+ */
+export default function LeadDrawer({
+  lead,
+  pipelineName,
+  stageName,
+  onClose,
+  onEdit,
+}: {
+  lead: LeadRow | null;
+  pipelineName: string;
+  stageName: string;
+  onClose: () => void;
+  onEdit: () => void;
+}) {
+  // The board mounts this with a `key` per lead, so `inquiryId` is fixed for
+  // the lifetime of the component and the fetch state can simply start correct.
+  const inquiryId = lead?.inquiry_id ?? null;
+  const [inquiry, setInquiry] = useState<InquiryRow | null>(null);
+  const [loading, setLoading] = useState(Boolean(inquiryId));
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!inquiryId) return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { data, error: queryError } = await createClient()
+          .from("inquiries")
+          .select("*")
+          .eq("id", inquiryId)
+          .maybeSingle();
+        if (cancelled) return;
+        if (queryError) setError(queryError.message);
+        else setInquiry(data ?? null);
+      } catch (caught) {
+        if (!cancelled) {
+          setError(caught instanceof Error ? caught.message : "Could not load the inquiry.");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [inquiryId]);
+
+  useEffect(() => {
+    if (!lead) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lead, onClose]);
+
+  if (!lead) return null;
+
+  const value = formatValue(lead.value);
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-end">
+      <button
+        type="button"
+        aria-label="Close lead"
+        onClick={onClose}
+        className="absolute inset-0 h-full w-full cursor-default bg-ink/40"
+      />
+
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Lead — ${lead.name}`}
+        className="relative flex h-full w-full max-w-md flex-col overflow-y-auto border-l border-ink/10 bg-cream"
+      >
+        <header className="flex items-start justify-between gap-4 border-b border-ink/10 px-6 py-5">
+          <div className="min-w-0">
+            <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+              Lead
+            </p>
+            <h2 className="mt-1 break-words font-display text-2xl text-ink">{lead.name}</h2>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <Badge tone={lead.inquiry_id ? "accent" : "muted"}>
+                {lead.inquiry_id ? "Inquiry" : "Manual"}
+              </Badge>
+              <Badge>{stageName}</Badge>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="shrink-0 font-body text-xs uppercase tracking-[0.18em] text-ink/50 transition-colors hover:text-ink"
+          >
+            Close
+          </button>
+        </header>
+
+        <div className="flex-1 px-6 py-2">
+          <Row label="Email">
+            {lead.email ? (
+              <a href={`mailto:${lead.email}`} className="underline-offset-4 hover:underline">
+                {lead.email}
+              </a>
+            ) : (
+              <span className="text-ink/40">—</span>
+            )}
+          </Row>
+          <Row label="Phone">
+            {lead.phone ? (
+              <a href={`tel:${lead.phone}`} className="underline-offset-4 hover:underline">
+                {lead.phone}
+              </a>
+            ) : (
+              <span className="text-ink/40">—</span>
+            )}
+          </Row>
+          <Row label="Interest">{lead.interest ?? <span className="text-ink/40">—</span>}</Row>
+          <Row label="Project">{lead.project ?? <span className="text-ink/40">—</span>}</Row>
+          <Row label="Value">{value ?? <span className="text-ink/40">—</span>}</Row>
+          <Row label="Pipeline">{pipelineName}</Row>
+          <Row label="Stage">{stageName}</Row>
+          <Row label="Created">{formatDate(lead.created_at, true)}</Row>
+          <Row label="Last updated">{formatDate(lead.updated_at, true)}</Row>
+          <Row label="Notes">
+            {lead.notes ? (
+              <span className="whitespace-pre-wrap text-ink/80">{lead.notes}</span>
+            ) : (
+              <span className="text-ink/40">No notes yet.</span>
+            )}
+          </Row>
+
+          {lead.inquiry_id && (
+            <div className="py-4">
+              <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+                Original inquiry
+              </p>
+              {loading && (
+                <p className="mt-2 font-body text-sm text-ink/45">Loading the message…</p>
+              )}
+              {error && (
+                <p className="mt-2 border border-red-200 bg-red-50 px-3 py-2 font-body text-sm text-red-700">
+                  {error}
+                </p>
+              )}
+              {!loading && !error && !inquiry && (
+                <p className="mt-2 font-body text-sm text-ink/45">
+                  That inquiry has since been deleted.
+                </p>
+              )}
+              {inquiry && (
+                <div className="mt-2 border border-ink/10 bg-white/70 px-4 py-3">
+                  <p className="font-body text-xs text-ink/45">
+                    {formatDate(inquiry.created_at, true)} · via {inquiry.source}
+                  </p>
+                  <p className="mt-2 whitespace-pre-wrap font-body text-sm text-ink/80">
+                    {inquiry.message}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <footer className="sticky bottom-0 border-t border-ink/10 bg-cream px-6 py-4">
+          <button type="button" onClick={onEdit} className={buttonClass("primary", "w-full")}>
+            Edit lead
+          </button>
+        </footer>
+      </aside>
+    </div>
+  );
+}

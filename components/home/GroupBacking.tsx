@@ -19,19 +19,31 @@ export default function GroupBacking() {
 
   useGSAP(
     () => {
-      const img = ref.current?.querySelector("[data-bg]");
-      if (img) {
-        gsap.fromTo(
-          img,
-          { scale: 1.2, yPercent: -6 },
-          {
-            scale: 1,
-            yPercent: 6,
-            ease: "none",
-            scrollTrigger: { trigger: ref.current, start: "top bottom", end: "bottom top", scrub: true },
-          }
-        );
-      }
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const img = ref.current?.querySelector("[data-bg]");
+        if (img) {
+          gsap.fromTo(
+            img,
+            { scale: 1.2, yPercent: -6 },
+            {
+              scale: 1,
+              yPercent: 6,
+              ease: "none",
+              scrollTrigger: { trigger: ref.current, start: "top bottom", end: "bottom top", scrub: true },
+            }
+          );
+        }
+      });
+
+      // Reduced motion — the backdrop holds its natural frame, no scrub.
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const img = ref.current?.querySelector("[data-bg]");
+        if (img) gsap.set(img, { scale: 1, yPercent: 0 });
+      });
+
+      return () => mm.revert();
     },
     { scope: ref }
   );

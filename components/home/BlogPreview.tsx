@@ -1,17 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
-import { INSIGHTS } from "@/lib/insights";
+import { getInsights } from "@/lib/blog-data";
 import { unsplash } from "@/lib/images";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 
 /**
- * Blog preview — latest three guides from the Insights hub, surfaced on
+ * Blog preview — first three guides from the Insights hub, surfaced on
  * the home page beneath the FAQ (client request, July 2026). Links use
  * the /insights routes the "Blog" nav item points to.
+ *
+ * Fetches its own posts rather than taking them as a prop: nothing else on
+ * the home page needs the articles, so lifting the await into page.tsx would
+ * only add a line there to thread a value straight back down.
  */
-export default function BlogPreview() {
-  const posts = INSIGHTS.slice(0, 3);
+export default async function BlogPreview() {
+  // Admin sort order decides which three lead, matching /insights.
+  const posts = (await getInsights()).slice(0, 3);
 
   return (
     <section className="section-light relative border-t border-hair py-24 md:py-32">

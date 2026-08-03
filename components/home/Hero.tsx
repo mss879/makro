@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import Magnetic from "@/components/anim/Magnetic";
+import { PRELOADER_DONE } from "@/components/ui/Preloader";
 
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null);
@@ -31,26 +32,53 @@ export default function Hero() {
         gsap.set(img, { scale: 1, yPercent: 0 });
       }
 
-      const tl = gsap.timeline({ delay: 0.35 });
-      tl.from(el.querySelectorAll("[data-h-word]"), {
-        yPercent: 150,
-        duration: 1.1,
-        ease: "power4.out",
-        stagger: 0.09,
-      })
-        .from(
-          el.querySelectorAll("[data-h-fade]"),
-          { opacity: 0, y: 24, duration: 0.9, ease: "power3.out", stagger: 0.12 },
-          "-=0.6"
-        );
+      const mm = gsap.matchMedia();
 
-      // Fade the whole frame content slightly as you scroll away
-      gsap.to(el.querySelector("[data-hero-content]"), {
-        y: -40,
-        opacity: 0.6,
-        ease: "none",
-        scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // Hold the headline down until the curtain has lifted. Started
+        // immediately it would play out behind the preloader and the visitor
+        // would only ever meet the finished state.
+        const tl = gsap.timeline({ paused: true });
+        tl.from(el.querySelectorAll("[data-h-word]"), {
+          yPercent: 150,
+          duration: 1.1,
+          ease: "power4.out",
+          stagger: 0.09,
+        })
+          .from(
+            el.querySelectorAll("[data-h-fade]"),
+            { opacity: 0, y: 24, duration: 0.9, ease: "power3.out", stagger: 0.12 },
+            "-=0.6"
+          );
+
+        // The curtain only mounts on a full page load. On a client-side
+        // navigation back to the home page there is none, so start straight
+        // away rather than waiting for an event that will never fire.
+        const start = () => tl.play();
+        if (document.querySelector(".pl-panel")) {
+          window.addEventListener(PRELOADER_DONE, start, { once: true });
+        } else {
+          gsap.delayedCall(0.15, start);
+        }
+
+        // Fade the whole frame content slightly as you scroll away
+        gsap.to(el.querySelector("[data-hero-content]"), {
+          y: -40,
+          opacity: 0.6,
+          ease: "none",
+          scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
+        });
       });
+
+      // Reduced motion — the finished frame, stated explicitly: headline
+      // seated, copy and CTAs opaque, no scroll-away drift.
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(el.querySelectorAll("[data-h-word]"), { yPercent: 0 });
+        gsap.set(el.querySelectorAll("[data-h-fade]"), { opacity: 1, y: 0 });
+        gsap.set(el.querySelector("[data-hero-content]"), { y: 0, opacity: 1 });
+      });
+
+      return () => mm.revert();
     },
     { scope: root }
   );
@@ -61,14 +89,21 @@ export default function Hero() {
       <div className="relative h-[calc(100svh-var(--nav-h))] min-h-[600px] overflow-hidden">
         {/* Hero video */}
         <div className="absolute inset-0">
+          {/* The poster is the real first paint: it decodes in a fraction of
+              the time the 2.9 MB loop takes, so a slow connection sees the
+              composed hero instead of a black rectangle. It is frame 0 of the
+              loop, so there is no visible jump when playback starts — regenerate
+              it from the video if the video is ever swapped. */}
           <video
             data-hero-img
-            src="/Building_push_cinematic_video_1080p_202607231223.mp4"
+            src="/hero-architectural-1080.mp4"
+            poster="/brand/hero-architectural-poster.webp"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
+            aria-hidden="true"
             className="img-warm absolute inset-0 h-full w-full object-cover"
           />
           {/* Dark gradients for text legibility */}

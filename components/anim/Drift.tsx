@@ -21,20 +21,32 @@ export default function Drift({
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        ref.current,
-        { y: -distance },
-        {
-          y: distance,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          ref.current,
+          { y: -distance },
+          {
+            y: distance,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ref.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        );
+      });
+
+      // Reduced motion — the layer holds its resting position, the midpoint
+      // of the drift's travel.
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(ref.current, { y: 0 });
+      });
+
+      return () => mm.revert();
     },
     { scope: ref }
   );

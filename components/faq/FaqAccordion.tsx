@@ -24,6 +24,7 @@ export default function FaqAccordion({
               onClick={() => setOpen(isOpen ? null : i)}
               className="flex w-full items-center justify-between gap-6 py-6 text-left"
               aria-expanded={isOpen}
+              aria-controls={`faq-panel-${i}`}
             >
               <span
                 className={`font-display text-xl leading-tight transition-colors md:text-2xl ${
@@ -42,6 +43,7 @@ export default function FaqAccordion({
               </span>
             </button>
             <div
+              id={`faq-panel-${i}`}
               className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
               }`}

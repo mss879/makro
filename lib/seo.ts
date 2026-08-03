@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SITE, CREATOR } from "./site";
-import { ogImage } from "./images";
+import { BRAND, ogImage } from "./images";
 import type { Project } from "./projects";
 import type { Insight } from "./insights";
 
@@ -13,6 +13,22 @@ import type { Insight } from "./insights";
 
 export function absoluteUrl(path = "/"): string {
   return `${SITE.url}${path === "/" ? "" : path}`;
+}
+
+/**
+ * ogImage() only crops raw Unsplash ids to exactly 1200×630 — resolved paths
+ * ("/brand/…", uploaded asset URLs) pass through at their native size, so
+ * card dimensions are only declared when the crop guarantees them.
+ */
+function isCropped(id: string): boolean {
+  return !id.startsWith("/") && !id.startsWith("http");
+}
+
+/** ogImage() resolved to an absolute URL for JSON-LD, where there is no
+    metadataBase to resolve a local "/brand/…" path against. */
+function absoluteOgImage(id: string): string {
+  const src = ogImage(id);
+  return src.startsWith("/") ? absoluteUrl(src) : src;
 }
 
 /**
@@ -35,7 +51,11 @@ export function pageMetadata({
   ogType?: "website" | "article";
 }): Metadata {
   const url = absoluteUrl(path);
-  const images = imageId ? [{ url: ogImage(imageId), width: 1200, height: 630 }] : undefined;
+  // Every page ships a card image — pages without their own art fall back to
+  // the brand texture so link previews never render blank.
+  const id = imageId ?? BRAND.textureAscent;
+  const image = ogImage(id);
+  const images = [isCropped(id) ? { url: image, width: 1200, height: 630 } : { url: image }];
   return {
     title,
     description,
@@ -54,7 +74,7 @@ export function pageMetadata({
       card: "summary_large_image",
       title: `${title} · ${SITE.name}`,
       description,
-      images: imageId ? [ogImage(imageId)] : undefined,
+      images: [image],
     },
   };
 }
@@ -237,6 +257,11 @@ export function projectListSchema(projects: Project[]) {
 export function projectSchema(project: Project) {
   const url = absoluteUrl(`/projects/${project.slug}`);
   const isResidential = project.type !== "Commercial";
+  /* The unit count lives in the admin-edited specs — find it by label rather
+     than position, and only emit the property when the value actually holds
+     a number ("~120" → 120; a "TBC" or missing spec is omitted). */
+  const unitsSpec = project.specs.find((s) => /residence|unit/i.test(s.label));
+  const units = Number(unitsSpec?.value.match(/\d+(?:\.\d+)?/)?.[0]);
   return {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
@@ -244,7 +269,7 @@ export function projectSchema(project: Project) {
     name: project.name,
     description: project.summary,
     url,
-    image: ogImage(project.cover),
+    image: absoluteOgImage(project.cover),
     datePosted: `${project.year}-01-01`,
     provider: { "@id": ORG_ID },
     about: {
@@ -253,11 +278,12 @@ export function projectSchema(project: Project) {
       description: project.tagline,
       address: {
         "@type": "PostalAddress",
-        addressLocality: project.location.split(",")[0].trim(),
+        streetAddress: project.location.split(",")[0].trim(),
+        addressLocality: project.city,
         addressCountry: "LK",
       },
-      ...(isResidential
-        ? { numberOfAccommodationUnits: { "@type": "QuantitativeValue", value: project.specs[0]?.value } }
+      ...(isResidential && Number.isFinite(units)
+        ? { numberOfAccommodationUnits: { "@type": "QuantitativeValue", value: units } }
         : {}),
       amenityFeature: project.features.map((f) => ({
         "@type": "LocationFeatureSpecification",
@@ -277,7 +303,7 @@ export function articleSchema(insight: Insight) {
     "@id": `${url}#article`,
     headline: insight.title,
     description: insight.metaDescription,
-    image: ogImage(insight.cover),
+    image: absoluteOgImage(insight.cover),
     url,
     datePublished: insight.date,
     dateModified: insight.date,

@@ -5,9 +5,12 @@ import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { unsplash } from "@/lib/images";
 import TextReveal from "@/components/anim/TextReveal";
-import { PeakMark } from "@/components/brand/PeakMark";
 
-/** Reusable inner-page hero with a treated background image and reveal. */
+/**
+ * Reusable inner-page hero with a treated background image and reveal.
+ * Deliberately quieter than the homepage hero (client direction — the
+ * sub-page heroes should introduce the page, not shout at it).
+ */
 export default function PageHero({
   eyebrow,
   title,
@@ -25,41 +28,58 @@ export default function PageHero({
 
   useGSAP(
     () => {
-      const img = ref.current?.querySelector("[data-hero-img]");
-      if (img) {
-        gsap.fromTo(
-          img,
-          { scale: 1.25 },
-          {
-            scale: 1,
-            ease: "none",
-            scrollTrigger: { trigger: ref.current, start: "top top", end: "bottom top", scrub: true },
-          }
-        );
-      }
-      if (ref.current) {
-        gsap.from(ref.current.querySelector("[data-hero-intro]"), {
-          opacity: 0,
-          y: 24,
-          duration: 1,
-          delay: 0.5,
-          ease: "power3.out",
-        });
+      const mm = gsap.matchMedia();
 
-        // Content drifts up and softens as the hero scrolls away,
-        // mirroring the homepage hero behaviour.
-        gsap.to(ref.current.querySelector("[data-hero-content]"), {
-          y: -48,
-          opacity: 0.5,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const img = ref.current?.querySelector("[data-hero-img]");
+        if (img) {
+          gsap.fromTo(
+            img,
+            { scale: 1.08 },
+            {
+              scale: 1,
+              ease: "none",
+              scrollTrigger: { trigger: ref.current, start: "top top", end: "bottom top", scrub: true },
+            }
+          );
+        }
+        if (ref.current) {
+          gsap.from(ref.current.querySelector("[data-hero-intro]"), {
+            opacity: 0,
+            y: 24,
+            duration: 1,
+            delay: 0.5,
+            ease: "power3.out",
+          });
+
+          // Content drifts up and softens as the hero scrolls away,
+          // mirroring the homepage hero behaviour.
+          gsap.to(ref.current.querySelector("[data-hero-content]"), {
+            y: -24,
+            opacity: 0.75,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ref.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
+        }
+      });
+
+      // Reduced motion — the hero at rest: image unscaled, intro and
+      // content seated and fully opaque.
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const img = ref.current?.querySelector("[data-hero-img]");
+        if (img) gsap.set(img, { scale: 1 });
+        if (ref.current) {
+          gsap.set(ref.current.querySelector("[data-hero-intro]"), { opacity: 1, y: 0 });
+          gsap.set(ref.current.querySelector("[data-hero-content]"), { y: 0, opacity: 1 });
+        }
+      });
+
+      return () => mm.revert();
     },
     { scope: ref }
   );
@@ -67,7 +87,7 @@ export default function PageHero({
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[78vh] items-end overflow-hidden pb-16 pt-40"
+      className="relative flex min-h-[46vh] items-end overflow-hidden pb-12 pt-32 md:min-h-[52vh] md:pt-36"
     >
       <div className="absolute inset-0">
         <Image
@@ -77,13 +97,9 @@ export default function PageHero({
           fill
           priority
           sizes="100vw"
-          className={`object-cover ${treatment === "mono" ? "img-mono" : "img-warm"} opacity-60`}
+          className={`object-cover ${treatment === "mono" ? "img-mono" : "img-warm"} opacity-35`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/30" />
-      </div>
-
-      <div className="pointer-events-none absolute right-6 top-1/3 opacity-[0.06] md:right-16">
-        <PeakMark className="h-[30rem] w-auto text-rose" strokeWidth={2} />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
       </div>
 
       <div data-hero-content className="container-edge relative w-full">
@@ -94,7 +110,7 @@ export default function PageHero({
         <TextReveal
           as="h1"
           text={title}
-          className="mt-6 max-w-5xl font-display display-fluid text-bone"
+          className="mt-6 max-w-4xl font-display display-lg text-bone"
           delay={0.15}
         />
         {intro && (

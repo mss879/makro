@@ -47,29 +47,43 @@ export default function ParallaxImage({
       const el = inner.current;
       if (!w || !el) return;
 
-      gsap.fromTo(
-        w,
-        { clipPath: `inset(${revealInset})` },
-        {
-          clipPath: "inset(0% 0% 0% 0%)",
-          duration: revealDuration,
-          ease: "power3.out",
-          scrollTrigger: { trigger: w, start: "top 85%" },
-        }
-      );
+      const mm = gsap.matchMedia();
 
-      // Base zoom lives here (not a CSS class) so it can vary per instance;
-      // GSAP composes it with the parallax translate into one transform.
-      gsap.set(el, { scale: zoom });
-      gsap.fromTo(
-        el,
-        { yPercent: -parallax },
-        {
-          yPercent: parallax,
-          ease: "none",
-          scrollTrigger: { trigger: w, start: "top bottom", end: "bottom top", scrub: true },
-        }
-      );
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          w,
+          { clipPath: `inset(${revealInset})` },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: revealDuration,
+            ease: "power3.out",
+            scrollTrigger: { trigger: w, start: "top 85%" },
+          }
+        );
+
+        // Base zoom lives here (not a CSS class) so it can vary per instance;
+        // GSAP composes it with the parallax translate into one transform.
+        gsap.set(el, { scale: zoom });
+        gsap.fromTo(
+          el,
+          { yPercent: -parallax },
+          {
+            yPercent: parallax,
+            ease: "none",
+            scrollTrigger: { trigger: w, start: "top bottom", end: "bottom top", scrub: true },
+          }
+        );
+      });
+
+      // Reduced motion — frame fully open, inner layer held at the parallax
+      // midpoint: the same crop a default visitor sees with the image
+      // centred in the viewport, just static.
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(w, { clipPath: "inset(0% 0% 0% 0%)" });
+        gsap.set(el, { scale: zoom, yPercent: 0 });
+      });
+
+      return () => mm.revert();
     },
     { scope: wrap }
   );

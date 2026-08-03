@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { PROJECTS } from "@/lib/projects";
+import type { Project } from "@/lib/projects";
 import { PeakMark } from "@/components/brand/PeakMark";
+import { submitInquiry } from "@/app/actions/contact";
 
 const INTERESTS = [
   "A residential development",
@@ -12,9 +13,15 @@ const INTERESTS = [
   "General enquiry",
 ];
 
-export default function ContactForm() {
+const SEND_FAILED =
+  "We could not send your message just now. Please try again, or email us directly.";
+
+/** Projects come from the server page so the dropdown tracks the admin panel. */
+export default function ContactForm({ projects }: { projects: Project[] }) {
   const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [sending, setSending] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const form = useRef<HTMLFormElement>(null);
   const success = useRef<HTMLDivElement>(null);
 
@@ -40,8 +47,12 @@ export default function ContactForm() {
     { dependencies: [sent] }
   );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (sending) return;
+
+    // Read the form before any await — `currentTarget` is null once the event
+    // has been handled.
     const data = new FormData(e.currentTarget);
     const newErrors: Record<string, boolean> = {};
     ["name", "email", "message"].forEach((f) => {
@@ -52,8 +63,20 @@ export default function ContactForm() {
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = true;
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      setSent(true);
+    if (Object.keys(newErrors).length > 0) return;
+
+    setFormError(null);
+    setSending(true);
+    try {
+      // Persists the enquiry as a row in `inquiries`, which is what the admin
+      // panel reads. Only celebrate once it is actually stored.
+      const result = await submitInquiry(data);
+      if (result.ok) setSent(true);
+      else setFormError(result.message || SEND_FAILED);
+    } catch {
+      setFormError(SEND_FAILED);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -70,7 +93,10 @@ export default function ContactForm() {
           touch within one business day.
         </p>
         <button
-          onClick={() => setSent(false)}
+          onClick={() => {
+            setSent(false);
+            setFormError(null);
+          }}
           className="mt-8 font-body text-sm text-rose-deep underline-offset-4 hover:underline"
         >
           Send another message
@@ -88,34 +114,44 @@ export default function ContactForm() {
     <form ref={form} onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         <div>
-          <label className="eyebrow text-fog">Full name*</label>
-          <input name="name" placeholder="Your name" className={`mt-2 ${fieldClass("name")}`} />
+          <label htmlFor="cf-name" className="eyebrow text-fog">Full name*</label>
+          <input
+            id="cf-name"
+            name="name"
+            placeholder="Your name"
+            aria-invalid={errors.name ? true : undefined}
+            aria-describedby={errors.name ? "cf-name-error" : undefined}
+            className={`mt-2 ${fieldClass("name")}`}
+          />
           {errors.name && (
-            <p className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
+            <p id="cf-name-error" role="alert" className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
           )}
         </div>
         <div>
-          <label className="eyebrow text-fog">Email*</label>
+          <label htmlFor="cf-email" className="eyebrow text-fog">Email*</label>
           <input
+            id="cf-email"
             name="email"
             type="email"
             placeholder="you@email.com"
+            aria-invalid={errors.email ? true : undefined}
+            aria-describedby={errors.email ? "cf-email-error" : undefined}
             className={`mt-2 ${fieldClass("email")}`}
           />
           {errors.email && (
-            <p className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
+            <p id="cf-email-error" role="alert" className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         <div>
-          <label className="eyebrow text-fog">Phone (optional)</label>
-          <input name="phone" placeholder="+94 …" className={`mt-2 ${fieldClass("phone")}`} />
+          <label htmlFor="cf-phone" className="eyebrow text-fog">Phone (optional)</label>
+          <input id="cf-phone" name="phone" placeholder="+94 …" className={`mt-2 ${fieldClass("phone")}`} />
         </div>
         <div>
-          <label className="eyebrow text-fog">I&rsquo;m interested in*</label>
-          <select name="interest" className={`mt-2 ${fieldClass("interest")} cursor-pointer`}>
+          <label htmlFor="cf-interest" className="eyebrow text-fog">I&rsquo;m interested in*</label>
+          <select id="cf-interest" name="interest" className={`mt-2 ${fieldClass("interest")} cursor-pointer`}>
             {INTERESTS.map((o) => (
               <option key={o} value={o} className="bg-bone text-ink">
                 {o}
@@ -126,12 +162,12 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="eyebrow text-fog">Project of interest</label>
-        <select name="project" className={`mt-2 ${fieldClass("project")} cursor-pointer`}>
+        <label htmlFor="cf-project" className="eyebrow text-fog">Project of interest</label>
+        <select id="cf-project" name="project" className={`mt-2 ${fieldClass("project")} cursor-pointer`}>
           <option value="" className="bg-bone text-ink">
             No specific project
           </option>
-          {PROJECTS.map((p) => (
+          {projects.map((p) => (
             <option key={p.slug} value={p.name} className="bg-bone text-ink">
               {p.name}
             </option>
@@ -140,25 +176,48 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="eyebrow text-fog">Message*</label>
+        <label htmlFor="cf-message" className="eyebrow text-fog">Message*</label>
         <textarea
+          id="cf-message"
           name="message"
           rows={4}
           placeholder="Tell us how we can help…"
+          aria-invalid={errors.message ? true : undefined}
+          aria-describedby={errors.message ? "cf-message-error" : undefined}
           className={`mt-2 resize-none ${fieldClass("message")}`}
         />
         {errors.message && (
-          <p className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
+          <p id="cf-message-error" role="alert" className="mt-2 font-body text-xs text-rose-deep">This field is required.</p>
         )}
       </div>
 
-      <button
-        type="submit"
-        className="group inline-flex items-center justify-center gap-3 self-start bg-ink px-8 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink"
-      >
-        Send enquiry
-        <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-      </button>
+      {/* Honeypot. Invisible to people, irresistible to bots — the server
+          action rejects any submission that fills it in. */}
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
+
+      <div className="flex flex-col gap-4">
+        <button
+          type="submit"
+          disabled={sending}
+          className="group inline-flex items-center justify-center gap-3 self-start bg-ink px-8 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-ink disabled:hover:text-bone"
+        >
+          {sending ? "Sending…" : "Send enquiry"}
+          <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+        </button>
+
+        {formError && (
+          <p role="alert" className="font-body text-sm text-rose-deep">
+            {formError}
+          </p>
+        )}
+      </div>
     </form>
   );
 }

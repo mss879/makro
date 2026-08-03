@@ -70,3 +70,54 @@ export function getProject(slug: string): Project | undefined {
 }
 
 export const PROJECT_SLUGS = PROJECTS.map((p) => p.slug);
+
+/* ---------- Status grouping ----------
+   The portfolio index is segregated by where a development sits in its
+   life, not by its marketing status. The group is derived from
+   `status` so a project never carries two sources of truth. */
+
+/* Two groups, not three (client, Aug 2026): the portfolio reads as delivered
+   work first, then everything still moving. "In Progress" deliberately absorbs
+   the old On-going and Upcoming buckets — a buyer does not distinguish between
+   a tower under construction and one in planning, they distinguish between one
+   they can walk through and one they cannot. */
+export type ProjectGroup = "Completed" | "In Progress";
+
+export const STATUS_GROUP: Record<ProjectStatus, ProjectGroup> = {
+  "Completed": "Completed",
+  "Under Construction": "In Progress",
+  "Now Selling": "In Progress",
+  "In Planning": "In Progress",
+};
+
+/** Render order — delivered work leads, then everything still in motion. */
+export const GROUP_ORDER: ProjectGroup[] = ["Completed", "In Progress"];
+
+/** Anchor ids for the in-page jump. Kept beside the group definition so a
+    renamed group can never drift from the id the dropdown scrolls to. */
+export const GROUP_SLUG: Record<ProjectGroup, string> = {
+  "Completed": "completed",
+  "In Progress": "in-progress",
+};
+
+export function projectsInGroup(g: ProjectGroup, list: Project[] = PROJECTS): Project[] {
+  return list.filter((p) => STATUS_GROUP[p.status] === g);
+}
+
+/**
+ * Named-but-unrevealed work. Deliberately NOT part of PROJECTS — a teaser
+ * has no slug and no detail page, so it can never reach the sitemap, the
+ * static params or the project JSON-LD. It exists only to show the index
+ * strip that more is in motion.
+ */
+export interface Teaser {
+  name: string;
+  type: Project["type"];
+  city: string;
+  note: string;
+}
+
+export const TEASERS: Teaser[] = [
+  { name: "Colombo Residential", type: "Residential", city: "Colombo", note: "Details to be announced" },
+  { name: "Commercial Development", type: "Commercial", city: "Colombo", note: "Details to be announced" },
+];

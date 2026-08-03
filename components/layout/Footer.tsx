@@ -4,8 +4,8 @@ import { CREATOR, NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/sit
 import { PeakMark } from "@/components/brand/PeakMark";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
-import Magnetic from "@/components/anim/Magnetic";
 import Drift from "@/components/anim/Drift";
+import NewsletterForm from "@/components/layout/NewsletterForm";
 
 export default function Footer() {
   return (
@@ -17,39 +17,39 @@ export default function Footer() {
 
       <div className="container-edge relative py-12 md:py-16">
         {/* CTA */}
-        <div className="flex flex-col items-start justify-between gap-10 border-b border-hair pb-10 md:pb-12 lg:flex-row lg:items-end">
+        <div className="flex flex-col items-start justify-between gap-10 border-b border-hair pb-8 md:pb-10 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow text-rose">Let&rsquo;s build something lasting</p>
             <TextReveal
               as="h2"
               text="Have a site, a vision or a question?"
-              className="mt-5 font-display display-lg text-bone"
+              className="mt-5 font-display display-md text-bone"
             />
           </div>
-          <Magnetic strength={0.4}>
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-4 bg-rose px-8 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
-            >
-              <span className="text-lg">Start a conversation</span>
-              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-            </Link>
-          </Magnetic>
+          <Link
+            href="/contact"
+            className="group inline-flex items-center gap-3 border-b border-hair-strong pb-2 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+          >
+            <span className="text-lg">Start a conversation</span>
+            <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+          </Link>
         </div>
 
         {/* Columns */}
         <Reveal className="grid grid-cols-2 gap-10 py-10 md:py-12 md:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
+            {/* Width/height at 2× the rendered h-8, not the asset's native
+                900×244 — same srcset discipline as the navbar lockup. */}
             <Image
               src="/logo-black.png"
               alt="Makro Developers"
-              width={900}
-              height={244}
+              width={236}
+              height={64}
               className="h-8 w-auto invert"
             />
-            <p className="mt-5 max-w-xs font-body text-sm leading-relaxed text-mist">
-              {SITE.description}
-            </p>
+            <div className="mt-7">
+              <NewsletterForm />
+            </div>
           </div>
 
           <div>

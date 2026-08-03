@@ -4,7 +4,7 @@ export const SITE = {
   parent: "Wheels Lanka Group",
   tagline: "The future built well.",
   description:
-    "Makro Developers is a Sri Lankan property developer delivering premium residential and commercial developments — backed by the Wheels Lanka Group and built for long-term value.",
+    "Makro Developers is a Sri Lankan property developer delivering premium residential and commercial developments, backed by the Wheels Lanka Group.",
   email: "hello@makrodevelopers.lk",
   phone: "+94 11 234 5678",
   address: "Colombo 07, Sri Lanka",
@@ -37,6 +37,9 @@ export const SOCIALS = [
   { label: "LinkedIn", href: "#" },
   { label: "Facebook", href: "#" },
 ];
+
+/** Section toggles — client-requested hides that may return. */
+export const FEATURES = { statsBand: false };
 
 /**
  * Agency credit — ARC AI designed & built this website. Surfaced as a

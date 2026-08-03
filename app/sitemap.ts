@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
-import { PROJECTS } from "@/lib/projects";
-import { INSIGHTS } from "@/lib/insights";
+import { getProjects } from "@/lib/projects-data";
+import { getInsights } from "@/lib/blog-data";
 
 /**
  * Sitemap priorities mirror the site's commercial hierarchy:
  * conversion pages (home, projects) highest, editorial next,
  * legal pages lowest. Documented in docs/SEO-HANDOVER.md.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const url = (path: string) => `${SITE.url}${path}`;
 
@@ -26,14 +26,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/terms-of-use"), lastModified: now, changeFrequency: "yearly", priority: 0.2 },
   ];
 
-  const projectPages: MetadataRoute.Sitemap = PROJECTS.map((p) => ({
+  const projectPages: MetadataRoute.Sitemap = (await getProjects()).map((p) => ({
     url: url(`/projects/${p.slug}`),
     lastModified: now,
     changeFrequency: "monthly",
     priority: p.status === "Now Selling" ? 0.9 : 0.8,
   }));
 
-  const insightPages: MetadataRoute.Sitemap = INSIGHTS.map((i) => ({
+  // getInsights rather than getInsightSlugs: <lastmod> needs each article's
+  // published_on, which the slug list drops.
+  const insightPages: MetadataRoute.Sitemap = (await getInsights()).map((i) => ({
     url: url(`/insights/${i.slug}`),
     lastModified: new Date(i.date),
     changeFrequency: "yearly",

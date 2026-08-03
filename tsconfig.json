@@ -30,5 +30,14 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    // iCloud syncs this project's Desktop folder and periodically leaves
+    // conflicted copies ("routes.d 2.ts") next to generated files. They are
+    // byte-identical, so TypeScript reports duplicate-identifier errors and
+    // the build fails for no real reason.
+    "**/* ?.ts",
+    "**/* ?.tsx",
+    "**/* ?.d.ts"
+  ]
 }

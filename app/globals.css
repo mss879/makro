@@ -278,5 +278,8 @@
   .will-reveal {
     opacity: 1 !important;
     transform: none !important;
+    /* The reveals animate autoAlpha, which writes inline visibility:hidden
+       alongside opacity 0 — opacity alone cannot undo that. */
+    visibility: visible !important;
   }
 }

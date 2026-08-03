@@ -5,14 +5,29 @@
  * and dramatic monochrome structural detail.
  */
 
-export function unsplash(id: string, w = 1600, q = 80): string {
-  if (id.startsWith("/")) return id; // local brand asset — serve as-is
+/**
+ * Fallback for an image that has no source yet — a project published from the
+ * admin panel before its first upload. Without it, an empty id would build the
+ * URL `…/photo-?…`, which 404s, and an undefined id would throw inside
+ * next/image during server rendering.
+ */
+const PLACEHOLDER = "/brand/towers-render.jpg";
+
+/** Already a usable URL: a local `/brand/…` path, or an uploaded asset's full URL. */
+function isResolved(id: string): boolean {
+  return id.startsWith("/") || id.startsWith("http");
+}
+
+export function unsplash(id: string | null | undefined, w = 1600, q = 80): string {
+  if (!id) return PLACEHOLDER;
+  if (isResolved(id)) return id;
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=${q}`;
 }
 
 /** 1200×630 crop for Open Graph / Twitter cards and structured-data images. */
-export function ogImage(id: string): string {
-  if (id.startsWith("/")) return id; // local brand asset (resolved via metadataBase)
+export function ogImage(id: string | null | undefined): string {
+  if (!id) return PLACEHOLDER;
+  if (isResolved(id)) return id; // local brand asset (resolved via metadataBase)
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&h=630&q=80`;
 }
 
@@ -35,6 +50,13 @@ export const BRAND = {
   lifestyleLoft: "/brand/lifestyle-loft.jpg", // warm loft living room
   lifestylePool: "/brand/lifestyle-pool.jpg", // poolside architecture, terracotta
   lifestyleSuite: "/brand/lifestyle-suite.jpg", // golden-hour suite, skyline view
+  // Landscape 3:2 (1539×1022) — unlike the portrait lifestyle-* plates, so any
+  // frame it sits in wants a landscape aspect. The subject sits left of centre,
+  // which a narrow centre-crop would cut out entirely.
+  aboutLifestyle: "/brand/about-lifestyle.webp", // client-supplied — About page editorial plate
+  // Landscape 3:2 (1536×1024). The tower model is dead-centre, so the 4:3 frame
+  // it sits in crops ~5% off each side without touching the subject.
+  aboutFoundation: "/brand/about-foundation.webp", // client-supplied — About "Our Foundation"
   interludeFacade: "/brand/interlude-facade.jpg", // AI-generated (Higgsfield, July 2026) golden-hour facade — home interlude
   serviceResidential: "/brand/service-residential.jpg", // AI-generated (Higgsfield) terracotta residence — services card 01
   serviceCommercial: "/brand/service-commercial.jpg", // AI-generated (Higgsfield) dusk tower — services card 02

@@ -2,13 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SITE } from "@/lib/site";
-import { organizationSchema, websiteSchema, creatorSchema } from "@/lib/seo";
-import JsonLd from "@/components/seo/JsonLd";
-import SmoothScroll from "@/components/providers/SmoothScroll";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import Preloader from "@/components/ui/Preloader";
-import ScrollProgress from "@/components/ui/ScrollProgress";
+import { absoluteUrl } from "@/lib/seo";
 
 // BRAND PRIMARY DISPLAY FONT — Marcellus (OFL, self-hosted). A classical,
 // inscription-derived serif: architectural and quietly premium without the
@@ -68,6 +62,9 @@ export const metadata: Metadata = {
     locale: "en_LK",
     siteName: SITE.name,
     url: SITE.url,
+    // Default card image — any page without its own og image (including the
+    // 404 fallback) inherits this; Twitter inherits openGraph images too.
+    images: [{ url: absoluteUrl("/brand/texture-ascent.jpg") }],
   },
   twitter: {
     card: "summary_large_image",
@@ -90,16 +87,10 @@ export default function RootLayout({
       lang="en"
       className={`${marcellus.variable} ${manrope.variable} h-full antialiased`}
     >
-      <body className="grain relative min-h-full bg-ink text-bone">
-        <JsonLd data={[organizationSchema(), websiteSchema(), creatorSchema()]} />
-        <Preloader />
-        <ScrollProgress />
-        <SmoothScroll>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </SmoothScroll>
-      </body>
+      {/* Document shell only — fonts, base colours and the grain overlay.
+          The public site's chrome (preloader, navbar, footer, smooth scroll)
+          lives in app/(site)/layout.tsx so /admin can opt out of all of it. */}
+      <body className="grain relative min-h-full bg-ink text-bone">{children}</body>
     </html>
   );
 }

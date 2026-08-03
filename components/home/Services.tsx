@@ -18,12 +18,14 @@ const SERVICES = [
     body: "Commercial spaces engineered for long-term performance and tenant confidence, from feasibility through to handover.",
     image: BRAND.serviceCommercial,
   },
-  {
-    n: "03",
-    title: "Investment & Value",
-    body: "Every development is structured to protect and grow its value, delivering confident long-term returns on a Makro address.",
-    image: BRAND.serviceValue,
-  },
+  // Retired per client feedback July 2026 — uncomment to restore.
+  // (BRAND.serviceValue is still exported from lib/images.ts.)
+  // {
+  //   n: "03",
+  //   title: "Investment & Value",
+  //   body: "Every development is structured to protect and grow its value, delivering confident long-term returns on a Makro address.",
+  //   image: BRAND.serviceValue,
+  // },
 ];
 
 export default function Services() {
@@ -57,8 +59,8 @@ export default function Services() {
         {/* Image cards on the cream field. The imagery stays fully visible
             (client direction — no dark hover-reveal); a bottom scrim keeps
             the text legible. Title and body live in fixed-height rows so
-            all three cards align horizontally regardless of text length. */}
-        <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-3">
+            both cards align horizontally regardless of text length. */}
+        <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
           {SERVICES.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.1}>
               <Link
@@ -66,12 +68,12 @@ export default function Services() {
                 className="group flex flex-col"
               >
                 {/* Image card frame with number overlay on top */}
-                <div className="relative h-[22rem] w-full overflow-hidden bg-ink-700 p-6">
+                <div className="relative h-[24rem] w-full overflow-hidden bg-ink-700 p-6 md:h-[30rem]">
                   <Image
                     src={s.image}
                     alt={s.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="img-warm object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   />
                   {/* Subtle top scrim for contrast */}
@@ -89,7 +91,9 @@ export default function Services() {
                   <h3 className="font-display text-2xl text-ink transition-colors duration-300 group-hover:text-rose-deep">
                     {s.title}
                   </h3>
-                  <p className="mt-3 font-body text-sm leading-relaxed text-mist">
+                  {/* Capped measure — at half-container width the line
+                      length would otherwise balloon past comfortable. */}
+                  <p className="mt-3 max-w-md font-body text-sm leading-relaxed text-mist">
                     {s.body}
                   </p>
                   <span className="mt-4 inline-flex items-center gap-2 font-body text-sm font-medium text-rose-deep">

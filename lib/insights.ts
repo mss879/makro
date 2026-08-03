@@ -39,7 +39,10 @@ export interface Insight {
 export const INSIGHTS: Insight[] = [
   {
     slug: "buying-an-apartment-in-colombo-guide",
-    title: "Buying an Apartment in Colombo: The Complete Guide",
+    // `title` feeds the <title>/JSON-LD only (displayTitle carries the
+    // headings) — keep it ≤41 chars so the " · Makro Developers" template
+    // suffix lands the rendered tab title at 60.
+    title: "Buying an Apartment in Colombo: The Guide",
     displayTitle: "Buying an apartment in Colombo.",
     category: "Buying",
     date: "2026-06-15",
@@ -48,7 +51,7 @@ export const INSIGHTS: Insight[] = [
     excerpt:
       "Location, developer track record, build quality and paperwork — what actually matters when buying an apartment in Colombo.",
     metaDescription:
-      "A practical guide to buying an apartment in Colombo, Sri Lanka — how to judge location, developer track record, construction quality, payment plans and legal due diligence before you commit.",
+      "A practical guide to buying an apartment in Colombo — judging location, developer track record, build quality, payment plans and legal due diligence.",
     keywords: [
       "buying an apartment in Colombo",
       "apartments for sale Colombo",
@@ -98,7 +101,7 @@ export const INSIGHTS: Insight[] = [
   },
   {
     slug: "sri-lanka-real-estate-investment-guide",
-    title: "Investing in Sri Lanka Real Estate: What to Know",
+    title: "Investing in Sri Lanka Real Estate",
     displayTitle: "Investing in Sri Lankan real estate.",
     category: "Investing",
     date: "2026-06-01",
@@ -107,7 +110,7 @@ export const INSIGHTS: Insight[] = [
     excerpt:
       "Why disciplined investors are looking at Sri Lankan property — and how to separate durable value from speculation.",
     metaDescription:
-      "An investor's guide to Sri Lanka real estate — market fundamentals, residential vs commercial property returns, what foreign buyers should know, and how to evaluate long-term value in Colombo and beyond.",
+      "An investor's guide to Sri Lanka real estate — market fundamentals, residential vs commercial returns, foreign ownership and long-term value in Colombo.",
     keywords: [
       "Sri Lanka real estate investment",
       "property investment Sri Lanka",
@@ -167,7 +170,7 @@ export const INSIGHTS: Insight[] = [
     excerpt:
       "'Grade A' is Colombo's most overused label. Here is the specification the term is supposed to guarantee.",
     metaDescription:
-      "What qualifies as Grade-A office space in Colombo, Sri Lanka — floor plates, ceilings, lifts, power redundancy, façade performance and the specification checklist occupiers and investors should demand.",
+      "What qualifies as Grade-A office space in Colombo — floor plates, ceilings, lifts, power redundancy and the specification occupiers and investors should demand.",
     keywords: [
       "Grade A office space Colombo",
       "commercial property Colombo",
@@ -212,7 +215,9 @@ export const INSIGHTS: Insight[] = [
   },
   {
     slug: "how-to-choose-a-property-developer-in-sri-lanka",
-    title: "How to Choose a Property Developer in Sri Lanka",
+    // Renders at 61 with the template suffix — kept a shade over 60 so the
+    // "property developer in Sri Lanka" keyword survives intact.
+    title: "Choosing a Property Developer in Sri Lanka",
     displayTitle: "Choosing a developer you can trust.",
     category: "Guides",
     date: "2026-05-02",
@@ -221,7 +226,7 @@ export const INSIGHTS: Insight[] = [
     excerpt:
       "The developer is the single biggest variable in any purchase. Five tests that separate reliable builders from marketing.",
     metaDescription:
-      "How to evaluate property developers in Sri Lanka before you buy — track record, financial backing, construction standards, transparency and after-sales support. Five tests every buyer should apply.",
+      "How to evaluate property developers in Sri Lanka — track record, financial backing, construction standards, transparency and after-sales support.",
     keywords: [
       "property developers in Sri Lanka",
       "best property developer Colombo",

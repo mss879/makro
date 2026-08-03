@@ -12,23 +12,35 @@ export default function ProjectHero({ project }: { project: Project }) {
 
   useGSAP(
     () => {
-      const img = ref.current?.querySelector("[data-img]");
-      if (img) {
-        gsap.fromTo(
-          img,
-          { scale: 1.2 },
-          {
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ref.current,
-              start: "top top",
-              end: "bottom top",
-              scrub: true,
-            },
-          }
-        );
-      }
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const img = ref.current?.querySelector("[data-img]");
+        if (img) {
+          gsap.fromTo(
+            img,
+            { scale: 1.2 },
+            {
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: ref.current,
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+        }
+      });
+
+      // Reduced motion — the cover at its finished scale, no scrub.
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const img = ref.current?.querySelector("[data-img]");
+        if (img) gsap.set(img, { scale: 1 });
+      });
+
+      return () => mm.revert();
     },
     { scope: ref }
   );
