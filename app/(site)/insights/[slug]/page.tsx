@@ -74,7 +74,7 @@ export default async function InsightPage({
       />
 
       {/* Article hero */}
-      <section className="relative bg-ink pb-16 pt-40">
+      <section className="relative bg-ink pb-16 pt-24">
         <div className="container-edge">
           <div className="flex flex-wrap items-center gap-4">
             <Link

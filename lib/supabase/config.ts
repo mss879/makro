@@ -26,6 +26,8 @@ export const isServiceRoleConfigured = Boolean(SUPABASE_URL && SUPABASE_SERVICE_
  * URL — the two have to agree on the literal or a replaced file leaks.
  */
 export const PROJECT_IMAGE_BUCKET = "project-images";
+/** Hero art for the /projects page. Separate from the per-project galleries. */
+export const PROJECTS_PAGE_IMAGE_BUCKET = "projects-page-images";
 export const SELECTED_WORK_IMAGE_BUCKET = "selected-work-images";
 export const BLOG_IMAGE_BUCKET = "blog-images";
 

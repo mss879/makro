@@ -166,6 +166,61 @@ export type SelectedWorkCardRow = {
 }
 
 /**
+ * Singleton row — switches and copy for the three sections that sit above the
+ * portfolio index on /projects. One row rather than three tables because the
+ * admin edits them as three tabs of one screen.
+ */
+export type ProjectsPageSettingsRow = {
+  id: string;
+  hero_enabled: boolean;
+  hero_autoplay: boolean;
+  /** Milliseconds, passed straight to the slideshow timer. 2000–30000. */
+  hero_interval_ms: number;
+  hero_show_dots: boolean;
+  intro_enabled: boolean;
+  intro_eyebrow: string;
+  /** string[] — one paragraph per entry, revealed in order. */
+  intro_body: string[];
+  carousel_enabled: boolean;
+  carousel_eyebrow: string;
+  carousel_heading: string;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * A hero panel. `image`, `heading` and `body` are independently optional: the
+ * client asked for image-only, image-with-text and text-only slides, so the
+ * shape is inferred at render time rather than stored as a discriminator that
+ * could disagree with the fields. The database rejects only the all-empty case.
+ */
+export type ProjectsPageHeroSlideRow = {
+  id: string;
+  /** Full public URL, never a bare storage key — same contract as project_images.path. */
+  image: string | null;
+  alt: string;
+  heading: string;
+  body: string;
+  published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Curation only. Every visible field on the carousel card is read from the
+ * joined project, so there is nothing here to drift out of date.
+ */
+export type ProjectsPageCarouselItemRow = {
+  id: string;
+  project_id: string;
+  published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
  * One `sections[]` entry on an article.
  *
  * `points` is OPTIONAL because the stored jsonb is deliberately sparse — the
@@ -243,6 +298,24 @@ export interface Database {
         [
           {
             foreignKeyName: "project_images_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+        ]
+      >;
+      projects_page_settings: Table<ProjectsPageSettingsRow>;
+      projects_page_hero_slides: Table<ProjectsPageHeroSlideRow>;
+      // The FK name is load-bearing in the same way project_images' is: it is
+      // what makes the embedded select in lib/projects-page-data.ts
+      //   .select("*, projects(...)")
+      // resolve to a typed shape instead of `never`.
+      projects_page_carousel_items: Table<
+        ProjectsPageCarouselItemRow,
+        [
+          {
+            foreignKeyName: "projects_page_carousel_items_project_id_fkey";
             columns: ["project_id"];
             isOneToOne: false;
             referencedRelation: "projects";

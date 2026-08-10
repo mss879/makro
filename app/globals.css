@@ -60,14 +60,21 @@
     border-color: var(--color-hair);
   }
 
-  /* Sticky white navbar height — full-viewport heroes subtract this. */
+  /* Sticky white navbar height — inner-page heroes subtract this. Trimmed
+     a step in Aug 2026 (client direction) so the bar sits lighter on the
+     page; the home hero now runs full height under an overlaid bar. */
   :root {
-    --nav-h: 4rem;
+    --nav-h: 3.5rem;
   }
   @media (min-width: 768px) {
     :root {
-      --nav-h: 5rem;
+      --nav-h: 4.25rem;
     }
+  }
+
+  /* Inset of the home hero's video frame from the viewport edges. */
+  :root {
+    --hero-inset: 4px;
   }
 
   html {
@@ -237,6 +244,34 @@
 
   .will-reveal {
     opacity: 0;
+  }
+
+  /* Projects-page intro reveal.
+     Fails VISIBLE, unlike .will-reveal above. Two gates make that true:
+
+     1. The hidden state hangs off `.intro-armed`, which ProjectsIntro's effect
+        adds to the container at mount — so the copy is only ever hidden once
+        the very code that reveals it is confirmed running. No script, no
+        observer, a thrown effect: the paragraphs are simply already seated.
+     2. Both selectors are DESCENDANT, keyed on the container. The reveal class
+        lands on the container, not on each paragraph, so `.intro-reveal.is-revealed`
+        would never match — which is exactly how an entire section of copy went
+        invisible while still occupying its height. */
+  .intro-reveal {
+    transition:
+      opacity 700ms var(--ease-out-expo),
+      transform 700ms var(--ease-out-expo);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .intro-armed .intro-reveal {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    .intro-armed.is-revealed .intro-reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .line-hair {

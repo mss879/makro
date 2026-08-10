@@ -38,9 +38,16 @@ export default function ImageField({
   cardId,
   value,
   onChange,
+  target = "selected-work",
 }: {
   /** Undefined until the card exists; uploads then land under `unsorted/`. */
   cardId?: string;
+  /**
+   * Which upload target (and therefore which bucket) this field writes to.
+   * Defaults to selected-work so every existing caller is unchanged; the
+   * /projects hero passes "projects-page".
+   */
+  target?: "selected-work" | "projects-page";
   value: string;
   onChange: (next: string) => void;
 }) {
@@ -61,7 +68,7 @@ export default function ImageField({
     try {
       const body = new FormData();
       body.append("file", file);
-      body.append("bucket", "selected-work");
+      body.append("bucket", target);
       if (cardId) body.append("slug", cardId);
 
       const response = await fetch("/api/admin/upload", { method: "POST", body });

@@ -87,7 +87,13 @@ export default function PageHero({
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[46vh] items-end overflow-hidden pb-12 pt-32 md:min-h-[52vh] md:pt-36"
+      /* Trimmed Aug 2026 (client direction: too much dead space above the
+         copy). The navbar is in normal flow on inner pages, so its height is
+         already separating this from the top of the window — the old pt-32/36
+         was stacked on top of that. The min-h came down too: on a tall window
+         it was the binding dimension and, with items-end, every extra pixel
+         became emptiness above the eyebrow. */
+      className="relative flex min-h-[32vh] items-end overflow-hidden pb-12 pt-16 md:min-h-[36vh] md:pt-20"
     >
       <div className="absolute inset-0">
         <Image

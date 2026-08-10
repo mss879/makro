@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
-import Magnetic from "@/components/anim/Magnetic";
 import { PRELOADER_DONE } from "@/components/ui/Preloader";
 
 export default function Hero() {
@@ -83,10 +82,20 @@ export default function Hero() {
     { scope: root }
   );
 
+  // The section owns the viewport height and the inset padding; with
+  // border-box the frame's h-full is already the viewport less the top and
+  // bottom inset. Deliberately NOT a calc(): `calc(100svh-var(...))` is
+  // invalid CSS — the minus needs surrounding whitespace — so it silently
+  // fell back to height:auto and collapsed the hero to its content height.
   return (
-    <section ref={root} className="relative">
-      {/* Full-bleed frame directly beneath the white sticky navbar */}
-      <div className="relative h-[calc(100svh-var(--nav-h))] min-h-[600px] overflow-hidden">
+    <section
+      ref={root}
+      className="relative h-[100svh] bg-ink p-[var(--hero-inset)]"
+    >
+      {/* Sharp-edged video frame, inset from every viewport edge by
+          --hero-inset (client direction, Aug 2026). The navbar overlays this
+          frame rather than sitting above it. */}
+      <div className="relative h-full overflow-hidden">
         {/* Hero video */}
         <div className="absolute inset-0">
           {/* The poster is the real first paint: it decodes in a fraction of
@@ -138,26 +147,24 @@ export default function Hero() {
                 execution.
               </p>
 
+              {/* No magnetic hover on these two (client direction, Aug 2026):
+                  the buttons hold their position and answer with colour only. */}
               <div data-h-fade className="flex flex-wrap items-center gap-3">
-                <Magnetic strength={0.4}>
-                  <Link
-                    href="/projects"
-                    className="group inline-flex items-center gap-3 bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
-                  >
-                    Explore Projects
-                    <span className="transition-transform duration-500 group-hover:translate-x-1">
-                      →
-                    </span>
-                  </Link>
-                </Magnetic>
-                <Magnetic strength={0.4}>
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-3 border border-bone/40 px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
-                  >
-                    Book a Consultation
-                  </Link>
-                </Magnetic>
+                <Link
+                  href="/projects"
+                  className="group inline-flex items-center gap-3 bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                >
+                  Explore Projects
+                  <span className="transition-transform duration-500 group-hover:translate-x-1">
+                    →
+                  </span>
+                </Link>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-3 border border-bone/40 px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+                >
+                  Book a Consultation
+                </Link>
               </div>
             </div>
           </div>

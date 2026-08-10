@@ -42,7 +42,7 @@ export default async function ContactPage() {
           inner page uses that component, and this one cannot (it has no
           background image; the drifting peak watermark stands in for one), so
           the sizing is matched by hand instead. Keep the two in step. */}
-      <section className="relative flex min-h-[46vh] items-end overflow-hidden bg-ink pb-12 pt-32 md:min-h-[52vh] md:pt-36">
+      <section className="relative flex min-h-[32vh] items-end overflow-hidden bg-ink pb-12 pt-16 md:min-h-[36vh] md:pt-20">
         <JsonLd
           data={[
             webPageSchema({

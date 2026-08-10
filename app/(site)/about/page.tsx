@@ -46,6 +46,14 @@ const VALUES = [
   },
 ];
 
+/**
+ * Our Journey timeline — hidden at client request (Aug 2026). Nothing was
+ * deleted: flip this to `true` to bring the eyebrow, heading and timeline
+ * back exactly as they were. The CTA and guide link below it stay visible
+ * either way.
+ */
+const SHOW_TIMELINE = false;
+
 const TIMELINE = [
   {
     year: "2013",
@@ -274,18 +282,29 @@ export default function AboutPage() {
       {/* Timeline */}
       <section className="section-light relative py-24 md:py-32">
         <div className="container-edge">
-          <div className="flex items-center gap-4">
-            <span className="line-hair w-10" />
-            <span className="eyebrow text-rose-deep">Our Journey</span>
-          </div>
-          <TextReveal
-            as="h2"
-            text="A short history, a long-term view."
-            className="mt-6 max-w-3xl font-display display-md text-ink"
-          />
-          <Timeline entries={TIMELINE} />
+          {SHOW_TIMELINE && (
+            <>
+              <div className="flex items-center gap-4">
+                <span className="line-hair w-10" />
+                <span className="eyebrow text-rose-deep">Our Journey</span>
+              </div>
+              <TextReveal
+                as="h2"
+                text="A short history, a long-term view."
+                className="mt-6 max-w-3xl font-display display-md text-ink"
+              />
+              <Timeline entries={TIMELINE} />
+            </>
+          )}
 
-          <Reveal className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-hair pt-10">
+          {/* The rule and top margin only make sense under the timeline —
+              without it they read as a stray line under the section's own
+              top padding. */}
+          <Reveal
+            className={`flex flex-wrap items-center justify-between gap-6 ${
+              SHOW_TIMELINE ? "mt-16 border-t border-hair pt-10" : ""
+            }`}
+          >
             <p className="max-w-xl font-display text-2xl text-ink">
               Curious where we are building next?
             </p>

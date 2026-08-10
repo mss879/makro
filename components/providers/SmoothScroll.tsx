@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
@@ -10,6 +11,35 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
  * smoothing: the font-swap refresh below runs for every visitor.
  */
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  // Client-side navigation leaves every reveal on the incoming page primed
+  // but unplayed: its ScrollTrigger is created against measurements cached
+  // from the page we just left, so a trigger the visitor is already past
+  // never fires onEnter and the words stay parked at yPercent 150 — clipped
+  // inside their masks, which is why hero headings came up blank when moving
+  // between pages. The refresh below re-measures against the new document,
+  // and the reveals' own onRefresh guards then seat anything already passed.
+  //
+  // This provider sits in the persistent (site) layout, so the fonts.ready
+  // refresh in the effect underneath only ever runs once, on first mount —
+  // it cannot cover later navigations. Hence a second, per-route effect.
+  //
+  // Two frames: children's effects (where the triggers are created) run
+  // before this parent effect, but layout is not settled until the browser
+  // has actually painted the new route.
+  useEffect(() => {
+    // Effects run child-first, so the incoming page's triggers already exist
+    // by the time this parent effect runs — refresh straight away rather than
+    // waiting on a frame. Deliberately NOT requestAnimationFrame: a tab that
+    // is backgrounded during the navigation never runs rAF callbacks, and the
+    // refresh would simply never happen. The timeout is a second pass once
+    // images and late layout have settled.
+    ScrollTrigger.refresh();
+    const t = setTimeout(() => ScrollTrigger.refresh(), 250);
+    return () => clearTimeout(t);
+  }, [pathname]);
+
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

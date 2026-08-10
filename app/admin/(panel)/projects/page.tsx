@@ -10,6 +10,7 @@ import {
   buttonClass,
   formatDate,
 } from "@/components/admin/ui";
+import PageTabs from "@/components/admin/projects/PageTabs";
 import type { ProjectRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +42,7 @@ export default async function ProjectsPage() {
     return (
       <div className="space-y-8">
         {heading}
+        <PageTabs />
         <NotConfigured />
       </div>
     );
@@ -57,6 +59,7 @@ export default async function ProjectsPage() {
     return (
       <div className="space-y-8">
         {heading}
+        <PageTabs />
         <Card>
           <p className="font-body text-sm text-red-700">
             The project list could not be loaded: {error.message}
@@ -71,6 +74,7 @@ export default async function ProjectsPage() {
   return (
     <div className="space-y-8">
       {heading}
+      <PageTabs />
 
       {projects.length === 0 ? (
         <EmptyState

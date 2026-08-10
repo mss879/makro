@@ -4,9 +4,12 @@ import { useActionState } from "react";
 import { subscribeToNewsletter } from "@/app/actions/newsletter";
 
 /**
- * Footer newsletter signup — a single hairline-underlined field on the dark
- * carbon surface, deliberately quieter than the page's contact form. The
- * reassurance line doubles as the live region for the action's reply.
+ * Footer newsletter signup — rebuilt Aug 2026 (client direction: the old
+ * hairline field tucked under the logo was going unnoticed). It now runs
+ * as its own band across the footer: a display-scale invitation on the
+ * left, a filled field and a solid rose button on the right, so it reads
+ * as an object rather than another line of footer text. The reassurance
+ * line doubles as the live region for the action's reply.
  */
 export default function NewsletterForm() {
   const [state, formAction, pending] = useActionState(subscribeToNewsletter, {
@@ -15,12 +18,32 @@ export default function NewsletterForm() {
   });
 
   return (
-    <form action={formAction} className="max-w-xs">
-      <label htmlFor="nl-email" className="eyebrow text-fog">
-        Join our newsletter
-      </label>
+    <form
+      action={formAction}
+      className="grid gap-7 lg:grid-cols-12 lg:items-center lg:gap-x-8"
+    >
+      <div className="lg:col-span-5">
+        <label
+          htmlFor="nl-email"
+          className="block font-display text-xl leading-tight text-bone md:text-2xl"
+        >
+          Join our newsletter
+        </label>
+        <p
+          aria-live="polite"
+          className={`mt-2 font-body text-sm leading-relaxed ${
+            state.message ? "text-rose" : "text-mist"
+          }`}
+        >
+          {state.message || "Project news, a few times a year."}
+        </p>
+      </div>
 
-      <div className="mt-3 flex items-center border-b border-hair-strong transition-colors focus-within:border-rose">
+      {/* Ends flush at column 12 so the field lines up with the legal bar
+          and the CTA link above it. Sized by the grid rather than by
+          justify-between, which let the label shrink-wrap and opened a
+          dead gap across the middle on wide screens. */}
+      <div className="flex w-full items-stretch gap-3 sm:gap-4 lg:col-span-5 lg:col-start-8">
         <input
           id="nl-email"
           name="email"
@@ -28,23 +51,19 @@ export default function NewsletterForm() {
           required
           autoComplete="email"
           placeholder="Email address"
-          className="w-full bg-transparent py-2.5 font-body text-sm text-bone placeholder:text-fog focus:outline-none"
+          className="w-full border border-hair-strong bg-white/5 px-4 py-3.5 font-body text-sm text-bone transition-colors placeholder:text-fog focus:border-rose focus:outline-none"
         />
         <button
           type="submit"
-          aria-label="Subscribe"
           disabled={pending}
-          className="group p-2 text-rose transition-colors hover:text-rose-soft disabled:opacity-40"
+          className="group inline-flex shrink-0 items-center gap-2.5 bg-rose px-6 py-3.5 font-body text-sm text-ink transition-colors hover:bg-rose-soft disabled:cursor-not-allowed disabled:opacity-50 sm:px-7"
         >
-          <span className="block transition-transform duration-500 group-hover:translate-x-0.5">
+          {pending ? "Joining" : "Subscribe"}
+          <span className="transition-transform duration-500 group-hover:translate-x-0.5">
             →
           </span>
         </button>
       </div>
-
-      <p aria-live="polite" className="mt-2 font-body text-[0.7rem] leading-relaxed text-fog">
-        {state.message || "Project news, a few times a year."}
-      </p>
     </form>
   );
 }

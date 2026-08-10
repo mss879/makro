@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { BRAND, IMG } from "@/lib/images";
+import { IMG } from "@/lib/images";
 import { getProjects } from "@/lib/projects-data";
+import { getProjectsPageContent } from "@/lib/projects-page-data";
 import { pageMetadata, breadcrumbSchema, webPageSchema, projectListSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
-import PageHero from "@/components/ui/PageHero";
+import ProjectsPageHero from "@/components/projects/ProjectsPageHero";
+import ProjectsIntro from "@/components/projects/ProjectsIntro";
+import ProjectsCarousel from "@/components/projects/ProjectsCarousel";
 import ProjectsIndex from "@/components/projects/ProjectsIndex";
 import HashScroll from "@/components/projects/HashScroll";
 import Faq from "@/components/projects/Faq";
@@ -28,7 +31,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const [projects, page] = await Promise.all([getProjects(), getProjectsPageContent()]);
 
   return (
     <>
@@ -44,13 +47,30 @@ export default async function ProjectsPage() {
           breadcrumbSchema([{ name: "Projects", path: "/projects" }]),
         ]}
       />
-      <PageHero
-        eyebrow="Our Portfolio"
-        title="Developments built to last."
-        intro="Residential and commercial projects across Sri Lanka — each delivered to a standard you can feel."
-        imageId={BRAND.towersRender}
-        treatment="warm"
-      />
+      {/* The three admin-controlled sections, in the order the client asked
+          for: full-screen hero, scroll-revealed intro, curated carousel — then
+          the portfolio index that was already here. Each renders only when its
+          own switch is on and it has something to show, so turning one off in
+          the admin closes the gap rather than leaving an empty band. */}
+      {page.hero.enabled && (
+        <ProjectsPageHero
+          slides={page.hero.slides}
+          autoplay={page.hero.autoplay}
+          intervalMs={page.hero.intervalMs}
+          showDots={page.hero.showDots}
+        />
+      )}
+      {page.intro.enabled && (
+        <ProjectsIntro eyebrow={page.intro.eyebrow} body={page.intro.body} />
+      )}
+      {page.carousel.enabled && (
+        <ProjectsCarousel
+          eyebrow={page.carousel.eyebrow}
+          heading={page.carousel.heading}
+          projects={page.carousel.projects}
+        />
+      )}
+
       {/* Lands /projects#completed and /projects#in-progress arriving from the
           navbar dropdown on another route. */}
       <HashScroll />

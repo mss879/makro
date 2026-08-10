@@ -43,7 +43,7 @@ export default function TextReveal({
         // and, with toggleActions "play none none none", never play again. The
         // heading is then invisible permanently. fromTo states both ends
         // explicitly, so a refresh cannot strand it half-primed.
-        gsap.fromTo(
+        const tween = gsap.fromTo(
           words,
           { yPercent: 150 },
           {
@@ -71,6 +71,18 @@ export default function TextReveal({
             },
           }
         );
+
+        // The guard above only runs when a refresh happens to land. On a
+        // client-side navigation into a page whose heading is already above
+        // the trigger point, no crossing occurs, so onEnter never fires — and
+        // if nothing refreshes afterwards the words stay parked at yPercent
+        // 150, clipped inside their masks, and the heading reads as missing.
+        // Settle it here instead, at creation, so the finished state never
+        // depends on a refresh arriving. Safe to read `tween` now: unlike the
+        // onRefresh callback above, this runs after gsap.fromTo() has
+        // returned, so the binding is initialised.
+        const st = tween.scrollTrigger;
+        if (st && (st.progress > 0 || st.isActive)) tween.progress(1);
       });
 
       // Reduced motion — every word seated in its mask, no tween and no

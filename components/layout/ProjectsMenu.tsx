@@ -19,10 +19,13 @@ export default function ProjectsMenu({
   href,
   label,
   active,
+  overlay = false,
 }: {
   href: string;
   label: string;
   active: boolean;
+  /** Bar is transparent over the home hero — invert the trigger's tones. */
+  overlay?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
@@ -74,14 +77,20 @@ export default function ProjectsMenu({
           href={href}
           aria-current={active ? "page" : undefined}
           className={`group relative font-body text-[0.72rem] font-medium uppercase tracking-[0.18em] transition-colors duration-300 ${
-            active ? "text-ink" : "text-ink/55 hover:text-ink"
+            overlay
+              ? active
+                ? "text-bone"
+                : "text-bone/65 hover:text-bone"
+              : active
+                ? "text-ink"
+                : "text-ink/55 hover:text-ink"
           }`}
         >
           {label}
           <span
-            className={`absolute -bottom-1.5 left-0 h-px bg-rose-deep transition-all duration-400 ${
-              active ? "w-full" : "w-0 group-hover:w-full"
-            }`}
+            className={`absolute -bottom-1.5 left-0 h-px transition-all duration-400 ${
+              overlay ? "bg-rose" : "bg-rose-deep"
+            } ${active ? "w-full" : "w-0 group-hover:w-full"}`}
           />
         </Link>
         {/* An SVG chevron rather than a ▾ glyph: the character sits on the
@@ -95,7 +104,11 @@ export default function ProjectsMenu({
           aria-controls="projects-sections-menu"
           aria-label={`${label} sections`}
           className={`flex h-4 w-4 items-center justify-center transition-all duration-300 ${
-            open ? "rotate-180 text-rose-deep" : "text-ink/40 hover:text-ink"
+            open
+              ? `rotate-180 ${overlay ? "text-rose" : "text-rose-deep"}`
+              : overlay
+                ? "text-bone/50 hover:text-bone"
+                : "text-ink/40 hover:text-ink"
           }`}
         >
           <svg viewBox="0 0 10 6" className="h-[5px] w-[9px]" fill="none" aria-hidden="true">

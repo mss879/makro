@@ -6,6 +6,7 @@ import {
   BLOG_IMAGE_BUCKET,
   MAX_PROJECT_IMAGES,
   PROJECT_IMAGE_BUCKET,
+  PROJECTS_PAGE_IMAGE_BUCKET,
   SELECTED_WORK_IMAGE_BUCKET,
 } from "@/lib/supabase/config";
 
@@ -26,6 +27,9 @@ const TARGETS = {
   project: { bucket: PROJECT_IMAGE_BUCKET, prefix: "projects" },
   "selected-work": { bucket: SELECTED_WORK_IMAGE_BUCKET, prefix: "selected-work" },
   blog: { bucket: BLOG_IMAGE_BUCKET, prefix: "blog" },
+  // Hero art for /projects. Its own bucket so it can be purged without
+  // touching a single project gallery.
+  "projects-page": { bucket: PROJECTS_PAGE_IMAGE_BUCKET, prefix: "projects-page" },
 } as const;
 
 type TargetName = keyof typeof TARGETS;

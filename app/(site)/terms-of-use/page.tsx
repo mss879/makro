@@ -61,7 +61,7 @@ export default function TermsOfUsePage() {
           breadcrumbSchema([{ name: "Terms of Use", path: "/terms-of-use" }]),
         ]}
       />
-      <section className="relative bg-ink pb-24 pt-40 md:pb-32">
+      <section className="relative bg-ink pb-24 pt-24 md:pb-32">
         <div className="container-edge mx-auto max-w-3xl">
           <div className="flex items-center gap-4">
             <span className="line-hair w-12" />

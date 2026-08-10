@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CREATOR, NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/site";
+import { CREATOR, NAV, NAV_LEGAL, SITE, SOCIALS } from "@/lib/site";
 import { PeakMark } from "@/components/brand/PeakMark";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -20,10 +20,14 @@ export default function Footer() {
         <div className="flex flex-col items-start justify-between gap-10 border-b border-hair pb-8 md:pb-10 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow text-rose">Let&rsquo;s build something lasting</p>
+            {/* Deliberately below the display-md section scale (client
+                direction, Aug 2026): the footer CTA should invite rather
+                than shout, and it sits under whatever section closed the
+                page. */}
             <TextReveal
               as="h2"
               text="Have a site, a vision or a question?"
-              className="mt-5 font-display display-md text-bone"
+              className="mt-5 font-display text-2xl leading-tight text-bone md:text-3xl lg:text-4xl"
             />
           </div>
           <Link
@@ -36,7 +40,7 @@ export default function Footer() {
         </div>
 
         {/* Columns */}
-        <Reveal className="grid grid-cols-2 gap-10 py-10 md:py-12 md:grid-cols-3 lg:grid-cols-5">
+        <Reveal className="grid grid-cols-2 gap-10 py-10 md:py-12 md:grid-cols-3 lg:grid-cols-4">
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             {/* Width/height at 2× the rendered h-8, not the asset's native
                 900×244 — same srcset discipline as the navbar lockup. */}
@@ -47,31 +51,12 @@ export default function Footer() {
               height={64}
               className="h-8 w-auto invert"
             />
-            <div className="mt-7">
-              <NewsletterForm />
-            </div>
           </div>
 
           <div>
             <p className="eyebrow text-fog">Explore</p>
             <ul className="mt-5 space-y-3">
               {NAV.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="font-body text-sm text-mist transition-colors hover:text-rose"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="eyebrow text-fog">Discover</p>
-            <ul className="mt-5 space-y-3">
-              {NAV_SECONDARY.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -118,6 +103,13 @@ export default function Footer() {
               <p className="font-body text-sm text-mist">{SITE.address}</p>
             </address>
           </div>
+        </Reveal>
+
+        {/* Newsletter — its own band rather than a column, so it reads as an
+            object instead of a fourth list of links (client direction, Aug
+            2026: the previous inline field was going unnoticed). */}
+        <Reveal className="border-t border-hair py-10 md:py-12">
+          <NewsletterForm />
         </Reveal>
 
         {/* Legal */}
