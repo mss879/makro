@@ -41,7 +41,6 @@ export default async function InsightsPage() {
       />
       <PageHero
         eyebrow="Blog"
-        title="Know before you build, buy or invest."
         intro="Considered guides to Sri Lankan property — written by the people who plan, build and deliver it."
         imageId={BRAND.lifestyleLoft}
         treatment="warm"
@@ -59,7 +58,8 @@ export default async function InsightsPage() {
                       alt={insight.title}
                       treatment={i % 2 === 0 ? "warm" : "mono"}
                       className="aspect-[16/10] w-full"
-                      sizes="50vw"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      width={1000}
                     />
                   </div>
                   <div className="mt-6 flex items-center gap-4">

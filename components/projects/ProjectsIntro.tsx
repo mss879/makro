@@ -36,13 +36,9 @@ export default function ProjectsIntro({
 
     const show = () => el.classList.add("is-revealed");
 
-    // No observer in this browser: leave the copy exactly as the server sent
-    // it — visible — rather than arming a hidden state nothing would undo.
+    // No observer in this browser: leave the copy visible
     if (typeof IntersectionObserver === "undefined") return;
 
-    // Arm only now. The hidden state in globals.css hangs off this class, so
-    // the paragraphs are not hidden until the code that reveals them is
-    // demonstrably running.
     el.classList.add("intro-armed");
 
     const io = new IntersectionObserver(
@@ -52,15 +48,11 @@ export default function ProjectsIntro({
           io.disconnect();
         }
       },
-      // Fires a little before the block is fully in view, so the rise finishes
-      // about when the reader reaches it rather than starting then.
-      { rootMargin: "0px 0px -15% 0px", threshold: 0.1 }
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
     );
     io.observe(el);
     return () => {
       io.disconnect();
-      // Unarm on teardown so a re-mount never inherits a hidden state whose
-      // observer has been disconnected.
       el.classList.remove("intro-armed");
     };
   }, []);
@@ -69,19 +61,20 @@ export default function ProjectsIntro({
 
   return (
     <section className="section-light relative py-24 md:py-32">
-      <div ref={ref} className="container-edge">
+      <div ref={ref} className="container-edge text-center">
         {eyebrow && (
-          <div className="flex items-center gap-4">
-            <span className="line-hair w-12" />
+          <div className="intro-reveal flex items-center justify-center gap-4">
+            <span className="line-hair w-10 md:w-12" />
             <span className="eyebrow text-rose-deep">{eyebrow}</span>
+            <span className="line-hair w-10 md:w-12" />
           </div>
         )}
 
-        <div className="mt-10 max-w-3xl space-y-6 md:mt-12">
+        <div className="mx-auto mt-10 max-w-3xl space-y-6 md:mt-12">
           {body.map((paragraph, i) => (
             <p
               key={i}
-              style={{ transitionDelay: `${i * 120}ms` }}
+              style={{ transitionDelay: `${(i + 1) * 120}ms` }}
               className="intro-reveal font-display text-xl leading-relaxed text-ink md:text-2xl"
             >
               {paragraph}

@@ -40,8 +40,8 @@ export default function Footer() {
         </div>
 
         {/* Columns */}
-        <Reveal className="grid grid-cols-2 gap-10 py-10 md:py-12 md:grid-cols-3 lg:grid-cols-4">
-          <div className="col-span-2 md:col-span-3 lg:col-span-1">
+        <Reveal className="grid grid-cols-1 gap-12 py-10 sm:grid-cols-2 md:py-12 lg:grid-cols-4">
+          <div className="space-y-5 sm:col-span-2 lg:col-span-1">
             {/* Width/height at 2× the rendered h-8, not the asset's native
                 900×244 — same srcset discipline as the navbar lockup. */}
             <Image
@@ -51,6 +51,9 @@ export default function Footer() {
               height={64}
               className="h-8 w-auto invert"
             />
+            <div className="pt-1">
+              <NewsletterForm />
+            </div>
           </div>
 
           <div>
@@ -103,13 +106,6 @@ export default function Footer() {
               <p className="font-body text-sm text-mist">{SITE.address}</p>
             </address>
           </div>
-        </Reveal>
-
-        {/* Newsletter — its own band rather than a column, so it reads as an
-            object instead of a fourth list of links (client direction, Aug
-            2026: the previous inline field was going unnoticed). */}
-        <Reveal className="border-t border-hair py-10 md:py-12">
-          <NewsletterForm />
         </Reveal>
 
         {/* Legal */}

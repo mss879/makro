@@ -36,13 +36,25 @@ export default function TextReveal({
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // fromTo, never from. `gsap.from` with a ScrollTrigger renders its
-        // from-state immediately (words pushed 150% down, out of their masks)
-        // and re-applies it on every ScrollTrigger.refresh — so if the trigger
-        // has already been passed when a refresh lands, the words get re-hidden
-        // and, with toggleActions "play none none none", never play again. The
-        // heading is then invisible permanently. fromTo states both ends
-        // explicitly, so a refresh cannot strand it half-primed.
+        // Calculate element's position relative to document top.
+        // Document-relative position is invariant to temporary scroll offsets during route navigation.
+        const pageTop = el.getBoundingClientRect().top + window.scrollY;
+        const inInitialViewport = pageTop < window.innerHeight;
+
+        let completed = false;
+        let activeTrigger: ReturnType<typeof gsap.fromTo>["scrollTrigger"] = undefined;
+
+        const markComplete = () => {
+          if (completed) return;
+          completed = true;
+          gsap.set(words, { yPercent: 0 });
+          if (activeTrigger) {
+            try {
+              activeTrigger.kill();
+            } catch {}
+          }
+        };
+
         const tween = gsap.fromTo(
           words,
           { yPercent: 150 },
@@ -52,37 +64,39 @@ export default function TextReveal({
             ease: "power4.out",
             stagger,
             delay,
+            onComplete: markComplete,
             scrollTrigger: {
               trigger: el,
               start,
               toggleActions: "play none none none",
-              // Belt to the braces above: if a refresh ever finds the trigger
-              // already scrolled past, force the finished state rather than
-              // trusting the toggle to have fired. Costs nothing when the
-              // animation played normally.
-              //
-              // self.animation, NOT a closure over the tween: onRefresh fires
-              // during gsap.fromTo()'s own construction, so a `const tween =`
-              // referenced here is still in its temporal dead zone and throws,
-              // which takes hydration down with it.
               onRefresh: (self) => {
-                if (self.progress > 0 || self.isActive) self.animation?.progress(1);
+                const r = el.getBoundingClientRect();
+                const absTop = r.top + window.scrollY;
+                if (
+                  absTop < window.innerHeight ||
+                  (r.top < window.innerHeight && r.bottom > 0) ||
+                  self.progress > 0 ||
+                  self.isActive
+                ) {
+                  self.animation?.progress(1);
+                  gsap.set(words, { yPercent: 0 });
+                  completed = true;
+                  try {
+                    self.kill();
+                  } catch {}
+                }
               },
             },
           }
         );
 
-        // The guard above only runs when a refresh happens to land. On a
-        // client-side navigation into a page whose heading is already above
-        // the trigger point, no crossing occurs, so onEnter never fires — and
-        // if nothing refreshes afterwards the words stay parked at yPercent
-        // 150, clipped inside their masks, and the heading reads as missing.
-        // Settle it here instead, at creation, so the finished state never
-        // depends on a refresh arriving. Safe to read `tween` now: unlike the
-        // onRefresh callback above, this runs after gsap.fromTo() has
-        // returned, so the binding is initialised.
-        const st = tween.scrollTrigger;
-        if (st && (st.progress > 0 || st.isActive)) tween.progress(1);
+        activeTrigger = tween.scrollTrigger;
+
+        if (inInitialViewport) {
+          tween.play();
+        } else if (activeTrigger && (activeTrigger.progress > 0 || activeTrigger.isActive)) {
+          markComplete();
+        }
       });
 
       // Reduced motion — every word seated in its mask, no tween and no

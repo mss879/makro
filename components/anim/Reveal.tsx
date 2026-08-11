@@ -33,7 +33,24 @@ export default function Reveal({
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.fromTo(
+        const pageTop = el.getBoundingClientRect().top + window.scrollY;
+        const inInitialViewport = pageTop < window.innerHeight;
+
+        let completed = false;
+        let activeTrigger: ReturnType<typeof gsap.fromTo>["scrollTrigger"] = undefined;
+
+        const markComplete = () => {
+          if (completed) return;
+          completed = true;
+          gsap.set(el, { autoAlpha: 1, y: 0 });
+          if (activeTrigger) {
+            try {
+              activeTrigger.kill();
+            } catch {}
+          }
+        };
+
+        const tween = gsap.fromTo(
           el,
           { autoAlpha: 0, y },
           {
@@ -42,13 +59,42 @@ export default function Reveal({
             duration,
             delay,
             ease: "power3.out",
+            onComplete: once ? markComplete : undefined,
             scrollTrigger: {
               trigger: el,
               start: "top 88%",
               toggleActions: once ? "play none none none" : "play none none reverse",
+              onRefresh: (self) => {
+                if (!once) return;
+                const r = el.getBoundingClientRect();
+                const absTop = r.top + window.scrollY;
+                if (
+                  absTop < window.innerHeight ||
+                  (r.top < window.innerHeight && r.bottom > 0) ||
+                  self.progress > 0 ||
+                  self.isActive
+                ) {
+                  self.animation?.progress(1);
+                  gsap.set(el, { autoAlpha: 1, y: 0 });
+                  completed = true;
+                  try {
+                    self.kill();
+                  } catch {}
+                }
+              },
             },
           }
         );
+
+        activeTrigger = tween.scrollTrigger;
+
+        if (once) {
+          if (inInitialViewport) {
+            tween.play();
+          } else if (activeTrigger && (activeTrigger.progress > 0 || activeTrigger.isActive)) {
+            markComplete();
+          }
+        }
       });
 
       // Reduced motion — the finished state, no tween and no ScrollTrigger.

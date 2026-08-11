@@ -93,7 +93,6 @@ export default function AboutPage() {
       />
       <PageHero
         eyebrow="About Makro"
-        title="Shaping how Sri Lanka lives."
         intro="We design and build developments that set a new standard for craftsmanship, trust and long-term value — for the people who will live, work and invest in them."
         imageId={BRAND.monoGrid}
         treatment="mono"

@@ -96,167 +96,115 @@ export default function Navbar() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const isHome = pathname === "/";
   /**
-   * Seated transparently on the home hero's video frame, morphing to the
-   * cream bar on scroll (client direction, Aug 2026). Never while the mobile
-   * overlay is open — that surface is cream, and bone-on-cream would vanish.
+   * Floating navbar — seated on top of the viewport across all pages,
+   * retaining its glassmorphic floating panel design even when scrolling
+   * (client direction, Aug 2026).
    */
-  const onHero = isHome && !scrolled && !open;
-
-  const linkTone = onHero
-    ? { active: "text-bone", idle: "text-bone/65 hover:text-bone" }
-    : { active: "text-ink", idle: "text-ink/55 hover:text-ink" };
+  const linkTone = { active: "text-bone", idle: "text-bone/65 hover:text-bone" };
 
   return (
     <>
-      <header
-        className={`z-[500] border-b transition-[background-color,border-color,box-shadow] duration-500 ${
-          // Fixed on home so the hero runs the full viewport beneath it;
-          // sticky elsewhere, where heroes still subtract --nav-h.
-          isHome ? "fixed inset-x-0 top-0" : "sticky top-0"
-        } ${
-          onHero
-            ? "border-transparent bg-transparent"
-            : scrolled
-              ? "border-ink/10 bg-cream shadow-[0_10px_30px_-18px_rgba(5,2,3,0.25)]"
-              : "border-ink/8 bg-cream"
-        }`}
-      >
-        <div
-          className={`container-edge mx-auto max-w-[1600px] ${
-            // Nudged down by the frame's inset so the bar reads as sitting on
-            // the video rather than straddling its top edge.
-            onHero
-              ? "pt-[calc(env(safe-area-inset-top)+var(--hero-inset))]"
-              : "pt-[env(safe-area-inset-top)]"
-          }`}
-        >
-          {/* On the hero the row becomes a floating panel — a tinted, blurred
-              plate with a hairline edge (client direction, Aug 2026) so the
-              bone logo and links stay legible over whatever frame of the video
-              is behind them, and the bar reads as an object sitting on the
-              footage rather than text scattered across it. Sharp corners, in
-              keeping with the frame and the Contact button. */}
+      <header className="fixed inset-x-0 top-0 z-[500] pointer-events-none border-b border-transparent bg-transparent transition-all duration-500">
+        <div className="container-edge mx-auto max-w-[1600px] pt-[calc(env(safe-area-inset-top)+var(--hero-inset))]">
+          {/* Black glassmorphism floating panel — dark frosted glass plate with hairline border & heavy backdrop blur. */}
           <div
-            className={`flex h-[var(--nav-h)] items-center justify-between transition-[background-color,border-color,margin] duration-500 ${
-              onHero
-                ? "mt-2 border border-bone/20 bg-ink/30 px-5 backdrop-blur-md md:mt-3 md:px-7"
-                : "border border-transparent"
+            className={`pointer-events-auto flex h-[var(--nav-h)] items-center justify-between transition-all duration-500 mt-2 border px-5 backdrop-blur-xl md:mt-3 md:px-7 ${
+              scrolled
+                ? "border-white/25 bg-ink/80 shadow-[0_12px_36px_-12px_rgba(0,0,0,0.6)]"
+                : "border-white/20 bg-ink/50 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)]"
             }`}
           >
-          {/* Logo — left. The real brand lockup asset, where the twin peaks
-              form the M of MAKRO. Not a reconstruction: the mark and the
-              wordmark are drawn as one piece and must not be rebuilt from
-              separate parts. */}
-          <Link
-            href="/"
-            aria-label={`${SITE.name} — home`}
-            className="shrink-0 transition-opacity hover:opacity-75"
-          >
-            {/* Fixed display size, so width/height are given at 2× rather
-                than the asset's native 900×244. next/image then emits a 1×/2×
-                srcset instead of fifteen candidates up to 3840px for a mark
-                that is never wider than 96 CSS pixels. */}
-            <Image
-              src="/logo-black.png"
-              alt={SITE.name}
-              width={192}
-              height={52}
-              priority
-              className={`w-auto transition-[filter,height] duration-500 ${
-                // The lockup ships black; inverting is how it reads on the
-                // dark hero without shipping a second asset. It also runs a
-                // step larger while seated on the hero (client direction, Aug
-                // 2026) and settles back to the bar size once the bar is cream.
-                onHero
-                  ? "h-[32px] invert md:h-[38px]"
-                  : "h-[22px] md:h-[26px]"
-              }`}
-            />
-          </Link>
+            {/* Logo — left. The real brand lockup asset. */}
+            <Link
+              href="/"
+              aria-label={`${SITE.name} — home`}
+              className="shrink-0 transition-opacity hover:opacity-75"
+            >
+              <Image
+                src="/logo-black.png"
+                alt={SITE.name}
+                width={192}
+                height={52}
+                priority
+                className={`w-auto transition-[filter,height] duration-500 invert ${
+                  scrolled ? "h-[28px] md:h-[34px]" : "h-[32px] md:h-[38px]"
+                }`}
+              />
+            </Link>
 
-          {/* Desktop links — right */}
-          <nav className="hidden items-center gap-9 md:flex" aria-label="Primary">
-            {NAV.map((item) => {
-              const active = isActive(item.href);
+            {/* Desktop links — right */}
+            <nav className="hidden items-center gap-9 md:flex" aria-label="Primary">
+              {NAV.map((item) => {
+                const active = isActive(item.href);
 
-              if (item.href === "/projects") {
-                return (
-                  <ProjectsMenu
-                    key={item.href}
-                    href={item.href}
-                    label={item.label}
-                    active={active}
-                    overlay={onHero}
-                  />
-                );
-              }
+                if (item.href === "/projects") {
+                  return (
+                    <ProjectsMenu
+                      key={item.href}
+                      href={item.href}
+                      label={item.label}
+                      active={active}
+                      overlay={true}
+                    />
+                  );
+                }
 
-              // Contact is the bar's one action, so it carries a sharp-edged
-              // outline rather than another underlined link (client
-              // direction, Aug 2026 — the peak glyph that used to precede it
-              // was dropped in the same pass).
-              if (item.href === "/contact") {
+                // Contact is the bar's one action, carrying a sharp-edged outline.
+                if (item.href === "/contact") {
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className="inline-flex items-center border border-bone/45 px-4 py-2 font-body text-[0.72rem] font-medium uppercase tracking-[0.18em] text-bone transition-colors duration-300 hover:border-rose hover:bg-rose hover:text-ink"
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                }
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`inline-flex items-center border px-4 py-2 font-body text-[0.72rem] font-medium uppercase tracking-[0.18em] transition-colors duration-300 ${
-                      onHero
-                        ? "border-bone/45 text-bone hover:border-rose hover:bg-rose hover:text-ink"
-                        : "border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-cream"
+                    className={`group relative font-body text-[0.72rem] font-medium uppercase tracking-[0.18em] transition-colors duration-300 ${
+                      active ? linkTone.active : linkTone.idle
                     }`}
                   >
                     {item.label}
+                    <span
+                      className={`absolute -bottom-1.5 left-0 h-px bg-rose transition-all duration-400 ${
+                        active ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    />
                   </Link>
                 );
-              }
+              })}
+            </nav>
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={`group relative font-body text-[0.72rem] font-medium uppercase tracking-[0.18em] transition-colors duration-300 ${
-                    active ? linkTone.active : linkTone.idle
+            {/* Mobile menu toggle */}
+            <button
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Toggle menu"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              className="-mr-2 flex h-10 w-10 items-center justify-center text-bone transition-colors duration-500 md:hidden"
+            >
+              <span className="relative flex h-[9px] w-5 flex-col justify-between">
+                <span
+                  className={`h-px w-full bg-current transition-all duration-300 ${
+                    open ? "translate-y-[4px] rotate-45" : ""
                   }`}
-                >
-                  {item.label}
-                  <span
-                    className={`absolute -bottom-1.5 left-0 h-px transition-all duration-400 ${
-                      onHero ? "bg-rose" : "bg-rose-deep"
-                    } ${active ? "w-full" : "w-0 group-hover:w-full"}`}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Mobile menu toggle */}
-          <button
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            className={`-mr-2 flex h-10 w-10 items-center justify-center transition-colors duration-500 md:hidden ${
-              onHero ? "text-bone" : "text-ink"
-            }`}
-          >
-            <span className="relative flex h-[9px] w-5 flex-col justify-between">
-              <span
-                className={`h-px w-full bg-current transition-all duration-300 ${
-                  open ? "translate-y-[4px] rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`h-px w-full bg-current transition-all duration-300 ${
-                  open ? "-translate-y-[4px] -rotate-45" : ""
-                }`}
-              />
-            </span>
-          </button>
+                />
+                <span
+                  className={`h-px w-full bg-current transition-all duration-300 ${
+                    open ? "-translate-y-[4px] -rotate-45" : ""
+                  }`}
+                />
+              </span>
+            </button>
           </div>
         </div>
       </header>

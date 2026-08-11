@@ -19,7 +19,7 @@ export default function PageHero({
   treatment = "mono",
 }: {
   eyebrow: string;
-  title: string;
+  title?: string;
   intro?: string;
   imageId: string;
   treatment?: "warm" | "mono";
@@ -44,13 +44,20 @@ export default function PageHero({
           );
         }
         if (ref.current) {
-          gsap.from(ref.current.querySelector("[data-hero-intro]"), {
-            opacity: 0,
-            y: 24,
-            duration: 1,
-            delay: 0.5,
-            ease: "power3.out",
-          });
+          const introEl = ref.current.querySelector("[data-hero-intro]");
+          if (introEl) {
+            gsap.fromTo(
+              introEl,
+              { opacity: 0, y: 24 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.5,
+                ease: "power3.out",
+              }
+            );
+          }
 
           // Content drifts up and softens as the hero scrolls away,
           // mirroring the homepage hero behaviour.
@@ -87,13 +94,7 @@ export default function PageHero({
   return (
     <section
       ref={ref}
-      /* Trimmed Aug 2026 (client direction: too much dead space above the
-         copy). The navbar is in normal flow on inner pages, so its height is
-         already separating this from the top of the window — the old pt-32/36
-         was stacked on top of that. The min-h came down too: on a tall window
-         it was the binding dimension and, with items-end, every extra pixel
-         became emptiness above the eyebrow. */
-      className="relative flex min-h-[32vh] items-end overflow-hidden pb-12 pt-16 md:min-h-[36vh] md:pt-20"
+      className="relative flex flex-col justify-center overflow-hidden pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]"
     >
       <div className="absolute inset-0">
         <Image
@@ -113,12 +114,14 @@ export default function PageHero({
           <span className="line-hair w-12" />
           <span className="eyebrow text-rose">{eyebrow}</span>
         </div>
-        <TextReveal
-          as="h1"
-          text={title}
-          className="mt-6 max-w-4xl font-display display-lg text-bone"
-          delay={0.15}
-        />
+        {title && (
+          <TextReveal
+            as="h1"
+            text={title}
+            className="mt-6 max-w-4xl font-display text-[clamp(2rem,3.8vw,3.6rem)] leading-[1.14] text-bone"
+            delay={0.15}
+          />
+        )}
         {intro && (
           <p
             data-hero-intro

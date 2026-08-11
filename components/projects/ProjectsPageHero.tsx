@@ -55,18 +55,8 @@ export default function ProjectsPageHero({
       ref={rootRef}
       aria-roledescription={count > 1 ? "carousel" : undefined}
       aria-label={count > 1 ? "Project highlights" : undefined}
-      // Not 100svh: unlike the home page, where the bar is fixed and the hero
-      // runs the full viewport beneath it, the navbar is sticky and therefore
-      // IN FLOW on inner pages — so a full-viewport hero here starts below the
-      // bar and overflows by exactly its height. Underscores are Tailwind's
-      // escape for the spaces calc() requires around the minus; without them
-      // the declaration is invalid CSS and the height silently falls back to
-      // auto.
-      // The extra 1px is the navbar's own bottom hairline: --nav-h sizes the
-      // bar's inner row, and the border sits outside it, so the header actually
-      // occupies var(--nav-h) + 1px of flow. Subtracting only --nav-h leaves the
-      // hero exactly one pixel too tall and the page scrolls.
-      className="relative h-[calc(100svh_-_var(--nav-h)_-_1px)] overflow-hidden bg-ink"
+      // Full viewport height so the hero fills the screen completely under the floating navbar
+      className="relative h-[100svh] overflow-hidden bg-ink"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}

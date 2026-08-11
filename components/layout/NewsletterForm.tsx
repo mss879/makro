@@ -18,32 +18,23 @@ export default function NewsletterForm() {
   });
 
   return (
-    <form
-      action={formAction}
-      className="grid gap-7 lg:grid-cols-12 lg:items-center lg:gap-x-8"
-    >
-      <div className="lg:col-span-5">
-        <label
-          htmlFor="nl-email"
-          className="block font-display text-xl leading-tight text-bone md:text-2xl"
-        >
-          Join our newsletter
-        </label>
-        <p
-          aria-live="polite"
-          className={`mt-2 font-body text-sm leading-relaxed ${
-            state.message ? "text-rose" : "text-mist"
-          }`}
-        >
-          {state.message || "Project news, a few times a year."}
-        </p>
-      </div>
+    <form action={formAction} className="w-full max-w-sm">
+      <label
+        htmlFor="nl-email"
+        className="block font-display text-base text-bone md:text-lg"
+      >
+        Join our newsletter
+      </label>
+      <p
+        aria-live="polite"
+        className={`mt-1 font-body text-xs leading-relaxed ${
+          state.message ? "text-rose" : "text-mist"
+        }`}
+      >
+        {state.message || "Project news, a few times a year."}
+      </p>
 
-      {/* Ends flush at column 12 so the field lines up with the legal bar
-          and the CTA link above it. Sized by the grid rather than by
-          justify-between, which let the label shrink-wrap and opened a
-          dead gap across the middle on wide screens. */}
-      <div className="flex w-full items-stretch gap-3 sm:gap-4 lg:col-span-5 lg:col-start-8">
+      <div className="mt-3 flex w-full items-stretch gap-2">
         <input
           id="nl-email"
           name="email"
@@ -51,17 +42,15 @@ export default function NewsletterForm() {
           required
           autoComplete="email"
           placeholder="Email address"
-          className="w-full border border-hair-strong bg-white/5 px-4 py-3.5 font-body text-sm text-bone transition-colors placeholder:text-fog focus:border-rose focus:outline-none"
+          className="w-full border border-hair-strong bg-white/5 px-3.5 py-2.5 font-body text-sm text-bone transition-colors placeholder:text-fog focus:border-rose focus:outline-none"
         />
         <button
           type="submit"
           disabled={pending}
-          className="group inline-flex shrink-0 items-center gap-2.5 bg-rose px-6 py-3.5 font-body text-sm text-ink transition-colors hover:bg-rose-soft disabled:cursor-not-allowed disabled:opacity-50 sm:px-7"
+          aria-label="Subscribe to newsletter"
+          className="group inline-flex shrink-0 items-center justify-center bg-rose px-4 py-2.5 font-body text-sm font-medium text-ink transition-colors hover:bg-rose-soft disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {pending ? "Joining" : "Subscribe"}
-          <span className="transition-transform duration-500 group-hover:translate-x-0.5">
-            →
-          </span>
+          {pending ? "..." : "→"}
         </button>
       </div>
     </form>

@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 
 import { createAnonSupabase } from "@/lib/supabase/server";
 import { INSIGHTS, type Insight, type InsightSection } from "@/lib/insights";
@@ -59,8 +60,8 @@ function toInsight(row: BlogPostRow): Insight {
   };
 }
 
-/** Published articles, ordered the way the admin panel arranges them. */
-export async function getInsights(): Promise<Insight[]> {
+/** Published articles, ordered the way the admin panel arranges them. Memoized per request. */
+export const getInsights = cache(async function getInsights(): Promise<Insight[]> {
   const supabase = createAnonSupabase();
   if (!supabase) return INSIGHTS;
 
@@ -80,7 +81,7 @@ export async function getInsights(): Promise<Insight[]> {
   // is answering it is the source of truth, and unpublishing every article has
   // to actually empty the hub rather than resurrect the four seeded guides.
   return (data ?? []).map((row) => toInsight(row as unknown as BlogPostRow));
-}
+});
 
 export async function getInsightBySlug(slug: string): Promise<Insight | undefined> {
   const insights = await getInsights();
