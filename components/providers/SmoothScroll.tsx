@@ -65,8 +65,26 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       };
     }
 
+    // ── The one dial for how the scroll FEELS ──────────────────────────
+    // Not a performance setting: frame rate is fixed elsewhere (composited
+    // reveals, no document-height blend layer, no stray promoted layers).
+    // This is purely how long the page keeps travelling after the wheel
+    // stops. It was 1.15s with an expo-out curve, whose long tail is what
+    // read as the page being heavy — each wheel event restarts a fresh
+    // 1.15s animation to a new target, so a run of events keeps extending
+    // the glide and the page feels disconnected from the input.
+    //
+    // 0.9 keeps the smoothing unmistakably present but lets it settle.
+    // If it still over-glides, the next step is not a smaller number here
+    // but the other mode entirely: delete `duration` and `easing` and pass
+    // `lerp: 0.1`. Lerp follows velocity per frame instead of animating to
+    // a target over a fixed span, which feels immediate on the first notch
+    // and settles fast — the usual answer for "I want it smooth but I want
+    // it to stop when I stop".
+    const SCROLL_GLIDE_SECONDS = 0.9;
+
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: SCROLL_GLIDE_SECONDS,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       touchMultiplier: 1.6,

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import type { SelectedWorkCard, SelectedWorkSettings } from "@/lib/selected-work-data";
 import { PeakMark } from "@/components/brand/PeakMark";
 
@@ -57,17 +57,14 @@ export default function FeaturedProjects({
         },
       });
 
-      // Recompute once images have loaded (layout height changes positions).
-      const refresh = () => ScrollTrigger.refresh();
-      const to1 = setTimeout(refresh, 500);
-      const to2 = setTimeout(refresh, 1500);
-      window.addEventListener("load", refresh);
-
-      return () => {
-        clearTimeout(to1);
-        clearTimeout(to2);
-        window.removeEventListener("load", refresh);
-      };
+      // Deliberately NO image-load refresh here. It guarded against a layout
+      // shift that cannot happen on this rail: every panel has an explicit
+      // viewport-derived width (PANEL_CLASS and the intro/end-cap widths) and
+      // every image box an explicit aspect-[4/5], so t.scrollWidth is a pure
+      // function of window.innerWidth and image decoding cannot move it. The
+      // three refreshes it used to fire (500ms, 1500ms, and window load) each
+      // re-measured every trigger on the page and ran ~26 onRefresh handlers
+      // that force synchronous layout — for a measurement that never changed.
     },
     { scope: section }
   );

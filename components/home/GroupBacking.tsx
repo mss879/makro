@@ -53,7 +53,10 @@ export default function GroupBacking() {
       <div className="absolute inset-0">
         <Image
           data-bg
-          src={unsplash(IMG.cityNight, 2000)}
+          // 1200, not 2000: this plate sits at opacity-20 under two full-bleed
+          // gradients and is scrub-scaled, so a 2000px source was decode,
+          // memory and raster nobody can see.
+          src={unsplash(IMG.cityNight, 1200)}
           alt=""
           fill
           sizes="100vw"

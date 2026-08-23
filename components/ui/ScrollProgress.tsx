@@ -9,7 +9,9 @@ export default function ScrollProgress() {
 
   useGSAP(() => {
     if (!bar.current) return;
-    gsap.set(bar.current, { scaleX: 0, transformOrigin: "left center" });
+    // The one element on the site where a permanent promotion is right: it
+    // transforms on every scroll frame for the entire length of the document.
+    gsap.set(bar.current, { scaleX: 0, transformOrigin: "left center", willChange: "transform" });
     gsap.to(bar.current, {
       scaleX: 1,
       ease: "none",

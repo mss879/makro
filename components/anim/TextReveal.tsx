@@ -125,7 +125,14 @@ export default function TextReveal({
           className="reveal-mask-inline"
           style={{ marginRight: "0.26em" }}
         >
-          <span data-w className="inline-block will-change-transform">
+          {/* No will-change here. GSAP's global default is force3D:"auto", so
+              it applies translateZ(0) for the tween's duration and strips it
+              on completion — promotion already happens exactly when needed.
+              Hardcoded in the markup it promoted every word permanently: 36
+              composited layers on the home page alone, held for the life of
+              the document long after the words had finished moving, for the
+              compositor to sort and draw on every frame. */}
+          <span data-w className="inline-block">
             {word}
           </span>
         </span>

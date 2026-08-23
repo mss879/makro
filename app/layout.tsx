@@ -13,6 +13,12 @@ const marcellus = localFont({
   variable: "--font-marcellus",
   display: "swap",
   fallback: ["Georgia", "Times New Roman", "serif"],
+  // next/font/local metric-matches against Arial by default, so a serif
+  // display face was being sized against a grotesque while actually falling
+  // back to Georgia — a bigger swap reflow than necessary, on exactly the
+  // headings whose reflow forced the fonts.ready ScrollTrigger refresh to
+  // exist. Manrope is left alone: Arial is the right match for a grotesque.
+  adjustFontFallback: "Times New Roman",
 });
 
 // Secondary / body face — Manrope (OFL, self-hosted variable file,

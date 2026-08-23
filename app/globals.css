@@ -80,7 +80,11 @@
   html {
     scroll-behavior: auto; /* Lenis drives smooth scroll */
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    /* No `text-rendering: optimizeLegibility`. Chromium and WebKit already
+       enable kerning and standard ligatures under the default `auto`, so it
+       bought nothing on the browsers visitors use — while forcing full text
+       shaping on every text REPAINT, which multiplied the cost of every
+       scrubbed reveal on the page. */
   }
 
   body {
@@ -220,7 +224,20 @@
 
   .grain::before {
     content: "";
-    position: absolute;
+    /* FIXED, not absolute. `body` is position:relative, so an absolute inset:0
+       sized this pseudo-element to the whole DOCUMENT — ~7300px on the home
+       page — and `mix-blend-mode` on a surface that large defeats layer
+       isolation for everything beneath it: the compositor has to read the
+       backdrop back and re-blend on every repaint under it. Fixed pins it to
+       the viewport, so the blend group is one screen and can stay a static
+       promoted layer. The grain no longer travels with the content, which at
+       0.05 opacity is not something the eye can resolve.
+
+       The blend mode itself has to stay. feTurbulence noise sits around 0.5,
+       so effective alpha here is ~0.025; under `overlay` that is a delta of
+       <0.3/255 on ink and <0.7/255 on cream. Swapped to `normal` it becomes
+       ~6/255 — 20x stronger, and it visibly lifts the blacks. */
+    position: fixed;
     inset: 0;
     pointer-events: none;
     opacity: 0.05;

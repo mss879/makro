@@ -105,14 +105,25 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[500] pointer-events-none border-b border-transparent bg-transparent transition-all duration-500">
+      {/* No transition-all, no border, no background: none of those ever
+          changed on this element, and transition-all on a fixed full-width
+          element makes the browser watch every animatable property on it. The
+          state change lives entirely on the panel below. */}
+      <header className="fixed inset-x-0 top-0 z-[500] pointer-events-none">
         <div className="container-edge mx-auto max-w-[1600px] pt-[calc(env(safe-area-inset-top)+var(--hero-inset))]">
           {/* Black glassmorphism floating panel — dark frosted glass plate with hairline border & heavy backdrop blur. */}
           <div
-            className={`pointer-events-auto flex h-[var(--nav-h)] items-center justify-between transition-all duration-500 mt-2 border px-5 backdrop-blur-xl md:mt-3 md:px-7 ${
+            /* An explicit property list, not transition-all — and ONE shadow
+               geometry across both states, varying only in alpha. The two
+               states used to carry different offsets and blurs, so every
+               crossing of the scroll threshold re-rasterised a full-width
+               shadow at ~30 intermediate geometries; alpha-only makes it a
+               colour interpolation instead. Under an 80%-opaque bar the
+               geometry change was not visible anyway. */
+            className={`pointer-events-auto flex h-[var(--nav-h)] items-center justify-between transition-[background-color,border-color,box-shadow] duration-500 mt-2 border px-5 backdrop-blur-xl md:mt-3 md:px-7 ${
               scrolled
-                ? "border-white/25 bg-ink/80 shadow-[0_12px_36px_-12px_rgba(0,0,0,0.6)]"
-                : "border-white/20 bg-ink/50 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)]"
+                ? "border-white/25 bg-ink/80 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)]"
+                : "border-white/20 bg-ink/50 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)]"
             }`}
           >
             {/* Logo — left. The real brand lockup asset. */}
@@ -127,8 +138,18 @@ export default function Navbar() {
                 width={192}
                 height={52}
                 priority
-                className={`w-auto transition-[filter,height] duration-500 invert ${
-                  scrolled ? "h-[28px] md:h-[34px]" : "h-[32px] md:h-[38px]"
+                /* Scale, not height. This used to transition the element's
+                   LAYOUT height (32->28 / 38->34), i.e. 500ms of layout plus a
+                   bitmap re-raster at every intermediate size, reflowing the
+                   fixed bar's flex row on each frame. The box now stays put and
+                   the mark scales inside it: 28/32 = 0.875, 34/38 = 0.895
+                   (= 34.01px), so both states land where they always did.
+                   origin-left resolves to left-center and the row is
+                   items-center, so the left edge and the optical centre both
+                   hold. `filter` was in the old transition list but never
+                   changed. */
+                className={`h-[32px] w-auto origin-left transition-transform duration-500 invert md:h-[38px] ${
+                  scrolled ? "scale-[0.875] md:scale-[0.895]" : ""
                 }`}
               />
             </Link>

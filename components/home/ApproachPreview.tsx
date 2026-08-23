@@ -75,13 +75,13 @@ export default function ApproachPreview() {
       const treads = q("[data-tread]");
       const risers = q("[data-riser]");
       const plumbs = q("[data-plumb]");
+      const plumbMasks = q("[data-plumb-mask]");
       const fills = q("[data-fill]");
       const nums = q("[data-num]");
       const titles = q("[data-title]");
       const bodies = q("[data-body]");
-
-      const CLIP_HID = "inset(0% 0% 100% 0%)";
-      const CLIP_VIS = "inset(0% 0% 0% 0%)";
+      const bodyWins = q("[data-body-win]");
+      const bodyInners = q("[data-body-inner]");
 
       /**
        * Every element in this section ships at its FINISHED value — there is
@@ -104,11 +104,23 @@ export default function ApproachPreview() {
       const prime = () => {
         gsap.set(treads, { scaleX: 0 });
         gsap.set(risers, { scaleY: 0 });
-        gsap.set(plumbs, { clipPath: CLIP_HID });
+        // Both reveals below are COUNTER-TRANSLATED DOUBLE MASKS, not
+        // clip-paths. The outer element is the clip window and sweeps down;
+        // the inner translates by exactly the opposite amount, so the content
+        // is pixel-stationary while a hard horizontal edge passes over it.
+        // Rendered position = outer + inner = 0. At yPercent -50 the window
+        // spans [T-h/2, T+h/2] against content at [T, T+h], so the visible
+        // intersection is the top half — which is precisely what
+        // `inset(0% 0% 100% 0%) -> inset(0)` drew, at zero repaint cost.
+        // clip-path is not a compositable property: scrubbed across a 90vh
+        // pin it repainted four paragraphs of text on every scroll frame.
+        gsap.set(plumbMasks, { yPercent: -100 });
+        gsap.set(plumbs, { yPercent: 100 });
         gsap.set(fills, { yPercent: 100 });
         gsap.set(nums, { yPercent: 100 });
         gsap.set(titles, { yPercent: 115 });
-        gsap.set(bodies, { clipPath: CLIP_HID });
+        gsap.set(bodies, { yPercent: -100 });
+        gsap.set(bodyInners, { yPercent: 100 });
         // Dash each logomark stroke by its own length and push the dash out
         // of view, so the paths can be drawn back on.
         peaks.forEach((p) => {
@@ -124,11 +136,6 @@ export default function ApproachPreview() {
       // flight per column at F = 0 / 1 / 2 / 3, then the summit.
       mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
         prime();
-
-        // Twelve promoted layers, released by mm.revert(). The hairlines and
-        // the paragraphs are deliberately left alone — promoting a 1px rule
-        // buys nothing and promoting clip-path costs memory for no gain.
-        gsap.set([...nums, ...titles, ...fills], { willChange: "transform" });
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -159,9 +166,18 @@ export default function ApproachPreview() {
             scrub: 0.6,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            // Don't leave clip-path promoted all the way down the page.
+            // One owner for promotion on this whole section: layers exist for
+            // the duration of the pin and are released the moment it lets go,
+            // so nothing stays promoted down the rest of the page. Previously
+            // twelve elements were promoted at breakpoint-match time and only
+            // released by mm.revert() (i.e. never), while the paragraphs got
+            // `will-change: clip-path` — a hint with no compositing fast path
+            // behind it in Chromium, so it cost memory and bought nothing.
             onToggle: (self) =>
-              gsap.set(bodies, { willChange: self.isActive ? "clip-path" : "auto" }),
+              gsap.set(
+                [...nums, ...titles, ...fills, ...plumbMasks, ...plumbs, ...bodies, ...bodyInners],
+                { willChange: self.isActive ? "transform" : "auto" }
+              ),
           },
         });
 
@@ -201,10 +217,18 @@ export default function ApproachPreview() {
           // tread is roughly a third of the way across, and its landing is
           // what releases the storey's content. One contrary vector gives
           // everything else something to push against.
+          // Paired counter-translate (see prime): the mask sweeps down, the
+          // dashed line slides up by the same amount, so the dashes neither
+          // stretch — which is what ruled out scaleY — nor travel.
           tl.fromTo(
+            qc("[data-plumb-mask]"),
+            { yPercent: -100 },
+            { yPercent: 0, duration: 0.26, ease: "power2.in", force3D: true },
+            F + 0.26
+          ).fromTo(
             qc("[data-plumb]"),
-            { clipPath: CLIP_HID },
-            { clipPath: CLIP_VIS, duration: 0.26, ease: "power2.in" },
+            { yPercent: 100 },
+            { yPercent: 0, duration: 0.26, ease: "power2.in", force3D: true },
             F + 0.26
           );
 
@@ -241,12 +265,29 @@ export default function ApproachPreview() {
           // Body unrolls top-to-bottom, in reading order, while the block
           // rises on the same tween. Line one is complete and readable
           // before line two exists.
+          // Three tweens, one gesture. Identical duration, ease and position
+          // on all of them so a single playhead keeps them locked: any drift
+          // between the window and the inner and the copy slides instead of
+          // unrolling. The window carries the 16px rise; the mask pair does
+          // the reveal.
           tl.fromTo(
-            qc("[data-body]"),
-            { clipPath: CLIP_HID, y: 16 },
-            { clipPath: CLIP_VIS, y: 0, duration: 0.5, ease: "power2.out" },
+            qc("[data-body-win]"),
+            { y: 16 },
+            { y: 0, duration: 0.5, ease: "power2.out", force3D: true },
             F + 0.66
-          );
+          )
+            .fromTo(
+              qc("[data-body]"),
+              { yPercent: -100 },
+              { yPercent: 0, duration: 0.5, ease: "power2.out", force3D: true },
+              F + 0.66
+            )
+            .fromTo(
+              qc("[data-body-inner]"),
+              { yPercent: 100 },
+              { yPercent: 0, duration: 0.5, ease: "power2.out", force3D: true },
+              F + 0.66
+            );
         });
 
         // Each flight's tail (body ends F+1.16, slab F+1.40) deliberately
@@ -325,11 +366,14 @@ export default function ApproachPreview() {
           // but unscrubbed, so the more extreme expo.out is free. The slab
           // is what carries the idea here; without it the mobile branch
           // would be one 48px hairline and a lot of nothing.
-          t.fromTo(qc("[data-plumb]"), { clipPath: CLIP_HID }, { clipPath: CLIP_VIS, duration: 0.34, ease: "power2.in" }, 0)
+          t.fromTo(qc("[data-plumb-mask]"), { yPercent: -100 }, { yPercent: 0, duration: 0.34, ease: "power2.in", force3D: true }, 0)
+            .fromTo(qc("[data-plumb]"), { yPercent: 100 }, { yPercent: 0, duration: 0.34, ease: "power2.in", force3D: true }, 0)
             .fromTo(qc("[data-fill]"), { yPercent: 100 }, { yPercent: 0, duration: 0.85, ease: "power2.out" }, 0.06)
             .fromTo(qc("[data-num]"), { yPercent: 100 }, { yPercent: 0, duration: 0.62, ease: "expo.out" }, 0.14)
             .fromTo(qc("[data-title]"), { yPercent: 115 }, { yPercent: 0, duration: 0.58, ease: "expo.out" }, 0.26)
-            .fromTo(qc("[data-body]"), { clipPath: CLIP_HID, y: 14 }, { clipPath: CLIP_VIS, y: 0, duration: 0.62, ease: "power2.out" }, 0.36);
+            .fromTo(qc("[data-body-win]"), { y: 14 }, { y: 0, duration: 0.62, ease: "power2.out", force3D: true }, 0.36)
+            .fromTo(qc("[data-body]"), { yPercent: -100 }, { yPercent: 0, duration: 0.62, ease: "power2.out", force3D: true }, 0.36)
+            .fromTo(qc("[data-body-inner]"), { yPercent: 100 }, { yPercent: 0, duration: 0.62, ease: "power2.out", force3D: true }, 0.36);
         });
 
         // Hung off the LAST cell so the mark still closes the sequence
@@ -351,17 +395,19 @@ export default function ApproachPreview() {
       // the summit. Because prime() never runs on this branch the markup is
       // already at every one of these values; the pass is kept explicit so
       // the finished state is stated once, in full, and survives any future
-      // branch that reverts into this one. clipPath "none" rather than a
-      // full inset so no clipping context is left on the text at rest.
+      // branch that reverts into this one. Every mask pair is seated at
+      // yPercent 0, which is where the markup already ships them — no
+      // clipping context and no residual transform left on the copy at rest.
       mm.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(treads, { scaleX: 1 });
         gsap.set(risers, { scaleY: 1 });
         gsap.set(rail, { scaleX: 1 });
-        gsap.set(plumbs, { clipPath: "none" });
+        gsap.set([...plumbMasks, ...plumbs], { yPercent: 0 });
         gsap.set(fills, { yPercent: 0 });
         gsap.set(nums, { yPercent: 0 });
         gsap.set(titles, { yPercent: 0 });
-        gsap.set(bodies, { clipPath: "none", y: 0 });
+        gsap.set([...bodies, ...bodyInners], { yPercent: 0 });
+        gsap.set(bodyWins, { y: 0 });
         if (markSvg) gsap.set(markSvg, { y: 0 });
         gsap.set(peaks, { strokeDashoffset: 0 });
         if (head) gsap.set(head, { y: 0 });
@@ -488,17 +534,29 @@ export default function ApproachPreview() {
 
                 {/* The construction line that stitches the tread into the
                     storey. left-8 = the cell's p-8, so it lands exactly on
-                    the numeral's left edge. Revealed by clip-path, NOT
-                    scaleY — scaling an element carrying a repeating gradient
-                    stretches the dashes instead of revealing them. */}
-                <span
-                  data-plumb
-                  style={{
-                    backgroundImage:
-                      "repeating-linear-gradient(to bottom, var(--color-rose-deep) 0 3px, transparent 3px 7px)",
-                  }}
-                  className="pointer-events-none absolute left-8 top-[-20px] h-12 w-px lg:top-[calc(var(--stair)*-1)] lg:h-[calc(var(--stair)+28px)]"
-                />
+                    the numeral's left edge.
+
+                    Three elements, not one. scaleY was never an option — it
+                    stretches the dashes instead of revealing them. clip-path
+                    did the job correctly but is not compositable, so scrubbed
+                    inside the pin it repainted on every scroll frame. This is
+                    the counter-translated double mask (see prime): the outer
+                    span owns the geometry, [data-plumb-mask] sweeps its clip
+                    window down, and [data-plumb] slides up by exactly the same
+                    amount. Net translation zero, so the dashes neither stretch
+                    nor travel — the line is drawn, not moved. */}
+                <span className="pointer-events-none absolute left-8 top-[-20px] h-12 w-px lg:top-[calc(var(--stair)*-1)] lg:h-[calc(var(--stair)+28px)]">
+                  <span data-plumb-mask className="absolute inset-0 overflow-hidden">
+                    <span
+                      data-plumb
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to bottom, var(--color-rose-deep) 0 3px, transparent 3px 7px)",
+                      }}
+                      className="absolute inset-0"
+                    />
+                  </span>
+                </span>
 
                 {/* No justify-between / min-height: grid cells already
                     equalise height, so the content keeps a tight rhythm
@@ -526,15 +584,34 @@ export default function ApproachPreview() {
                   </h3>
 
                   {/* 30ch cap + balanced wrap → three even, full rows at any
-                      card width, never a stranded half row. The 2px pad and
-                      matching negative margin stop the clip-path shaving a
-                      descender on a subpixel boundary at rest. */}
-                  <p
-                    data-body
-                    className="mt-3 mb-[-2px] max-w-[30ch] text-balance pb-[2px] font-body text-sm leading-relaxed text-mist"
-                  >
-                    {s.body}
-                  </p>
+                      card width, never a stranded half row.
+
+                      Three elements, and the pad/margin split between them is
+                      load-bearing. yPercent resolves against offsetHeight, so
+                      the mask [data-body] and the copy [data-body-inner] have
+                      to be exactly the same height for their translates to
+                      cancel to the pixel — hence pb-[2px] stays on the
+                      paragraph (keeping the descender room INSIDE the mask,
+                      where clip-path used to shave it on a subpixel boundary)
+                      while the cancelling mb-[-2px] moves up to the window,
+                      which is also what carries the 16px rise.
+
+                      A cover slab was the obvious alternative and does not
+                      work: [data-fill] is still pouring up behind this copy
+                      while it unrolls, so the backdrop is mid-transition from
+                      cream to shell and no flat colour could match it — and
+                      group-hover:bg-[#ded5c0] would break it again. These
+                      masks are transparent, so hover is untouched. */}
+                  <div data-body-win className="mt-3 mb-[-2px]">
+                    <div data-body className="overflow-hidden">
+                      <p
+                        data-body-inner
+                        className="max-w-[30ch] text-balance pb-[2px] font-body text-sm leading-relaxed text-mist"
+                      >
+                        {s.body}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}

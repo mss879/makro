@@ -21,6 +21,8 @@ type Props = {
   revealDuration?: number;
   /** Starting clip inset, e.g. "14% 8% 14% 8%" — how far the frame grows. */
   revealInset?: string;
+  /** Skip the frame-open entirely. A 0% inset animates a value to itself. */
+  reveal?: boolean;
 };
 
 /** Scroll-parallax image with a clip-path reveal and brand tonal treatment. */
@@ -37,6 +39,7 @@ export default function ParallaxImage({
   zoom = 1.18,
   revealDuration = 1.4,
   revealInset = "14% 8% 14% 8%",
+  reveal = true,
 }: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
@@ -50,16 +53,25 @@ export default function ParallaxImage({
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.fromTo(
-          w,
-          { clipPath: `inset(${revealInset})` },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: revealDuration,
-            ease: "power3.out",
-            scrollTrigger: { trigger: w, start: "top 85%" },
-          }
-        );
+        if (reveal) {
+          gsap.fromTo(
+            w,
+            { clipPath: `inset(${revealInset})` },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: revealDuration,
+              ease: "power3.out",
+              // Drop the clipping context once the frame has finished opening.
+              // GSAP leaves a tween's end value inline forever, so without this
+              // every instance carried `clip-path: inset(0)` — a render surface
+              // the compositor keeps for the life of the page — long after the
+              // reveal was over. The wrapper already has overflow:hidden and no
+              // border-radius, so inset(0) and none crop identically.
+              onComplete: () => gsap.set(w, { clipPath: "none" }),
+              scrollTrigger: { trigger: w, start: "top 85%" },
+            }
+          );
+        }
 
         // Base zoom lives here (not a CSS class) so it can vary per instance;
         // GSAP composes it with the parallax translate into one transform.
@@ -79,7 +91,7 @@ export default function ParallaxImage({
       // midpoint: the same crop a default visitor sees with the image
       // centred in the viewport, just static.
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(w, { clipPath: "inset(0% 0% 0% 0%)" });
+        gsap.set(w, { clipPath: "none" });
         gsap.set(el, { scale: zoom, yPercent: 0 });
       });
 

@@ -8,16 +8,51 @@ import { PRELOADER_DONE } from "@/components/ui/Preloader";
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null);
 
-  // Browsers pause muted autoplay video in background tabs; make sure it
-  // resumes when the visitor switches back.
+  // Two jobs, one effect, because they share ownership of "why is this
+  // paused": browsers pause muted autoplay in background tabs and it has to
+  // resume when the visitor switches back — but a full-screen 1080p loop
+  // carrying a three-function CSS filter should not keep decoding and running
+  // a shader pass per frame once it is eight sections off screen, which is
+  // most of this page.
   useEffect(() => {
     const v = root.current?.querySelector<HTMLVideoElement>("video[data-hero-img]");
     if (!v) return;
-    const resume = () => {
+
+    // Set only by the observer below. Without it the visibilitychange handler
+    // would helpfully restart decoding for a hero nobody can see, every time
+    // the visitor came back to the tab.
+    let parked = false;
+
+    const play = () => {
       if (document.visibilityState === "visible" && v.paused) v.play().catch(() => {});
     };
+    const resume = () => {
+      if (!parked) play();
+    };
     document.addEventListener("visibilitychange", resume);
-    return () => document.removeEventListener("visibilitychange", resume);
+
+    // IntersectionObserver rather than a ScrollTrigger: it reports off the
+    // compositor instead of Lenis's scroll callback, so it costs nothing per
+    // frame — and it still works for reduced-motion visitors, where Lenis
+    // never mounts at all.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          parked = false;
+          play();
+        } else if (!v.paused) {
+          parked = true;
+          v.pause();
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(v);
+
+    return () => {
+      document.removeEventListener("visibilitychange", resume);
+      io.disconnect();
+    };
   }, []);
 
   useGSAP(

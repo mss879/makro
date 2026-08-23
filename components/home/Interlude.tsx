@@ -25,7 +25,10 @@ export default function Interlude({ image, alt, eyebrow, line }: Props) {
         width={2048}
         parallax={9}
         zoom={1.12}
-        revealInset="0% 0% 0% 0%"
+        // No frame-open on the interlude — it is a full-bleed pause, not a
+        // framed plate. This was a `revealInset="0% 0% 0% 0%"`, which spent
+        // 1.4s animating a value to itself and left a clip-path behind.
+        reveal={false}
       />
       {/* Quiet centered caption over the image's built-in bottom gradient */}
       <Reveal className="absolute inset-x-0 bottom-0 pb-14 text-center md:pb-20">
