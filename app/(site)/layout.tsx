@@ -6,6 +6,8 @@ import Footer from "@/components/layout/Footer";
 import Preloader from "@/components/ui/Preloader";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import TrackPageview from "@/components/analytics/TrackPageview";
+import ChatMount from "@/components/chat/ChatMount";
+import { isChatConfigured } from "@/lib/chat/config";
 
 /**
  * The public site's chrome.
@@ -30,6 +32,15 @@ export default function SiteLayout({
         <main>{children}</main>
         <Footer />
       </SmoothScroll>
+      {/* Outside SmoothScroll on purpose: the widget is fixed to the viewport,
+          and Lenis transforms its wrapper — a fixed child of a transformed
+          ancestor positions against that ancestor, not the viewport, so the
+          panel would drift with the page as you scroll.
+
+          Rendered only when the model key AND the service-role key are both
+          present (lib/chat/config.ts). A launcher that opens onto a 503 is
+          worse than no launcher. */}
+      {isChatConfigured && <ChatMount />}
     </>
   );
 }

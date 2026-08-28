@@ -6,11 +6,7 @@
  */
 
 export type InquiryStatus = "new" | "transferred" | "archived";
-export type ProjectStatusRow =
-  | "Completed"
-  | "Now Selling"
-  | "Under Construction"
-  | "In Planning";
+export type ProjectStatusRow = "Upcoming" | "On-going" | "Delivered";
 export type ProjectTypeRow = "Residential" | "Commercial" | "Mixed-Use";
 /** The two panel renders in the home page rail — a real discriminator, not a flag. */
 export type SelectedWorkKind = "cover" | "gallery";
@@ -88,6 +84,37 @@ export type SubscriberRow = {
   id: string;
   email: string;
   created_at: string;
+  /** Where the address came from, e.g. "Catalogue — Makro Heights". Comma-separated when more than one. */
+  source: string | null;
+}
+
+/** One conversation with the site's AI agent. */
+export type ChatSessionRow = {
+  id: string;
+  /** Bearer secret held only by the visitor's browser — never sent to the admin UI. */
+  token: string;
+  created_at: string;
+  updated_at: string;
+  last_message_at: string;
+  /** False once an admin takes the conversation over by hand. */
+  ai_enabled: boolean;
+  visitor: string | null;
+  started_path: string | null;
+  name: string | null;
+  phone: string | null;
+  email: string | null;
+  lead_id: string | null;
+}
+
+/** `agent` is a human admin replying in place of the AI. */
+export type ChatRole = "user" | "assistant" | "agent";
+
+export type ChatMessageRow = {
+  id: string;
+  session_id: string;
+  role: ChatRole;
+  content: string;
+  created_at: string;
 }
 
 export type ProjectRow = {
@@ -107,6 +134,12 @@ export type ProjectRow = {
   specs_note: string | null;
   features: string[];
   cover: string | null;
+  /** Full-bleed hero art, independent of the gallery. Null falls back to cover. */
+  hero_image: string | null;
+  /** Public URL of the catalogue PDF, or null. Gates on an email — see /api/catalogue. */
+  catalogue_url: string | null;
+  /** The name the visitor's browser saves it as; the storage key is a uuid. */
+  catalogue_name: string | null;
   published: boolean;
   sort_order: number;
   created_at: string;
@@ -292,6 +325,19 @@ export interface Database {
       notes: Table<NoteRow>;
       page_views: Table<PageViewRow>;
       newsletter_subscribers: Table<SubscriberRow>;
+      chat_sessions: Table<ChatSessionRow>;
+      chat_messages: Table<
+        ChatMessageRow,
+        [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_sessions";
+            referencedColumns: ["id"];
+          },
+        ]
+      >;
       projects: Table<ProjectRow>;
       project_images: Table<
         ProjectImageRow,
