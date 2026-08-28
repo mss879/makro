@@ -9,9 +9,9 @@ import Reveal from "@/components/anim/Reveal";
 import { PeakMark } from "@/components/brand/PeakMark";
 
 const POINTS = [
-  "An established corporate group",
-  "Capital discipline & staying power",
-  "A long-term outlook on value",
+  "Established group. Independent focus.",
+  "Financial strength. Enduring stability.",
+  "The confidence to think beyond the immediate.",
 ];
 
 export default function GroupBacking() {
@@ -86,12 +86,13 @@ export default function GroupBacking() {
 
           <Reveal delay={0.1}>
             <p className="mt-5 max-w-xl font-body text-base leading-relaxed text-mist">
-              Makro Developers is a wholly owned subsidiary of the Wheels Lanka
-              Group, one of Sri Lanka&rsquo;s established diversified business
-              groups. That relationship gives every development the financial
-              strength, governance and long-term stability to be delivered with
-              confidence — while Makro remains singularly focused on property
-              development.
+              As a wholly owned subsidiary of the Wheels Lanka Group, Makro
+              combines the strength, governance and long-term stability of an
+              established and diversified Sri Lankan business group with a
+              singular focus on property development. This gives us the
+              confidence and stability to take a considered approach to every
+              project — making decisions with discipline, looking beyond the
+              immediate and staying focused on the long term.
             </p>
           </Reveal>
 

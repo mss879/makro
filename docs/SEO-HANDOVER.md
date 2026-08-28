@@ -17,7 +17,7 @@ makrodevelopers.lk
 │
 ├── TRUST PILLAR — who we are and how we work
 │   ├── /about               About Us
-│   ├── /approach            Our four-stage development process
+│   ├── /approach            Our five-stage development process
 │   ├── /sustainability      Responsible building commitments
 │   └── /careers             Careers & open application
 │
@@ -97,9 +97,9 @@ Titles follow the pattern `Page Title · Makro Developers` (the suffix is applie
 | `/` | **Makro Developers — Luxury Property Developer in Colombo, Sri Lanka** | Makro Developers builds premium residential and commercial properties in Colombo and across Sri Lanka. A Wheels Lanka Group company delivering luxury apartments, villas and Grade-A offices — the future built well. |
 | `/about` | **About Us — A Sri Lankan Property Developer** | Makro Developers is a Sri Lankan property developer and a fully owned subsidiary of the Wheels Lanka Group — combining corporate strength with a focused approach to residential and commercial development in Colombo and beyond. |
 | `/projects` | **Property Developments in Sri Lanka** | Explore Makro Developers' portfolio of residential and commercial property developments across Sri Lanka — luxury apartments, waterfront villas and Grade-A offices, completed, selling and in planning. |
-| `/approach` | **Our Approach to Property Development** | How Makro Developers creates lasting value in Sri Lankan real estate — a four-stage development process of thoughtful planning, climate-aware design, disciplined construction and after-handover care. |
+| `/approach` | **Our Approach to Property Development** | How Makro Developers creates lasting value in Sri Lankan real estate — feasibility-led planning, integrated design, compliance, disciplined construction and performance beyond handover. |
 | `/sustainability` | **Sustainable Property Development** | Sustainable property development in Sri Lanka — Makro Developers builds climate-conscious residential and commercial projects with passive cooling, solar-ready services and durable materials for lasting value. |
-| `/contact` | **Contact a Property Developer in Colombo** | Contact Makro Developers in Colombo, Sri Lanka — enquire about luxury apartments, villas, Grade-A commercial space or investment opportunities. Call, email or visit our Colombo 07 office. |
+| `/contact` | **Contact a Property Developer in Colombo** | Contact Makro Developers in Colombo, Sri Lanka — enquire about luxury apartments, villas, Grade-A commercial space or investment opportunities. Call, email or visit our Colombo 05 head office. |
 | `/faq` | **Frequently Asked Questions — Buying & Investing** | Answers to common questions about buying, investing and living in a Makro development — from apartment purchases in Colombo and foreign ownership in Sri Lanka to payment plans and after-handover support. |
 | `/insights` | **Property Insights & Buying Guides** | Guides and insights on Sri Lankan property — buying an apartment in Colombo, investing in real estate, Grade-A commercial space and how to choose a developer you can trust. |
 | `/careers` | **Careers in Property Development** | Build a career with Makro Developers — a growing Sri Lankan property developer backed by the Wheels Lanka Group. Opportunities across engineering, design management, sales and operations in Colombo. |
@@ -235,7 +235,7 @@ Every page is linked to and from other pages **by editorial intent, not randomly
 ## 7. Post-Launch Checklist (for the client)
 
 1. **Google Search Console** — verify the domain, submit `https://makrodevelopers.lk/sitemap.xml`.
-2. **Google Business Profile** — create/claim the Colombo 07 listing; keep name, address, phone identical to the site (the LocalBusiness schema mirrors these).
+2. **Google Business Profile** — create/claim the Colombo 05 head-office listing; keep name, address, phone identical to the site (the LocalBusiness schema mirrors these).
 3. **Analytics** — add GA4 (or equivalent) before launch.
 4. **Social profiles** — the footer's Instagram/LinkedIn/Facebook links are placeholders (`#`). Once live profiles exist, update `SOCIALS` in `lib/site.ts` and add the profile URLs to a `sameAs` array in `organizationSchema()` (`lib/seo.ts`).
 5. **Phone number** — `+94 11 234 5678` in `lib/site.ts` is a placeholder; replace with the real line (updates site-wide, including schemas).

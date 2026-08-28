@@ -29,20 +29,20 @@ export const metadata = pageMetadata({
 
 const VALUES = [
   {
-    title: "Disciplined",
-    body: "Every decision, from planning to material selection, is measured against the same standard — regardless of budget or market segment.",
+    title: "DISCIPLINED",
+    body: "We believe good development begins with disciplined decisions. From feasibility and planning to design, procurement and delivery, we apply the same rigour to every decision — balancing commercial realities with quality, functionality and long-term value.",
   },
   {
-    title: "Innovative",
-    body: "We continually refine our design and construction methods to meet modern living demands without abandoning what endures.",
+    title: "CURATED",
+    body: "We are deliberate about what we bring into a development and why. From spatial planning and materials to finishes and detail, every element is carefully selected to enhance how a place is experienced, how it performs and how it stands the test of time.",
   },
   {
-    title: "Trustworthy",
-    body: "We build relationships on delivering exactly what we promise — to customers, partners and communities alike.",
+    title: "HOLISTIC",
+    body: "A development is greater than the sum of its parts. We bring together the right specialists and consider architecture, structure, services, interiors and performance as one cohesive whole — ensuring every decision contributes to the quality and value of the finished development.",
   },
   {
-    title: "Modern",
-    body: "Our architecture embraces contemporary design and thinking, without chasing trends that date quickly.",
+    title: "TRUST",
+    body: "Trust is built through what we ultimately deliver, not simply what we promise. We value transparency, honour our commitments and remain accountable — creating relationships that extend well beyond the transaction.",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function AboutPage() {
       />
       <PageHero
         eyebrow="About Makro"
-        intro="We design and build developments that set a new standard for craftsmanship, trust and long-term value — for the people who will live, work and invest in them."
+        intro="Our developments reflect considered design, quality craftsmanship and lasting value — creating spaces and landmarks where people can live, work and invest with confidence."
         imageId={BRAND.monoGrid}
         treatment="mono"
       />
@@ -108,7 +108,7 @@ export default function AboutPage() {
             </div>
             <TextReveal
               as="h2"
-              text="A new standard of craftsmanship, trust and value."
+              text="A specialist developer with the strength to think beyond the immediate."
               className="mt-6 font-display display-md text-ink"
             />
           </div>
@@ -116,20 +116,19 @@ export default function AboutPage() {
             <Reveal>
               <p className="font-body text-lg leading-relaxed text-mist">
                 Makro Developers is a wholly owned subsidiary of the Wheels
-                Lanka Group, established to focus entirely on residential and
-                commercial property development. Being part of an established,
-                diversified business group gives us the financial strength,
-                governance and long-term stability to take on developments with
-                confidence — and every Makro project carries that backing.
+                Lanka Group, established with a singular focus on property
+                development. We bring together specialist development expertise
+                with the financial strength, governance and stability of an
+                established Sri Lankan business group.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="font-body text-lg leading-relaxed text-mist">
-                We approach every development as a long-term commitment rather
-                than a single sale, from the first feasibility study to long
-                after the keys have changed hands. That commitment is what we
-                call The Standard Above — the benchmark against which every
-                decision we make is measured.{" "}
+                We approach every development as a commitment that extends
+                beyond construction — from the first feasibility assessment
+                through design, delivery and into ownership. Every decision is
+                measured against the same standard: creating developments that
+                are considered today and continue to deliver value over time.{" "}
                 <Link
                   href="/approach"
                   className="text-ink underline decoration-rose-deep/50 underline-offset-4 transition-colors hover:text-rose-deep"
@@ -169,7 +168,7 @@ export default function AboutPage() {
           </div>
           <TextReveal
             as="h2"
-            text="The traits behind everything we build."
+            text="The Makro Distinction"
             className="mt-6 max-w-3xl font-display display-md text-ink"
           />
           {/* The cards' left hairlines carry the rhythm now, so the columns
@@ -205,23 +204,32 @@ export default function AboutPage() {
             </div>
             <TextReveal
               as="h2"
-              text="Backed by the Wheels Lanka Group."
+              text="Strength behind every development."
               className="mt-6 font-display display-md text-bone"
             />
             <Reveal delay={0.1}>
               <p className="mt-8 font-body text-lg leading-relaxed text-mist">
-                Makro Developers operates with the backing of the Wheels Lanka
-                Group, one of Sri Lanka&rsquo;s established diversified business
-                groups. That relationship brings capital discipline,
-                professional governance and a long-term outlook to every
-                development we undertake — meaning every Makro project is
-                supported by more than a single balance sheet.
+                As a wholly owned subsidiary of the Wheels Lanka Group, Makro
+                combines specialist property development expertise with the
+                financial strength, governance and stability of an established
+                and diversified Sri Lankan business group.
               </p>
             </Reveal>
-            <Reveal delay={0.15} className="mt-8 flex items-center gap-3">
+            <Reveal delay={0.15}>
+              <p className="mt-6 font-body text-lg leading-relaxed text-mist">
+                The Group provides a strong institutional foundation from which
+                Makro operates — bringing financial discipline, experienced
+                governance and the stability to take a measured view of every
+                development. Within that foundation, we remain singularly
+                focused on property, with the freedom to pursue the right
+                opportunities and the discipline to develop them for lasting
+                value.
+              </p>
+            </Reveal>
+            <Reveal delay={0.2} className="mt-8 flex items-center gap-3">
               <PeakMark className="h-4 w-auto text-rose" strokeWidth={11} />
               <span className="font-body text-sm text-bone">
-                A fully owned subsidiary of the Wheels Lanka Group.
+                Institutional stability and governance
               </span>
             </Reveal>
           </div>
@@ -232,39 +240,42 @@ export default function AboutPage() {
           one-line versions of these (client direction, July 2026) */}
       <section className="section-light relative py-24 md:py-32">
         <div className="container-edge">
-          <div className="flex items-center gap-4">
-            <span className="line-hair w-10" />
-            <span className="eyebrow text-rose-deep">Why Makro</span>
+          {/* No heading under this label any more (client, Aug 2026 — the
+              section headline was cut). The eyebrow is set at display scale
+              instead so the section still opens on something, rather than a
+              0.7rem line of tracking holding up four long reasons. */}
+          <div className="flex items-center gap-5">
+            <span className="line-hair w-14" />
+            <TextReveal
+              as="h2"
+              text="Why Makro"
+              className="font-display display-md uppercase text-ink"
+            />
           </div>
-          <TextReveal
-            as="h2"
-            text="Why buyers and investors choose Makro."
-            className="mt-6 max-w-3xl font-display display-md text-ink"
-          />
           <div className="mt-14 grid grid-cols-1 gap-x-12 gap-y-12 md:grid-cols-2">
             {[
               {
-                title: "Local insight, international standard",
-                body: "We understand Sri Lanka — its planning regulations, its climate, and the way people actually live here. That local depth is paired with planning, engineering and design discipline benchmarked against international standards.",
+                title: "DOMESTIC INSIGHT, INTERNATIONAL STANDARDS",
+                body: "Our approach begins with a deep understanding of Sri Lanka — its planning environment, climate, construction realities and the way people live and invest. We pair that local insight with planning, engineering and design practices benchmarked against established international standards, bringing a broader perspective while remaining grounded in what works locally.",
               },
               {
-                title: "The strength of a group behind us",
-                body: "Makro Developers is a wholly owned subsidiary of the Wheels Lanka Group, giving every development the financial strength, governance and long-term stability of an established business group behind it.",
+                title: "SPECIALIST FOCUS. GROUP STRENGTH.",
+                body: "Property development is our singular focus. Our team brings specialist expertise across the development lifecycle, supported by the financial strength, governance and stability of the Wheels Lanka Group. The combination gives us the depth to approach each development with focus, discipline and the confidence to make considered decisions from opportunity through completion.",
               },
               {
-                title: "Built to endure, not to impress",
-                body: "We measure success by how a building performs decades after handover, not how it photographs on completion day. Every material, layout and system is chosen for lasting value over short-term impression.",
+                title: "BUILT TO ENDURE, NOT SIMPLY IMPRESS",
+                body: "We look beyond the moment of completion, considering how a development will perform, function and age over time. From the planning of space to the selection of materials, finishes and building systems, we prioritise durability, maintainability and lasting utility over short-term impression. We measure what we build not by how it looks on completion, but by how well it continues to serve the people who own and use it.",
               },
               {
-                title: "A relationship, not a transaction",
-                body: "Our responsibility to a customer doesn't end at handover. From the first enquiry through years of ownership, we remain accountable for what we've built and responsive to the people who live in it.",
+                title: "A RELATIONSHIP, NOT MERELY A TRANSACTION",
+                body: "We see every development as the beginning of a relationship, not the end of a transaction. From the first conversation through handover and ownership, we believe in clear communication, keeping our commitments and remaining accountable for what we deliver. The trust placed in us is a responsibility we take seriously — and one that extends well beyond the point of sale.",
               },
             ].map((r, i) => (
               <Reveal key={r.title} delay={i * 0.06} className="border-t border-hair pt-6">
                 <div className="flex items-baseline gap-4">
                   <span className="font-body text-sm text-rose-deep">0{i + 1}</span>
                   <div>
-                    <h3 className="font-display text-2xl leading-tight text-ink md:text-3xl">
+                    <h3 className="font-display text-xl leading-tight tracking-[0.04em] text-ink md:text-2xl">
                       {r.title}
                     </h3>
                     <p className="mt-4 max-w-xl font-body text-base leading-relaxed text-mist">
@@ -299,23 +310,21 @@ export default function AboutPage() {
           {/* The rule and top margin only make sense under the timeline —
               without it they read as a stray line under the section's own
               top padding. */}
+          {/* The prompt line above this button was cut (client, Aug 2026),
+              so there is no longer a left-hand item for justify-between to
+              push against — the button just leads the row on its own. */}
           <Reveal
-            className={`flex flex-wrap items-center justify-between gap-6 ${
+            className={`flex flex-wrap items-center gap-4 ${
               SHOW_TIMELINE ? "mt-16 border-t border-hair pt-10" : ""
             }`}
           >
-            <p className="max-w-xl font-display text-2xl text-ink">
-              Curious where we are building next?
-            </p>
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                href="/projects"
-                className="group inline-flex items-center gap-3 bg-ink px-7 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink"
-              >
-                Explore our projects
-                <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-              </Link>
-            </div>
+            <Link
+              href="/projects"
+              className="group inline-flex items-center gap-3 bg-ink px-7 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink"
+            >
+              Explore our projects
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </Link>
           </Reveal>
 
           <Reveal className="mt-10">

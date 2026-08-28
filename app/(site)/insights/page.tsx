@@ -41,7 +41,7 @@ export default async function InsightsPage() {
       />
       <PageHero
         eyebrow="Blog"
-        intro="Considered guides to Sri Lankan property — written by the people who plan, build and deliver it."
+        intro="Considered perspectives on Sri Lankan property — from the people who plan, build and deliver it."
         imageId={BRAND.lifestyleLoft}
         treatment="warm"
       />

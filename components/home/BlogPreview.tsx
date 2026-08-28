@@ -29,7 +29,7 @@ export default async function BlogPreview() {
             </div>
             <TextReveal
               as="h2"
-              text="Guides for buying and investing well."
+              text="Insights behind informed decision making"
               className="mt-4 font-display text-2xl leading-tight text-ink sm:text-3xl md:text-4xl"
             />
           </div>

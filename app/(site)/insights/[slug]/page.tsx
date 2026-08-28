@@ -155,7 +155,8 @@ export default async function InsightPage({
                 <span className="eyebrow text-fog">Talk it through</span>
               </div>
               <p className="mt-5 font-display text-2xl leading-snug text-bone md:text-3xl">
-                Questions about buying or investing? Our team will answer them plainly.
+                Questions about buying or investing? We&rsquo;re here to help
+                you make an informed decision.
               </p>
               <Link
                 href="/contact"

@@ -56,7 +56,7 @@ export default async function Home() {
         image={BRAND.interludeFacade}
         alt="Golden-hour light across the facade of a modern Makro residential development"
         eyebrow="The Standard Above"
-        line="Every decision measured against a higher benchmark."
+        line="Every decision held to a higher standard"
       />
       {/* The client's on/off switch for the whole rail. Rendering nothing —
           no section, no wrapper — is the point: an empty band of black would

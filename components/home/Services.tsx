@@ -9,13 +9,13 @@ const SERVICES = [
   {
     n: "01",
     title: "Residential Development",
-    body: "Residential developments that balance thoughtful planning with everyday livability, creating homes built to be lived in for decades.",
+    body: "Residential developments shaped by thoughtful planning and high-utility design, where every space is constructed to complement the experience of everyday life.",
     image: BRAND.serviceResidential,
   },
   {
     n: "02",
     title: "Commercial Development",
-    body: "Commercial spaces engineered for long-term performance and tenant confidence, from feasibility through to handover.",
+    body: "Developments grounded in commercial insight and engineering precision, balancing operational efficiency with long-term asset performance.",
     image: BRAND.serviceCommercial,
   },
   // Retired per client feedback July 2026 — uncomment to restore.
@@ -41,7 +41,7 @@ export default function Services() {
             </div>
             <TextReveal
               as="h2"
-              text="Focused expertise, end to end."
+              text="Focused expertise. From vision to delivery."
               className="mt-6 font-display display-md text-ink"
             />
           </div>

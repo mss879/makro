@@ -103,7 +103,8 @@ export function organizationSchema() {
     telephone: SITE.phone,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Colombo 07",
+      streetAddress: "10, Esther Avenue, Park Road",
+      addressLocality: "Colombo 05",
       addressCountry: "LK",
     },
     parentOrganization: {
@@ -171,14 +172,15 @@ export function localBusinessSchema() {
     priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Colombo 07",
+      streetAddress: "10, Esther Avenue, Park Road",
+      addressLocality: "Colombo 05",
       addressCountry: "LK",
     },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       opens: "09:00",
-      closes: "18:00",
+      closes: "17:00",
     },
     parentOrganization: { "@id": ORG_ID },
   };

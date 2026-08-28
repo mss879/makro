@@ -6,10 +6,10 @@ import Reveal from "@/components/anim/Reveal";
 import { PeakMark } from "@/components/brand/PeakMark";
 
 const PRINCIPLES = [
-  "Thoughtful planning",
-  "Quality execution",
-  "Strategic investment",
-  "Enduring, long-term value",
+  "Strategic execution",
+  "Strong QAQC",
+  "Function-over-form Design",
+  "Consistent standards",
 ];
 
 export default function BrandStatement() {
@@ -30,7 +30,7 @@ export default function BrandStatement() {
             <PeakMark className="h-6 w-auto text-rose" strokeWidth={9} />
             <p className="mt-4 font-display text-4xl text-bone">6+</p>
             <p className="mt-1 font-body text-sm text-white/60">
-              Years delivering developments across Sri Lanka
+              Years of disciplined property development in Sri Lanka
             </p>
           </Reveal>
         </div>
@@ -44,16 +44,16 @@ export default function BrandStatement() {
 
           <TextReveal
             as="h2"
-            text="Homes and landmarks built to hold their value."
+            text="Where thoughtful development creates lasting value"
             className="mt-7 font-display display-md text-ink"
           />
 
           <Reveal delay={0.1}>
             <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
-              For years, Makro Developers has approached every project as a
-              long-term commitment, not a single transaction. We plan with
-              discipline, build with precision and stand behind every
-              development long after completion.
+              At Makro, every development is a long-term commitment, not a
+              single transaction. We plan with discipline, build with precision
+              and think beyond completion — considering how each development
+              will perform, endure and continue to create value over time.
             </p>
           </Reveal>
 

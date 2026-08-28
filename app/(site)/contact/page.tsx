@@ -9,6 +9,7 @@ import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import Drift from "@/components/anim/Drift";
 import { PeakMark } from "@/components/brand/PeakMark";
+import { SocialIcon } from "@/components/brand/SocialIcon";
 
 const DESCRIPTION =
   "Contact Makro Developers in Colombo, Sri Lanka — enquire about Makro Heights in Dehiwala, upcoming developments or investment opportunities. Call or email us.";
@@ -29,8 +30,8 @@ export const metadata = pageMetadata({
 const DETAILS = [
   { label: "Email", value: SITE.email, href: `mailto:${SITE.email}` },
   { label: "Phone", value: SITE.phone, href: `tel:${SITE.phone.replace(/\s/g, "")}` },
-  { label: "Office", value: SITE.address, href: undefined },
-  { label: "Hours", value: "Mon – Fri · 9.00 – 18.00", href: undefined },
+  { label: "Head Office", value: SITE.address, href: undefined },
+  { label: "Hours", value: "Mon – Fri · 9.00 – 17.00", href: undefined },
 ];
 
 export default async function ContactPage() {
@@ -64,13 +65,12 @@ export default async function ContactPage() {
         <div className="container-edge relative w-full">
           <div className="flex items-center gap-4">
             <span className="line-hair w-12" />
-            <span className="eyebrow text-rose">Contact</span>
+            <span className="eyebrow text-rose">Contact Us</span>
           </div>
           <Reveal delay={0.1}>
             <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
-              Whether you have a site, a vision or simply a question about
-              Makro Heights or our approach, we&rsquo;d like to hear from you.
-              Share a few details and our team will be in touch.
+              Have a site, a vision or an idea worth exploring? Tell us what
+              you have in mind, and our team will be in touch.
             </p>
           </Reveal>
         </div>
@@ -99,6 +99,10 @@ export default async function ContactPage() {
                 ))}
               </div>
 
+              {/* Icon tiles rather than the old text buttons (client note,
+                  Aug 2026 — "make it more graphic"). The label stays as the
+                  accessible name: the glyph itself is aria-hidden, so a
+                  screen reader still hears "Instagram", not "link". */}
               <div className="mt-8">
                 <p className="eyebrow text-fog">Follow</p>
                 <div className="mt-4 flex flex-wrap gap-3">
@@ -106,9 +110,14 @@ export default async function ContactPage() {
                     <a
                       key={s.label}
                       href={s.href}
-                      className="border border-hair-strong px-5 py-2.5 font-body text-sm text-mist transition-colors hover:border-rose-deep hover:text-rose-deep"
+                      aria-label={s.label}
+                      title={s.label}
+                      className="group grid h-12 w-12 place-items-center border border-hair-strong text-mist transition-colors duration-300 hover:border-rose-deep hover:bg-rose-deep hover:text-ink"
                     >
-                      {s.label}
+                      <SocialIcon
+                        name={s.icon}
+                        className="h-5 w-5 transition-transform duration-500 group-hover:scale-110"
+                      />
                     </a>
                   ))}
                 </div>

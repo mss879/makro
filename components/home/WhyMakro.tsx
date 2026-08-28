@@ -12,20 +12,20 @@ import Reveal from "@/components/anim/Reveal";
  */
 const REASONS = [
   {
-    title: "Local insight, international standard",
-    line: "Sri Lankan depth, benchmarked to international standards.",
+    title: "Domestic insight, international standards",
+    line: "Grounded in Sri Lankan insight, with our approach benchmarked against established international practices",
   },
   {
-    title: "The strength of a group behind us",
-    line: "The financial strength of the Wheels Lanka Group behind every project.",
+    title: "Specialist focus. Group strength.",
+    line: "Specialist development expertise, supported by the financial strength, governance and long-term stability of the Wheels Lanka Group.",
   },
   {
-    title: "Built to endure, not to impress",
-    line: "Measured by how buildings perform decades after handover.",
+    title: "Built to endure, not simply impress",
+    line: "We measure our developments by how they perform, endure and retain their value over time.",
   },
   {
-    title: "A relationship, not a transaction",
-    line: "Accountable to our customers long after the keys change hands.",
+    title: "A relationship, not merely a transaction",
+    line: "Every development is the beginning of a relationship built on trust, transparency and accountability.",
   },
 ];
 

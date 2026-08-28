@@ -5,9 +5,9 @@ export const SITE = {
   tagline: "The future built well.",
   description:
     "Makro Developers is a Sri Lankan property developer delivering premium residential and commercial developments, backed by the Wheels Lanka Group.",
-  email: "hello@makrodevelopers.lk",
-  phone: "+94 11 234 5678",
-  address: "Colombo 07, Sri Lanka",
+  email: "info@makrodevelopers.com",
+  phone: "+94 707 21 21 21",
+  address: "10, Esther Avenue, Park Road, Colombo 05",
   url: "https://makrodevelopers.lk",
 };
 
@@ -32,11 +32,17 @@ export const NAV_LEGAL = [
   { label: "Terms of Use", href: "/terms-of-use" },
 ];
 
+/**
+ * `icon` names a glyph in components/brand/SocialIcon — the contact page
+ * renders the mark rather than the label (client direction, Aug 2026:
+ * "include icon and make it more graphic instead of just buttons"), while
+ * the footer's Connect column still lists them by name.
+ */
 export const SOCIALS = [
-  { label: "Instagram", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Facebook", href: "#" },
-];
+  { label: "Instagram", href: "#", icon: "instagram" },
+  { label: "LinkedIn", href: "#", icon: "linkedin" },
+  { label: "Facebook", href: "#", icon: "facebook" },
+] as const;
 
 /** Section toggles — client-requested hides that may return. */
 export const FEATURES = { statsBand: false };

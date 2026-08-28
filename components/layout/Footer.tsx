@@ -19,14 +19,14 @@ export default function Footer() {
         {/* CTA */}
         <div className="flex flex-col items-start justify-between gap-10 border-b border-hair pb-8 md:pb-10 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <p className="eyebrow text-rose">Let&rsquo;s build something lasting</p>
+            <p className="eyebrow text-rose">Let&rsquo;s create a landmark.</p>
             {/* Deliberately below the display-md section scale (client
                 direction, Aug 2026): the footer CTA should invite rather
                 than shout, and it sits under whatever section closed the
                 page. */}
             <TextReveal
               as="h2"
-              text="Have a site, a vision or a question?"
+              text="Have a site, a vision or an idea?"
               className="mt-5 font-display text-2xl leading-tight text-bone md:text-3xl lg:text-4xl"
             />
           </div>

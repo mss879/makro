@@ -166,20 +166,19 @@ export default function Hero() {
               <h1 className="flex flex-col font-display display-fluid leading-[1.05] text-bone">
                 <span className="reveal-mask">
                   <span data-h-word className="inline-block">
-                    The future,
+                    The Future,
                   </span>
                 </span>
                 <span className="reveal-mask">
                   <span data-h-word className="inline-block">
-                    built well.
+                    Built to Endure.
                   </span>
                 </span>
               </h1>
 
               <p data-h-fade className="max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg">
-                Premium residential and commercial developments across Sri
-                Lanka, built on disciplined planning and uncompromising
-                execution.
+                Thoughtfully planned residential and commercial developments,
+                built for lasting value.
               </p>
 
               {/* No magnetic hover on these two (client direction, Aug 2026):

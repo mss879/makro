@@ -13,38 +13,43 @@ const STEPS = [
   {
     n: "01",
     title: "Plan",
-    body: "Every development begins with the site, the market and the people who will live there.",
+    body: "Make the right development decision before committing capital.",
   },
   {
     n: "02",
     title: "Design",
-    body: "Layouts considered from the inside out, prioritizing natural light, ventilation and daily function.",
+    body: "Make every square foot work harder, through integrated design and expertise.",
   },
   {
     n: "03",
-    title: "Build",
-    body: "Disciplined construction, skilled workmanship and strict quality assurance throughout.",
+    title: "Compliance",
+    body: "Protect completion, ownership and value through disciplined conformity.",
   },
   {
     n: "04",
+    title: "Build",
+    body: "QAQC, efficient project programming and precise execution working in harmony through every stage of delivery.",
+  },
+  {
+    n: "05",
     title: "Endure",
-    body: "Responsive after-sales support and long-term building performance beyond handover.",
+    body: "Create performance and value that extend well beyond completion.",
   },
 ];
 
-/* Each cell sits one 20px riser higher than the one before it, so the four
+/* Each cell sits one 20px riser higher than the one before it, so the five
    treads read as a staircase climbing left to right. Exposed as a custom
    property because the hairline geometry is pure CSS below — a media query
    can drop the stair at <1024px without JS knowing about it. */
 const stairFor = (i: number) => `${12 + 20 * i}px`;
 
 /**
- * "Four Flights" — the rail is no longer a straight line, it is a section
- * through a building. A rose hairline datum climbs the grid in four
+ * "Five Flights" — the rail is no longer a straight line, it is a section
+ * through a building. A rose hairline datum climbs the grid in five
  * ascending flights (riser, tread, riser, tread); as each level lands, a
  * dashed plumb line falls into that storey, the storey's type is set out,
  * and only then does the storey fill with material. The twin-peak logomark
- * is the last step, drawn at the summit. 01 Plan at the base, 04 Endure at
+ * is the last step, drawn at the summit. 01 Plan at the base, 05 Endure at
  * the top: "The Standard Above" drawn as a building section.
  *
  * Two rules govern everything here:
@@ -132,8 +137,8 @@ export default function ApproachPreview() {
       const mm = gsap.matchMedia();
 
       // ── Desktop — pinned and scrubbed ───────────────────────────────────
-      // The timeline is 4.75 units long and maps onto ~140vh of pin. One
-      // flight per column at F = 0 / 1 / 2 / 3, then the summit.
+      // The timeline is 5.75 units long and maps onto ~90vh of pin. One
+      // flight per column at F = 0 / 1 / 2 / 3 / 4, then the summit.
       mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
         prime();
 
@@ -293,41 +298,41 @@ export default function ApproachPreview() {
         // Each flight's tail (body ends F+1.16, slab F+1.40) deliberately
         // overlaps the next flight's riser at F+1.00. The eye has already
         // moved right to the new riser while the previous storey is still
-        // settling in peripheral vision, so the four reveals read as one
-        // continuous survey rather than four announcements.
+        // settling in peripheral vision, so the five reveals read as one
+        // continuous survey rather than five announcements.
 
-        // Summit. The mark lifts onto the end of the fourth tread the
-        // instant that tread lands (3.68), then the two peaks draw
+        // Summit. The mark lifts onto the end of the fifth tread the
+        // instant that tread lands (4.68), then the two peaks draw
         // themselves on, left then right — the same ascending gesture the
         // staircase just performed, at brand scale.
         if (markSvg) {
-          tl.fromTo(markSvg, { y: 8 }, { y: 0, duration: 0.55, ease: "expo.out" }, 3.7);
+          tl.fromTo(markSvg, { y: 8 }, { y: 0, duration: 0.55, ease: "expo.out" }, 4.7);
         }
         // A 0.18 stagger means peak two starts climbing while peak one is
         // still going, so you watch the interlocking M assemble rather than
         // see two lines finish separately. Safe as a .to() because
         // strokeDashoffset was primed by gsap.set before the timeline existed.
-        tl.to(peaks, { strokeDashoffset: 0, duration: 0.55, stagger: 0.18, ease: "power2.out" }, 3.78);
+        tl.to(peaks, { strokeDashoffset: 0, duration: 0.55, stagger: 0.18, ease: "power2.out" }, 4.78);
 
         // A slow constant pull under the entire sequence so the pinned frame
         // is never static and the direction of travel is reinforced even
         // while the eye is on the copy. ease "none" — any easing here reads
         // as a second, competing event.
         if (head) {
-          tl.fromTo(head, { y: 0 }, { y: -26, ease: "none", duration: 4.75 }, 0);
+          tl.fromTo(head, { y: 0 }, { y: -26, ease: "none", duration: 5.75 }, 0);
         }
 
-        // Hold from 4.51 (last stroke lands, 95%) to 4.75 (100%). Not
+        // Hold from 5.51 (last stroke lands, ~96%) to 5.75 (100%). Not
         // padding: with scrub 0.6 the playhead lags the scroll position, so
         // a timeline that ends at exactly 100% unpins while the logomark is
         // still drawing. Placed explicitly rather than appended so the
-        // timeline's total stays 4.75 alongside the head tween. If this
+        // timeline's total stays 5.75 alongside the head tween. If this
         // section ever needs shortening, reduce FLIGHT — not this.
-        tl.to({}, { duration: 0.24 }, 4.51);
+        tl.to({}, { duration: 0.24 }, 5.51);
       });
 
       // ── Tablet and phone — unpinned, one-shot ───────────────────────────
-      // The staircase does not exist below lg: a four-riser stair means
+      // The staircase does not exist below lg: a five-riser stair means
       // nothing over a one- or two-column stack, and the treads and risers
       // are `hidden lg:block` so they never need a tween. The story still
       // holds because the storeys are already stacked vertically — physical
@@ -452,14 +457,14 @@ export default function ApproachPreview() {
             inside it — an absolute child of a grid container is a fragile
             place to put them.
 
-            lg:pt-[104px] reserves the band the staircase climbs through:
-            72px of maximum stair + 24px of logomark + 8px of air. It is
+            lg:pt-[124px] reserves the band the staircase climbs through:
+            92px of maximum stair + 24px of logomark + 8px of air. It is
             static layout applied once; the treads, risers and plumbs are all
             absolutely positioned, so nothing in the band ever reflows. The
             drawn band now supplies the breathing room the old mt-16 did,
             hence lg:mt-8. */}
-        <div data-grid className="relative mt-16 lg:mt-8 lg:pt-[104px]">
-          {/* Mobile datum only — above lg the four treads replace it.
+        <div data-grid className="relative mt-16 lg:mt-8 lg:pt-[124px]">
+          {/* Mobile datum only — above lg the five treads replace it.
               No `scale-x-0` here or on any data-hooked element below:
               Tailwind v4 writes the discrete CSS `scale` property, which
               composes with — and permanently flattens — the `transform` GSAP
@@ -469,9 +474,9 @@ export default function ApproachPreview() {
             data-rail
             className="pointer-events-none absolute -top-px left-0 h-px w-full origin-left bg-rose-deep lg:hidden"
           />
-          {/* Rests on the end of the summit tread. At lg the band is 104px,
-              the top tread sits 72px above the grid, the mark is 24px tall,
-              so 104 − 72 − 24 − 2 = 6px leaves its foot 2px clear of the
+          {/* Rests on the end of the summit tread. At lg the band is 124px,
+              the top tread sits 92px above the grid, the mark is 24px tall,
+              so 124 − 92 − 24 − 2 = 6px leaves its foot 2px clear of the
               tread. (Absolute offsets here are measured from the wrapper's
               padding box, i.e. its outer top edge, not from below the band.) */}
           <PeakMark
@@ -481,13 +486,18 @@ export default function ApproachPreview() {
             animated
           />
 
-          <div className="grid grid-cols-1 gap-px border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-px border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-5">
             {STEPS.map((s, i) => (
               <div
                 key={s.n}
                 data-step
                 style={{ "--stair": stairFor(i) } as React.CSSProperties}
-                className="group relative flex flex-col bg-cream p-8"
+                /* Five into two leaves the last cell alone on its row at sm,
+                   and an empty half-row in a gap-px grid paints as a bare
+                   slab of hairline. It spans the row instead. */
+                className={`group relative flex flex-col bg-cream p-8 ${
+                  i === STEPS.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""
+                }`}
               >
                 {/* The slab gets its own clipper rather than overflow-hidden
                     on the cell: the cell has to let the treads, risers and
@@ -497,7 +507,7 @@ export default function ApproachPreview() {
 
                     At lg the clipper's top rises to this cell's own tread, so
                     the material pours up PAST the grid's top edge and stops
-                    flush against the datum line. That is what turns four equal
+                    flush against the datum line. That is what turns five equal
                     cards into an actual staircase of filled blocks — the step
                     is the mass, not just a line floating above it. Below lg
                     the stair does not exist, so it stays inset to the cell. */}
@@ -576,15 +586,24 @@ export default function ApproachPreview() {
 
                   {/* .reveal-mask already gives "Design"'s descender room;
                       the travel is 115% rather than 100% so the glyph fully
-                      clears that overhang. */}
-                  <h3 className="reveal-mask mt-7 font-display text-3xl text-ink">
+                      clears that overhang.
+
+                      Steps down through the desktop range: five columns leave
+                      only ~117px of content inside the p-8 at lg, and
+                      "Compliance" is one unbreakable word. Measured, not
+                      guessed — at each of these breakpoints the widest title
+                      clears its column with room to spare. Below lg the grid
+                      is one or two columns, so the full size fits. */}
+                  <h3 className="reveal-mask mt-7 font-display text-3xl text-ink lg:text-xl xl:text-2xl 2xl:text-3xl">
                     <span data-title className="block">
                       {s.title}
                     </span>
                   </h3>
 
-                  {/* 30ch cap + balanced wrap → three even, full rows at any
-                      card width, never a stranded half row.
+                  {/* Balanced wrap → even rows, never a stranded half row.
+                      The 30ch cap is inert from lg up (the five columns are
+                      narrower than that) and still governs the stacked
+                      layouts below it.
 
                       Three elements, and the pad/margin split between them is
                       load-bearing. yPercent resolves against offsetHeight, so

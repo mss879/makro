@@ -43,13 +43,13 @@ export const INSIGHTS: Insight[] = [
     // headings) — keep it ≤41 chars so the " · Makro Developers" template
     // suffix lands the rendered tab title at 60.
     title: "Buying an Apartment in Colombo: The Guide",
-    displayTitle: "Buying an apartment in Colombo.",
+    displayTitle: "Investing in an apartment in Colombo.",
     category: "Buying",
     date: "2026-06-15",
     readTime: "7 min read",
     cover: IMG.warmLiving,
     excerpt:
-      "Location, developer track record, build quality and paperwork — what actually matters when buying an apartment in Colombo.",
+      "What matters when choosing an apartment to live in or invest in — from location and the developer to build quality and documentation.",
     metaDescription:
       "A practical guide to buying an apartment in Colombo — judging location, developer track record, build quality, payment plans and legal due diligence.",
     keywords: [
@@ -60,20 +60,18 @@ export const INSIGHTS: Insight[] = [
       "Sri Lanka apartment buying process",
     ],
     intro:
-      "Colombo's apartment market rewards buyers who look past the brochure. This guide covers what to evaluate — location fundamentals, the developer behind the tower, construction quality and the paperwork — before you sign.",
+      "Whether you are buying a home or an investment, an apartment is a decision with lasting implications. Look beyond the brochure to the fundamentals that shape both the experience of living there and the value it can hold over time — location, the developer, build quality and the documentation behind it.",
     sections: [
       {
-        heading: "Location is a decade-long decision.",
+        heading: "Location is more than an address.",
         paras: [
-          "In Colombo, micro-location matters more than the city itself. Colombo 07's established streets, Colombo 05's connectivity and emerging corridors such as Rajagiriya and Battaramulla each behave differently as investments. Ask how the neighbourhood will look in ten years, not how it photographs today.",
-          "Proximity to schools, hospitals and daily conveniences drives both liveability and resale demand for apartments in Colombo — and unlike finishes, location can never be renovated.",
+          "The right location should work for both the life you lead today and the value you may need tomorrow. Look beyond the address to the neighbourhood’s connectivity, amenities, infrastructure and potential for growth — because while an apartment can be renovated, its location cannot.",
         ],
       },
       {
-        heading: "The developer matters more than the render.",
+        heading: "The developer matters as much as the property.",
         paras: [
-          "Any render can look spectacular. What separates a safe purchase from a risky one is the property developer's record of finishing what they start — on schedule, to specification, with owners who would buy again.",
-          "Look for completed, occupied projects you can walk through, corporate backing that guarantees staying power, and after-handover support. A developer backed by an established group, as Makro Developers is by the Wheels Lanka Group, carries a different risk profile from a single-project company.",
+          "A compelling design is only as valuable as the developer’s ability to deliver it. Look beyond the render to completed projects, delivery standards, financial strength and what happens after handover. A developer’s track record tells you far more about what you are buying than a promise on a page.",
         ],
         points: [
           "Visit a completed project — occupied buildings tell the truth",
@@ -82,17 +80,15 @@ export const INSIGHTS: Insight[] = [
         ],
       },
       {
-        heading: "Judge the build, not the finishes.",
+        heading: "Look beyond the finishes.",
         paras: [
-          "Marble lobbies date; structure and services endure. In a tropical climate, cross-ventilation, shading, glazing quality and waterproofing decide what an apartment costs to run and how it ages. Ask about floor-to-ceiling heights, natural light, backup power and water, and lift capacity at peak hours.",
-          "Quality you feel years after handover — not just on the day you receive the keys — is the standard worth paying for.",
+          "What matters most is often what you cannot see. Consider the structure, services, ventilation, natural light, waterproofing, glazing, backup systems and the quality of the spaces themselves — the elements that determine how a home performs, what it costs to run and how well it ages. Good finishes create an impression; good construction creates lasting value.",
         ],
       },
       {
-        heading: "Paperwork, payments and due diligence.",
+        heading: "Know what you are buying.",
         paras: [
-          "Confirm clear title to the land, approved building plans and, for apartments, the condominium plan registration. Payment schedules tied to construction milestones protect you; heavy upfront payments to thinly capitalised developers do not.",
-          "Engage your own lawyer early. A reputable developer will welcome scrutiny — hesitation to share documentation is itself an answer.",
+          "Before committing, make sure the fundamentals are in order. Confirm clear title, approved plans, condominium registration and a payment structure aligned with the progress of construction. Independent legal advice is worth taking early — and a developer willing to provide clear documentation should have nothing to hide.",
         ],
       },
     ],
@@ -108,7 +104,7 @@ export const INSIGHTS: Insight[] = [
     readTime: "8 min read",
     cover: IMG.skylineWarm,
     excerpt:
-      "Why disciplined investors are looking at Sri Lankan property — and how to separate durable value from speculation.",
+      "A considered look at the fundamentals that shape property value — and how to distinguish durable opportunities from speculation.",
     metaDescription:
       "An investor's guide to Sri Lanka real estate — market fundamentals, residential vs commercial returns, foreign ownership and long-term value in Colombo.",
     keywords: [
@@ -119,34 +115,30 @@ export const INSIGHTS: Insight[] = [
       "foreigners buying property in Sri Lanka",
     ],
     intro:
-      "Sri Lankan real estate rewards patience and punishes speculation. Here is how disciplined investors evaluate the market — residential and commercial — and where durable value is actually created.",
+      "Property rewards investors who look beyond the immediate. Understanding the fundamentals — from location and market demand to quality, ownership structure and the developer behind the asset — is essential to identifying opportunities with durable value.",
     sections: [
       {
-        heading: "The fundamentals favour the long view.",
+        heading: "The fundamentals favour a longer view.",
         paras: [
-          "Urbanising demographics, a growing professional class and constrained supply of well-built stock in prime Colombo underpin the market's long-term case. Land in established districts is finite; quality construction is scarcer still.",
-          "The investors who do well in Sri Lankan property buy assets they would be comfortable holding for a decade — because the compounding happens in the holding, not the flipping.",
+          "Strong property investments are built on fundamentals, not short-term momentum. In established parts of Colombo, finite land, growing demand and limited supply of well-built property support a longer investment horizon. The focus should be on assets with the quality, location and underlying demand to remain relevant through the cycle.",
         ],
       },
       {
-        heading: "Residential or commercial?",
+        heading: "Residential or commercial? Different assets, different dynamics.",
         paras: [
-          "Prime residential property in Colombo offers steady rental demand from professionals and expatriates, with capital appreciation concentrated in well-located, well-built projects. Waterfront and boutique developments in destinations like Galle add a lifestyle-asset dimension with strong holiday-let potential.",
-          "Grade-A commercial space is a different instrument: longer leases, corporate tenants and returns driven by specification and location. Colombo's supply of genuinely Grade-A office space remains thin — which is precisely the opportunity.",
+          "Residential and commercial property serve different investment objectives. Residential value is shaped by location, liveability, rental demand and quality, while commercial assets depend more heavily on specification, tenant demand, lease strength and location. The right choice comes down to the asset, the market it serves and the investment horizon behind it.",
         ],
       },
       {
-        heading: "What foreign investors should know.",
+        heading: "Investing across borders.",
         paras: [
-          "Foreign nationals can freely purchase condominium apartments in Sri Lanka (freehold land carries restrictions), which makes well-structured apartment and mixed-use projects the natural entry point for international capital.",
-          "Work with developers who understand cross-border transactions and can evidence clean title, approvals and a compliant payment structure. Professional advice on tax and repatriation is essential — and cheap relative to the asset.",
+          "Sri Lankan condominium property can provide a practical entry point for international investors, but cross-border ownership requires careful due diligence. Consider the title, approvals, ownership structure and payment arrangements, and seek professional advice on taxation and the repatriation of funds before committing.",
         ],
       },
       {
-        heading: "Judging durable value.",
+        heading: "Value that holds over time.",
         paras: [
-          "The same tests apply to a villa and a tower: the land's ten-year trajectory, the developer's completed track record, construction quality that controls running costs, and an exit story that doesn't rely on a greater fool.",
-          "Our own investment discipline is simple — we only build what we would be content to hold. That filter is available to investors too.",
+          "Durable value comes from fundamentals that remain relevant beyond the purchase. Consider the location’s future, the developer’s track record, the quality and efficiency of the asset, its ongoing costs and the depth of future demand. The strongest investments are those that remain desirable to live in, operate and own — not simply sell.",
         ],
         points: [
           "Buy the location's future, not its present",
@@ -168,7 +160,7 @@ export const INSIGHTS: Insight[] = [
     readTime: "6 min read",
     cover: BRAND.texturePeaks,
     excerpt:
-      "'Grade A' is Colombo's most overused label. Here is the specification the term is supposed to guarantee.",
+      "Beyond the label: what specification, performance and resilience really mean in Grade-A office space.",
     metaDescription:
       "What qualifies as Grade-A office space in Colombo — floor plates, ceilings, lifts, power redundancy and the specification occupiers and investors should demand.",
     keywords: [
@@ -179,34 +171,31 @@ export const INSIGHTS: Insight[] = [
       "commercial real estate Sri Lanka",
     ],
     intro:
-      "Every second tower in Colombo calls itself Grade A. The label has a real meaning — a specification that determines what a building costs to occupy, how it performs and what it is worth in fifteen years.",
+      "Grade-A is more than a polished lobby or a premium address. It is a measurable standard of specification, performance and resilience — one that affects how efficiently a building operates, what it costs to occupy and how well its value holds over time.",
     sections: [
       {
-        heading: "The specification, not the lobby.",
+        heading: "The specification matters more than the finish.",
         paras: [
-          "Grade-A is a technical standard, not an aesthetic one. It lives in the floor plates, the cores, the services and the façade — the parts of a commercial building that cannot be refurbished later.",
+          "Genuine Grade-A quality is defined by what sits behind the finishes. Floor plates, ceiling heights, lift capacity, power resilience, water reserves, glazing and net-to-gross efficiency all shape how a building performs for its occupiers and remains competitive over time.",
         ],
         points: [
-          "Column-light floor plates of 10,000+ sq ft for flexible fit-outs",
+          "Function spaces aligned with everyday living",
           "Finished ceilings of 2.7m or higher",
           "Destination-control lifts sized for peak loads",
           "N+1 backup power and independent water reserves",
-          "High-performance glazing that controls solar gain",
           "Efficient net-to-gross ratios — you pay for usable space",
         ],
       },
       {
-        heading: "Why it matters to occupiers.",
+        heading: "Performance is felt every day.",
         paras: [
-          "For a business, the difference between genuine Grade-A office space and a well-dressed Grade B building shows up monthly: cooling loads, downtime, churn costs when teams grow, and the talent question of whether people actually want to be in the building.",
-          "Multinationals and their auditors increasingly require certified, resilient space — which keeps genuine Grade-A stock in Colombo structurally under-supplied.",
+          "For occupiers, specification translates directly into the working environment and the cost of operating it. Efficient cooling, reliable power and water, flexible floor plates and resilient building systems reduce disruption, support changing business needs and create a workplace people want to be in.",
         ],
       },
       {
-        heading: "Why it matters to investors.",
+        heading: "Specification protects value.",
         paras: [
-          "Specification is what separates assets that re-let quickly at premium rents from those that discount every cycle. A commercial building engineered to international standards holds tenants, holds rents and holds value.",
-          "It is why every commercial space Makro plans is engineered around column-light plates, redundant services and a high-performance façade from the first feasibility study — the specification global occupiers audit for, held to the same standard that governs every Makro development.",
+          "For investors, quality specification is a commercial advantage. Buildings that perform well attract stronger occupiers, support rental resilience and remain competitive through market cycles. That is why specification should be considered from the earliest feasibility decisions — not added as an upgrade once the building is already designed.",
         ],
       },
     ],
@@ -224,7 +213,7 @@ export const INSIGHTS: Insight[] = [
     readTime: "6 min read",
     cover: IMG.concreteLines,
     excerpt:
-      "The developer is the single biggest variable in any purchase. Five tests that separate reliable builders from marketing.",
+      "Five things to look beyond the brochure for when assessing a developer — from track record and financial strength to standards, transparency and what happens after handover.",
     metaDescription:
       "How to evaluate property developers in Sri Lanka — track record, financial backing, construction standards, transparency and after-sales support.",
     keywords: [
@@ -235,36 +224,36 @@ export const INSIGHTS: Insight[] = [
       "real estate developer track record",
     ],
     intro:
-      "In property, you never really buy a building — you buy the organisation that promises to deliver it. These five tests tell you whether that promise will hold.",
+      "A property purchase is also a decision about who you trust to deliver it. Look beyond the project to the organisation behind it — its track record, financial strength, standards, transparency and commitment beyond handover. These are the things worth examining before you commit.",
     sections: [
       {
-        heading: "One — a track record you can walk through.",
+        heading: "A track record you can see.",
         paras: [
-          "Completed, occupied, ageing-well buildings are the only evidence that matters. Visit a project the developer handed over years ago and look at how it has weathered. And where a developer's flagship is still in planning — as Makro Heights is — scrutinise what you can verify instead: the group behind it, the professionals it has appointed and the standards it publishes. Substance you can check beats any promise.",
+          "Past performance is best judged by what has actually been delivered. Look beyond completed projects to how they have performed over time — how they have aged, how they are maintained and how owners experience them. Where a developer is still establishing its own portfolio, examine what can be verified: the people behind it, the professionals appointed and the standards it commits to.",
         ],
       },
       {
-        heading: "Two — the strength behind the brand.",
+        heading: "The strength behind the brand.",
         paras: [
-          "Construction is capital-hungry, and half-finished towers are usually financing failures, not engineering ones. A developer backed by an established group — as Makro Developers is by the Wheels Lanka Group — can hold its schedule and its standards through market cycles.",
+          "Property development requires substantial capital and the ability to remain committed through changing market conditions. Consider who stands behind the developer, the strength of its financial backing and whether it has the stability to maintain its commitments, standards and delivery throughout the development cycle.",
         ],
       },
       {
-        heading: "Three — standards you can inspect.",
+        heading: "Standards you can inspect.",
         paras: [
-          "Ask what standard the structure is engineered to, who supervises quality on site, and how materials are selected. Specific answers signal a real process; vague reassurance signals its absence. Our four-stage approach — plan, design, build, endure — exists precisely so the answer is never vague.",
+          "Quality should be more than a promise. Ask what standards the building is designed and constructed to, who is responsible for quality on site and how materials and systems are selected. The more clearly a developer can explain its standards and processes, the more confidently you can assess what is being delivered.",
         ],
       },
       {
-        heading: "Four — transparency before you commit.",
+        heading: "Transparency before you commit.",
         paras: [
-          "Title documents, approvals, specifications and payment structures should be offered, not extracted. Developers with nothing to hide behave that way.",
+          "The information behind a property should be clear before you commit. Title documents, approvals, specifications and payment structures should be readily available for review, with the developer prepared to answer questions openly and provide the information needed to make an informed decision.",
         ],
       },
       {
-        heading: "Five — presence after handover.",
+        heading: "Presence after handover.",
         paras: [
-          "The keys are the midpoint of the relationship, not the end. Ask how defects are handled, who maintains common property, and whether earlier buyers would purchase again. After-sales behaviour is where a developer's real character shows.",
+          "The relationship with a developer should not end when the keys are handed over. Understand how defects are addressed, how common property is maintained and who remains responsible after completion. The way a developer stands behind what it delivers is as important as what it promises before purchase.",
         ],
       },
     ],
