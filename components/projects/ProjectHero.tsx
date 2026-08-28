@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { unsplash } from "@/lib/images";
 import TextReveal from "@/components/anim/TextReveal";
 import type { Project } from "@/lib/projects";
 
@@ -47,16 +46,27 @@ export default function ProjectHero({ project }: { project: Project }) {
 
   return (
     <section ref={ref} className="relative flex min-h-[90vh] items-end overflow-hidden pb-16 pt-40">
+      {/* No art yet means NO image, not a stand-in. This used to fall through
+          to a shared placeholder, which is fine until a second project exists
+          — then every imageless development wears the first one's building as
+          if it were its own, including in social previews. An empty frame is
+          honest; a borrowed one is not.
+
+          The gradient stays either way: it is what the headline is legible
+          against, and dropping it on the empty path would leave white type on
+          a flat ground. */}
       <div className="absolute inset-0">
-        <Image
-          data-img
-          src={unsplash(project.heroImage, 2200)}
-          alt={project.name}
-          fill
-          priority
-          sizes="100vw"
-          className="img-warm object-cover"
-        />
+        {project.heroImage && (
+          <Image
+            data-img
+            src={project.heroImage}
+            alt={project.name}
+            fill
+            priority
+            sizes="100vw"
+            className="img-warm object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/30" />
       </div>
 

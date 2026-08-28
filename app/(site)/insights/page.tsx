@@ -7,6 +7,21 @@ import PageHero from "@/components/ui/PageHero";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import Reveal from "@/components/anim/Reveal";
 
+/**
+ * Admin-editable content, so this page must not be frozen at build time.
+ *
+ * Every public page here was fully static with no revalidate window, which
+ * meant a project, article or image saved in the admin only appeared after the
+ * next deploy. `revalidatePath()` in the Server Actions is still the fast path
+ * — it invalidates immediately — but it cannot be the ONLY path: it depends on
+ * the host's on-demand revalidation working, and when it does not, the page
+ * simply never updates and nothing says so.
+ *
+ * 60s is the backstop. Cached and fast for visitors, and an edit that misses
+ * the on-demand hook still lands within a minute instead of never.
+ */
+export const revalidate = 60;
+
 const DESCRIPTION =
   "Guides and insights on Sri Lankan property — buying an apartment in Colombo, investing in real estate, Grade-A space and choosing a developer you can trust.";
 

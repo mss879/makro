@@ -271,7 +271,10 @@ export function projectSchema(project: Project) {
     name: project.name,
     description: project.summary,
     url,
-    image: absoluteOgImage(project.cover),
+    // Same empty-string trap as the page's openGraph image: a project with no
+    // art must not advertise the shared placeholder as its own photograph in
+    // structured data. Falls back to the brand texture.
+    image: absoluteOgImage(project.cover || BRAND.textureAscent),
     datePosted: `${project.year}-01-01`,
     provider: { "@id": ORG_ID },
     about: {

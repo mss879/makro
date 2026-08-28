@@ -14,6 +14,21 @@ import ApproachPreview from "@/components/home/ApproachPreview";
 import GroupBacking from "@/components/home/GroupBacking";
 import BlogPreview from "@/components/home/BlogPreview";
 
+/**
+ * Admin-editable content, so this page must not be frozen at build time.
+ *
+ * Every public page here was fully static with no revalidate window, which
+ * meant a project, article or image saved in the admin only appeared after the
+ * next deploy. `revalidatePath()` in the Server Actions is still the fast path
+ * — it invalidates immediately — but it cannot be the ONLY path: it depends on
+ * the host's on-demand revalidation working, and when it does not, the page
+ * simply never updates and nothing says so.
+ *
+ * 60s is the backstop. Cached and fast for visitors, and an edit that misses
+ * the on-demand hook still lands within a minute instead of never.
+ */
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — Property Developer in Colombo, Sri Lanka` },
   description:

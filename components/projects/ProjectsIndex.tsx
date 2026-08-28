@@ -182,13 +182,18 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
                           feature ? "aspect-[16/9]" : "aspect-[4/3]"
                         }`}
                       >
-                        <Image
-                          src={unsplash(p.cover, feature ? 1800 : 1200)}
-                          alt={p.name}
-                          fill
-                          sizes={feature ? "100vw" : "50vw"}
-                          className="img-warm object-cover transition-transform duration-[1.3s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                        />
+                        {/* Empty rather than a placeholder — see ProjectHero.
+                            The frame keeps its aspect either way, so the grid
+                            does not reflow when art is added. */}
+                        {p.cover && (
+                          <Image
+                            src={unsplash(p.cover, feature ? 1800 : 1200)}
+                            alt={p.name}
+                            fill
+                            sizes={feature ? "100vw" : "50vw"}
+                            className="img-warm object-cover transition-transform duration-[1.3s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
                         <div className="absolute left-5 top-5 flex items-center gap-2 border border-hair-strong bg-cream/70 px-3 py-1.5 backdrop-blur-md">
                           <span className="h-1.5 w-1.5 bg-rose-deep" />

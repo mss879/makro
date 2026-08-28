@@ -24,7 +24,12 @@ function toProject(row: ProjectRow, gallery: string[]): Project {
     type: row.type,
     status: row.status,
     year: row.year,
-    cover: row.cover ?? gallery[0] ?? "",
+    // Falls back to the hero before giving up. `cover` is maintained as the
+    // gallery's first image, so a project whose only art is a hero would
+    // otherwise render an empty card everywhere while plainly having a
+    // picture — which is what happened the first time a hero was uploaded.
+    // The two stay independent when both are set; this only fills a gap.
+    cover: row.cover ?? row.hero_image ?? gallery[0] ?? "",
     // Hero falls back to the cover, then to the first gallery image, so a
     // project that predates the split — or one where the client has simply not
     // set a hero yet — renders exactly as it did before.

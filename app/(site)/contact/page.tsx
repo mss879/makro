@@ -11,6 +11,21 @@ import Drift from "@/components/anim/Drift";
 import { PeakMark } from "@/components/brand/PeakMark";
 import { SocialIcon } from "@/components/brand/SocialIcon";
 
+/**
+ * Admin-editable content, so this page must not be frozen at build time.
+ *
+ * Every public page here was fully static with no revalidate window, which
+ * meant a project, article or image saved in the admin only appeared after the
+ * next deploy. `revalidatePath()` in the Server Actions is still the fast path
+ * — it invalidates immediately — but it cannot be the ONLY path: it depends on
+ * the host's on-demand revalidation working, and when it does not, the page
+ * simply never updates and nothing says so.
+ *
+ * 60s is the backstop. Cached and fast for visitors, and an edit that misses
+ * the on-demand hook still lands within a minute instead of never.
+ */
+export const revalidate = 60;
+
 const DESCRIPTION =
   "Contact Makro Developers in Colombo, Sri Lanka — enquire about Makro Heights in Dehiwala, upcoming developments or investment opportunities. Call or email us.";
 

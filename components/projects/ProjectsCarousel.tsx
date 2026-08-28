@@ -93,13 +93,16 @@ export default function ProjectsCarousel({
             >
               <Link href={`/projects/${project.slug}`} className="group block">
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-shell">
-                  <Image
-                    src={unsplash(project.cover, 900)}
-                    alt={project.name}
-                    fill
-                    sizes="(max-width: 640px) 85vw, 420px"
-                    className="img-warm object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
+                  {/* Empty rather than a placeholder — see ProjectHero. */}
+                  {project.cover && (
+                    <Image
+                      src={unsplash(project.cover, 900)}
+                      alt={project.name}
+                      fill
+                      sizes="(max-width: 640px) 85vw, 420px"
+                      className="img-warm object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                  )}
                 </div>
 
                 <div className="p-6 md:p-7">

@@ -103,9 +103,12 @@ export default async function ProjectsPage() {
                   <td className={CELL}>
                     <div className="flex items-center gap-3">
                       <div className="relative h-11 w-16 shrink-0 overflow-hidden bg-panel-high">
-                        {project.cover && (
+                        {/* Hero as a fallback: the thumbnail's job is "does
+                            this project have art", and cover alone answers
+                            that wrongly for a project with only a hero set. */}
+                        {(project.cover || project.hero_image) && (
                           <Image
-                            src={project.cover}
+                            src={project.cover || project.hero_image!}
                             alt=""
                             fill
                             sizes="4rem"
