@@ -108,6 +108,38 @@ function explainStorageFailure(message: string, bucket: string): string {
   return `Supabase Storage rejected the upload: ${message}`;
 }
 
+/**
+ * Copies bytes into a freshly allocated, non-shared Uint8Array.
+ *
+ * WHY THIS EXISTS. supabase-js hands the upload body straight to fetch, and
+ * the WHATWG body converter refuses a typed array whose underlying buffer is a
+ * SharedArrayBuffer — it throws literally
+ *
+ *     ArrayBuffer: SharedArrayBuffer is not allowed.
+ *
+ * The deployed runtime (Netlify) returns exactly that: sharp's `toBuffer()`
+ * comes back backed by libvips' shared allocator, so every converted image was
+ * rejected before it left the server. It does NOT reproduce locally, where
+ * sharp hands back a plain ArrayBuffer — which is why this only ever appeared
+ * after deploying, and why it is written host-agnostically: the guarantee we
+ * need is "a normal ArrayBuffer", not "not Netlify".
+ *
+ * `.set()` on a newly allocated view is the fix rather than `.slice()` or
+ * `.subarray()`, because slicing a SharedArrayBuffer yields another
+ * SharedArrayBuffer. Allocating first guarantees a normal ArrayBuffer whatever
+ * the input was. It also normalises the two neighbouring cases the same
+ * converter rejects: a pooled Buffer with a non-zero byteOffset, and a
+ * resizable or growable ArrayBuffer.
+ *
+ * Costs one copy of at most 25 MB on an upload that is already doing far more
+ * work than that.
+ */
+function toPlainBytes(input: Uint8Array): Uint8Array {
+  const copy = new Uint8Array(input.byteLength);
+  copy.set(input);
+  return copy;
+}
+
 export async function POST(request: NextRequest) {
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
@@ -198,7 +230,7 @@ export async function POST(request: NextRequest) {
   const path = `${target.prefix}/${slug}/${randomUUID()}.${extension}`;
   const { error } = await supabase.storage
     .from(target.bucket)
-    .upload(path, body, { contentType, upsert: false });
+    .upload(path, toPlainBytes(body), { contentType, upsert: false });
 
   if (error) {
     console.error("[makro] Upload failed:", error.message, `(bucket: ${target.bucket})`);
