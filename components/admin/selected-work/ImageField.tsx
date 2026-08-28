@@ -113,8 +113,15 @@ export default function ImageField({
 
   return (
     <div className="grid gap-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
-      {/* The rail crops every panel to 4/5, so the preview does too. */}
-      <div className="group relative aspect-[4/5] w-full overflow-hidden border border-panel-line bg-panel-high">
+      {/* The preview is cropped to whatever the destination actually crops to:
+          the Selected Work rail is a tall 4:5 panel, a project or /projects
+          hero is full-bleed and lands nearer 16:10. Showing the wrong frame
+          here is worse than showing none — it is a promise about the crop. */}
+      <div
+        className={`group relative w-full overflow-hidden border border-panel-line bg-panel-high ${
+          target === "selected-work" ? "aspect-[4/5]" : "aspect-[16/10]"
+        }`}
+      >
         {value ? (
           <>
             <Image
@@ -164,24 +171,46 @@ export default function ImageField({
           className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
         />
 
-        <Field
-          label="Image"
-          hint="Filled in by the upload above. A /brand/… path or an Unsplash photo id also works."
-        >
-          <input
-            type="text"
-            name="image"
-            value={value}
-            onChange={(event) => onChange(event.target.value)}
-            placeholder="/brand/sw-tower.jpg"
-            className={`${inputClass} font-mono text-xs`}
-          />
-        </Field>
+        {/* Collapsed by default (client, Aug 2026 — "I don't need a path, I
+            just need to upload the image"). Its placeholder read as an
+            instruction to type one, when the file picker above is the whole
+            job for anyone adding art.
 
-        <p className="font-body text-xs text-panel-faint">
-          Uploads are converted to WebP and resized to 2000px on the long edge; 25 MB
-          in, maximum. Panels are cropped to a tall 4:5 frame, so shoot or pick
-          accordingly.
+            NOT removed, and not conditionally rendered: this input carries
+            `name="image"`, which is how the Selected Work dialog submits its
+            value, and the column deliberately accepts three shapes — an
+            uploaded Storage URL, a bundled /brand/… path (what the seeded
+            panels use), or a bare Unsplash id. <details> keeps its children
+            mounted while closed, so the field still submits either way. */}
+        <details className="group/adv">
+          <summary className="cursor-pointer list-none font-body text-xs text-panel-faint transition-colors hover:text-panel-muted">
+            <span className="underline decoration-panel-line-strong underline-offset-4">
+              Set a path or photo id instead
+            </span>
+          </summary>
+          <div className="mt-3">
+            <Field
+              label="Image"
+              hint="Filled in by the upload above. A /brand/… path or an Unsplash photo id also works."
+            >
+              <input
+                type="text"
+                name="image"
+                value={value}
+                onChange={(event) => onChange(event.target.value)}
+                placeholder="/brand/sw-tower.jpg"
+                className={`${inputClass} font-mono text-xs`}
+              />
+            </Field>
+          </div>
+        </details>
+
+        <p className="font-body text-xs leading-relaxed text-panel-faint">
+          Uploads are converted to WebP and resized to 2000px on the long edge;
+          25 MB in, maximum.{" "}
+          {target === "selected-work"
+            ? "Panels are cropped to a tall 4:5 frame, so shoot or pick accordingly."
+            : "This one runs full-bleed behind the heading, so pick a wide shot with room at the bottom for type."}
         </p>
 
         {busy && <p className="font-body text-xs text-panel-faint">Uploading…</p>}
