@@ -84,7 +84,12 @@ export const DEFAULT_PROJECTS_PAGE: Omit<ProjectsPageContent, "carousel"> & {
     ],
   },
   carousel: {
-    enabled: true,
+    // Off by default (client, Aug 2026). It sat directly above the portfolio
+    // index showing the same developments a second time, which read as the
+    // page repeating itself. The section is intact and switchable from
+    // /admin/projects/carousel — this is the default a database that has never
+    // been touched falls back to, not a deletion.
+    enabled: false,
     eyebrow: "",
     heading: "Our Projects",
   },

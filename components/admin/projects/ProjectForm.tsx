@@ -12,6 +12,8 @@ import {
 import { Card, Field, buttonClass, inputClass } from "@/components/admin/ui";
 import { SpecList, StringList } from "./RepeatableList";
 import ImageManager from "./ImageManager";
+import ImageField from "@/components/admin/selected-work/ImageField";
+import CatalogueField from "./CatalogueField";
 import type { ProjectImageRow, ProjectRow } from "@/lib/supabase/types";
 
 /**
@@ -22,10 +24,9 @@ import type { ProjectImageRow, ProjectRow } from "@/lib/supabase/types";
 
 const TYPES = ["Residential", "Commercial", "Mixed-Use"] as const;
 const STATUSES = [
-  "Completed",
-  "Now Selling",
-  "Under Construction",
-  "In Planning",
+  "Upcoming",
+  "On-going",
+  "Delivered",
 ] as const;
 
 /**
@@ -33,7 +34,7 @@ const STATUSES = [
  * nobody has to guess which bucket a project will land in.
  */
 const STATUS_HINT =
-  "Under Construction and Now Selling show under “On-going”; In Planning shows under “Upcoming”; Completed shows under “Past”.";
+  "Upcoming and On-going are shown together under “In Progress” on the public index; Delivered leads the page.";
 
 const INITIAL_STATE: ProjectFormState = { ok: false, message: "" };
 
@@ -64,6 +65,11 @@ export default function ProjectForm({
   );
 
   const [name, setName] = useState(project?.name ?? "");
+  const [heroImage, setHeroImage] = useState(project?.hero_image ?? "");
+  const [catalogue, setCatalogue] = useState({
+    url: project?.catalogue_url ?? "",
+    name: project?.catalogue_name ?? "",
+  });
   const [slug, setSlug] = useState(project?.slug ?? "");
   // On an existing project the slug is a live URL: never rewrite it silently.
   const [slugPinned, setSlugPinned] = useState(isEdit);
@@ -110,7 +116,7 @@ export default function ProjectForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Identity</h2>
+        <h2 className="font-display text-xl text-panel-text">Identity</h2>
 
         <div className="grid gap-5 md:grid-cols-2">
           <Field label="Name">
@@ -188,7 +194,7 @@ export default function ProjectForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Classification</h2>
+        <h2 className="font-display text-xl text-panel-text">Classification</h2>
 
         <div className="grid gap-5 md:grid-cols-2">
           <Field label="Type">
@@ -208,7 +214,7 @@ export default function ProjectForm({
           <Field label="Status" hint={STATUS_HINT}>
             <select
               name="status"
-              defaultValue={project?.status ?? "In Planning"}
+              defaultValue={project?.status ?? "Upcoming"}
               className={inputClass}
             >
               {STATUSES.map((option) => (
@@ -241,17 +247,17 @@ export default function ProjectForm({
           </Field>
         </div>
 
-        <label className="flex items-start gap-3 border border-ink/10 bg-cream/60 px-4 py-3">
+        <label className="flex items-start gap-3 border border-panel-line bg-panel/60 px-4 py-3">
           <input
             type="checkbox"
             name="published"
             checked={published}
             onChange={(event) => setPublished(event.target.checked)}
-            className="mt-0.5 h-4 w-4 accent-rose-deep"
+            className="mt-0.5 h-4 w-4 accent-rose"
           />
           <span>
-            <span className="block font-body text-sm text-ink">Published</span>
-            <span className="block font-body text-xs text-ink/45">
+            <span className="block font-body text-sm text-panel-text">Published</span>
+            <span className="block font-body text-xs text-panel-faint">
               Unpublished projects are invisible to the public site and to search
               engines. Leave this off until the copy and gallery are final.
             </span>
@@ -261,7 +267,7 @@ export default function ProjectForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Copy</h2>
+        <h2 className="font-display text-xl text-panel-text">Copy</h2>
 
         <Field label="Headline" hint="Short display heading on the project page.">
           <input
@@ -287,10 +293,10 @@ export default function ProjectForm({
         </Field>
 
         <div>
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Description
           </p>
-          <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+          <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
             One block per paragraph, in the order they should read.
           </p>
           <StringList
@@ -306,13 +312,13 @@ export default function ProjectForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">At a glance</h2>
+        <h2 className="font-display text-xl text-panel-text">At a glance</h2>
 
         <div>
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Specs
           </p>
-          <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+          <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
             Label and value pairs — Residences / ~120, Floors / G+15.
           </p>
           <SpecList initial={specs} />
@@ -330,10 +336,10 @@ export default function ProjectForm({
         </Field>
 
         <div>
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Features
           </p>
-          <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+          <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
             One line each, listed in order on the project page.
           </p>
           <StringList
@@ -349,24 +355,74 @@ export default function ProjectForm({
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-4">
         <div>
-          <h2 className="font-display text-xl text-ink">Images</h2>
-          <p className="mt-1 font-body text-xs text-ink/45">
-            The first image is the cover — it is what the home page, the index
-            cards and the project hero use.
+          <h2 className="font-display text-xl text-panel-text">Hero image</h2>
+          <p className="mt-1 max-w-2xl font-body text-xs leading-relaxed text-panel-faint">
+            The full-bleed image behind the project name at the top of its page.
+            Set separately from the gallery — a shot that works full-bleed
+            behind a headline is rarely the one that works as a card. Leave it
+            empty and the cover below is used instead.
+          </p>
+        </div>
+
+        {/* Submitted with the rest of the form, so the hero saves on "Save
+            changes" like every other field rather than needing its own button. */}
+        <input type="hidden" name="hero_image" value={heroImage} />
+        <ImageField
+          target="project"
+          cardId={project?.slug}
+          value={heroImage}
+          onChange={setHeroImage}
+        />
+      </Card>
+
+      {/* ------------------------------------------------------------- */}
+      <Card className="space-y-4">
+        <div>
+          <h2 className="font-display text-xl text-panel-text">Gallery</h2>
+          <p className="mt-1 max-w-2xl font-body text-xs leading-relaxed text-panel-faint">
+            Shown as the gallery band on the project page. The first image is
+            also the cover — what the index cards and the home page use, and the
+            hero falls back to when no hero image is set above.
           </p>
         </div>
 
         {project ? (
           <ImageManager projectId={project.id} slug={project.slug} initial={images} />
         ) : (
-          <p className="border border-dashed border-ink/15 px-4 py-8 text-center font-body text-sm text-ink/45">
+          <p className="border border-dashed border-panel-line px-4 py-8 text-center font-body text-sm text-panel-faint">
             Save the project first — images can be uploaded as soon as it exists.
           </p>
         )}
       </Card>
 
       {/* ------------------------------------------------------------- */}
-      <div className="sticky bottom-0 -mx-6 border-t border-ink/10 bg-cream/95 px-6 py-4 backdrop-blur md:-mx-10 md:px-10">
+      <Card className="space-y-4">
+        <div>
+          <h2 className="font-display text-xl text-panel-text">Catalogue</h2>
+          <p className="mt-1 max-w-2xl font-body text-xs leading-relaxed text-panel-faint">
+            A PDF visitors can download from the project page. They enter an
+            email address first, and it is added to the Email List tagged with
+            this project so you can see which development each lead asked about.
+          </p>
+        </div>
+
+        {project ? (
+          <CatalogueField
+            slug={project.slug}
+            url={catalogue.url}
+            name={catalogue.name}
+            onChange={setCatalogue}
+          />
+        ) : (
+          <p className="border border-dashed border-panel-line px-4 py-8 text-center font-body text-sm text-panel-faint">
+            Save the project first — the catalogue can be uploaded as soon as it
+            exists.
+          </p>
+        )}
+      </Card>
+
+      {/* ------------------------------------------------------------- */}
+      <div className="sticky bottom-0 -mx-6 border-t border-panel-line bg-panel/95 px-6 py-4 backdrop-blur md:-mx-10 md:px-10">
         <div className="flex flex-wrap items-center gap-3">
           <button type="submit" disabled={busy} className={buttonClass("primary")}>
             {pending ? "Saving…" : isEdit ? "Save changes" : "Create project"}
@@ -403,7 +459,7 @@ export default function ProjectForm({
             role="status"
             aria-live="polite"
             className={`mt-3 font-body text-sm ${
-              state.ok && !deleteError ? "text-emerald-700" : "text-red-700"
+              state.ok && !deleteError ? "text-success" : "text-danger"
             }`}
           >
             {deleteError ?? state.message}

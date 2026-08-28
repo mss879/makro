@@ -16,8 +16,8 @@ import type { ProjectRow } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 const HEAD_CELL =
-  "px-4 py-3 text-left font-body text-[0.65rem] uppercase tracking-[0.18em] text-ink/40";
-const CELL = "px-4 py-4 align-middle font-body text-sm text-ink/70";
+  "px-4 py-3 text-left font-body text-[0.65rem] uppercase tracking-[0.18em] text-panel-faint";
+const CELL = "px-4 py-4 align-middle font-body text-sm text-panel-muted";
 
 function NewProjectButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
   return (
@@ -61,7 +61,7 @@ export default async function ProjectsPage() {
         {heading}
         <PageTabs />
         <Card>
-          <p className="font-body text-sm text-red-700">
+          <p className="font-body text-sm text-danger">
             The project list could not be loaded: {error.message}
           </p>
         </Card>
@@ -83,10 +83,10 @@ export default async function ProjectsPage() {
           action={<NewProjectButton />}
         />
       ) : (
-        <div className="overflow-x-auto border border-ink/10 bg-white/70">
+        <div className="overflow-x-auto border border-panel-line bg-panel-raised">
           <table className="w-full min-w-[52rem] border-collapse">
             <thead>
-              <tr className="border-b border-ink/10">
+              <tr className="border-b border-panel-line">
                 <th className={HEAD_CELL}>Project</th>
                 <th className={HEAD_CELL}>Type</th>
                 <th className={HEAD_CELL}>Status</th>
@@ -99,10 +99,10 @@ export default async function ProjectsPage() {
             </thead>
             <tbody>
               {projects.map((project) => (
-                <tr key={project.id} className="border-b border-ink/5 last:border-b-0">
+                <tr key={project.id} className="border-b border-panel-line last:border-b-0">
                   <td className={CELL}>
                     <div className="flex items-center gap-3">
-                      <div className="relative h-11 w-16 shrink-0 overflow-hidden bg-ink/5">
+                      <div className="relative h-11 w-16 shrink-0 overflow-hidden bg-panel-high">
                         {project.cover && (
                           <Image
                             src={project.cover}
@@ -114,8 +114,8 @@ export default async function ProjectsPage() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="truncate font-body text-sm text-ink">{project.name}</p>
-                        <p className="truncate font-body text-xs text-ink/40">
+                        <p className="truncate font-body text-sm text-panel-text">{project.name}</p>
+                        <p className="truncate font-body text-xs text-panel-faint">
                           /projects/{project.slug}
                           {project.city ? ` · ${project.city}` : ""}
                         </p>
@@ -135,7 +135,7 @@ export default async function ProjectsPage() {
                   <td className={`${CELL} text-right`}>
                     <Link
                       href={`/admin/projects/${project.id}`}
-                      className="font-body text-sm text-ink/60 underline-offset-4 transition-colors hover:text-rose-deep hover:underline"
+                      className="font-body text-sm text-panel-muted underline-offset-4 transition-colors hover:text-rose hover:underline"
                     >
                       Edit
                     </Link>

@@ -7,23 +7,14 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import {
   GROUP_ORDER,
   GROUP_SLUG,
-  TEASERS,
   projectsInGroup,
   type Project,
-  type Teaser,
 } from "@/lib/projects";
 import { unsplash } from "@/lib/images";
 import SectionJump from "@/components/projects/SectionJump";
 
 const FILTERS = ["All", "Residential", "Commercial", "Mixed-Use"] as const;
 type Filter = (typeof FILTERS)[number];
-
-type LedgerRow =
-  | { kind: "project"; project: Project }
-  | { kind: "teaser"; teaser: Teaser };
-
-const ROW =
-  "group relative flex flex-wrap items-baseline justify-between gap-4 border-t border-hair py-5";
 
 /** "N development(s)" — shared by the filter bar and every group header. */
 function countLabel(n: number): string {
@@ -53,26 +44,18 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
   );
   const showFilters = activeFilters.length > 2;
 
-  /** The index strip — every real development first, then the named-but-
-      unrevealed teasers, as one uninterrupted ledger of everything in motion. */
-  const ledger = useMemo<LedgerRow[]>(
-    () => [
-      ...projects.map((project) => ({ kind: "project" as const, project })),
-      ...TEASERS.map((teaser) => ({ kind: "teaser" as const, teaser })),
-    ],
-    [projects]
-  );
-
   const visible = useMemo(
     () => projects.filter((p) => filter === "All" || p.type === filter),
     [projects, filter]
   );
 
-  /** BOTH groups always render, even when one is empty. The client asked for
-      the page to be split into Completed and In Progress and for a dropdown
-      that jumps between them — hiding an empty stage would leave the dropdown
-      with a dead option, or with only one, which is no dropdown at all. An
-      empty stage states so plainly rather than being papered over. */
+  /** EVERY group renders, even when empty. The client asked for the page to be
+      split by stage — Upcoming, On-going, Delivered — with a dropdown that
+      jumps between them; hiding an empty stage would leave the dropdown with a
+      dead option, or with only one, which is no dropdown at all. An empty stage
+      states so plainly rather than being papered over, and with one live
+      development that honesty is the point: it shows what is coming rather
+      than implying a back catalogue that does not exist. */
   const groups = useMemo(
     () => GROUP_ORDER.map((group) => ({ group, items: projectsInGroup(group, visible) })),
     [visible]
@@ -113,51 +96,13 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
   return (
     <section className="section-light relative py-16 md:py-24">
       <div className="container-edge">
-        {/* Index strip — the whole portfolio at a glance, one hairline row
-            per development. Desktop hover floats the cover alongside. */}
-        <p className="eyebrow text-rose-deep">Index</p>
-        <div className="mt-6">
-          {ledger.map((row, i) => {
-            const last = i === ledger.length - 1 ? " border-b" : "";
-
-            if (row.kind === "teaser") {
-              const t = row.teaser;
-              return (
-                <div key={t.name} className={`${ROW}${last}`}>
-                  <span className="font-display text-2xl text-fog md:text-3xl">
-                    {t.name}
-                  </span>
-                  <span className="font-body text-sm text-fog">
-                    {t.type} · {t.city} — {t.note}
-                  </span>
-                </div>
-              );
-            }
-
-            const p = row.project;
-            return (
-              <Link key={p.slug} href={`/projects/${p.slug}`} className={`${ROW}${last}`}>
-                <span className="font-display text-2xl text-ink transition-colors group-hover:text-rose-deep md:text-3xl">
-                  {p.name}
-                </span>
-                <span className="font-body text-sm text-mist">
-                  {p.type} · {p.city} — {p.status} — {p.year}
-                </span>
-                <span className="pointer-events-none absolute right-28 top-1/2 z-10 hidden w-60 -translate-y-1/2 lg:block">
-                  <span className="relative block aspect-[16/10] scale-95 overflow-hidden bg-shell opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-hover:opacity-100">
-                    <Image
-                      src={unsplash(p.cover, 640)}
-                      alt=""
-                      fill
-                      sizes="240px"
-                      className="img-warm object-cover"
-                    />
-                  </span>
-                </span>
-              </Link>
-            );
-          })}
-        </div>
+        {/* The "Index" strip that used to open this section was removed
+            (client, Aug 2026 — "confusing for the user"). It listed every
+            development as a text row directly above the same developments
+            rendered as cards, so the page stated its contents twice before
+            showing them once. The teaser rows for unannounced work went with
+            it; TEASERS is still defined in lib/projects.ts if it is wanted
+            back. */}
 
         {/* Filters + the jump control. The dropdown sits first because it
             navigates the page, while the type buttons only narrow what is on
@@ -185,8 +130,9 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
           </span>
         </div>
 
-        {/* Groups — on-going first, then upcoming, then past. A group with
-            nothing in it is not rendered at all. */}
+        {/* One block per stage, in GROUP_ORDER — Upcoming, On-going,
+            Delivered. Every stage renders even when empty; see the note on
+            `groups` above for why. */}
         <div ref={grid}>
           {groups.map(({ group, items }, gi) => {
             const feature = items.length === 1;

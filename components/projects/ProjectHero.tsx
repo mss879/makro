@@ -50,7 +50,7 @@ export default function ProjectHero({ project }: { project: Project }) {
       <div className="absolute inset-0">
         <Image
           data-img
-          src={unsplash(project.cover, 2200)}
+          src={unsplash(project.heroImage, 2200)}
           alt={project.name}
           fill
           priority

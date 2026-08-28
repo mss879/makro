@@ -14,8 +14,8 @@ export type JumpOption = {
 
 /**
  * Jump-to-section dropdown for the portfolio index (client request, Aug 2026):
- * one page split into Completed and In Progress, with a control that scrolls to
- * whichever the visitor picks rather than routing to a second page.
+ * one page split by stage — Upcoming, On-going, Delivered — with a control that
+ * scrolls to whichever the visitor picks rather than routing to a second page.
  *
  * Deliberately not a native <select>. A select cannot carry the count column,
  * and its popup is rendered by the OS — on a page this typographically

@@ -25,6 +25,12 @@ function toProject(row: ProjectRow, gallery: string[]): Project {
     status: row.status,
     year: row.year,
     cover: row.cover ?? gallery[0] ?? "",
+    // Hero falls back to the cover, then to the first gallery image, so a
+    // project that predates the split — or one where the client has simply not
+    // set a hero yet — renders exactly as it did before.
+    heroImage: row.hero_image ?? row.cover ?? gallery[0] ?? "",
+    catalogueUrl: row.catalogue_url ?? "",
+    catalogueName: row.catalogue_name ?? "",
     gallery: gallery.length ? gallery : row.cover ? [row.cover] : [],
     headline: row.headline,
     summary: row.summary,

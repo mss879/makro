@@ -30,6 +30,9 @@ export const PROJECT_IMAGE_BUCKET = "project-images";
 export const PROJECTS_PAGE_IMAGE_BUCKET = "projects-page-images";
 export const SELECTED_WORK_IMAGE_BUCKET = "selected-work-images";
 export const BLOG_IMAGE_BUCKET = "blog-images";
+/** Project catalogue PDFs. Separate from the image buckets: nothing here is
+    converted, and the bucket itself refuses anything that is not a PDF. */
+export const PROJECT_CATALOGUE_BUCKET = "project-catalogues";
 
 /** Hard cap on images per project (client comment: "up to 5 images"). */
 export const MAX_PROJECT_IMAGES = 5;

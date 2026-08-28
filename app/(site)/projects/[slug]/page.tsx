@@ -6,6 +6,7 @@ import { getProjects, getProjectBySlug, getProjectSlugs } from "@/lib/projects-d
 import { pageMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import ProjectHero from "@/components/projects/ProjectHero";
+import CatalogueDownload from "@/components/projects/CatalogueDownload";
 import ParallaxImage from "@/components/ui/ParallaxImage";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -102,17 +103,17 @@ export default async function ProjectDetailPage({
       <ProjectHero project={project} />
 
       {/* Overview + specs */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="section-light relative py-24 md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <div className="flex items-center gap-4">
               <span className="line-hair w-10" />
-              <span className="eyebrow text-rose">Overview</span>
+              <span className="eyebrow text-rose-deep">Overview</span>
             </div>
             <TextReveal
               as="h2"
               text={project.headline}
-              className="mt-6 font-display display-md text-bone"
+              className="mt-6 font-display display-md text-ink"
             />
             <div className="mt-8 space-y-6">
               {project.description.map((para, i) => (
@@ -127,16 +128,16 @@ export default async function ProjectDetailPage({
 
           {/* Specs */}
           <div className="lg:col-span-4 lg:col-start-9">
-            <Reveal className="border border-hair bg-carbon p-8">
+            <Reveal className="border border-hair bg-shell p-8">
               <div className="flex items-center gap-3">
-                <PeakMark className="h-5 w-auto text-rose" strokeWidth={10} />
+                <PeakMark className="h-5 w-auto text-rose-deep" strokeWidth={10} />
                 <span className="eyebrow text-fog">At a glance</span>
               </div>
               <dl className="mt-6 divide-y divide-hair">
                 {project.specs.map((s) => (
                   <div key={s.label} className="flex items-center justify-between py-4">
                     <dt className="font-body text-sm text-mist">{s.label}</dt>
-                    <dd className="font-display text-xl text-bone">{s.value}</dd>
+                    <dd className="font-display text-xl text-ink">{s.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -147,21 +148,29 @@ export default async function ProjectDetailPage({
               )}
               <Link
                 href="/contact"
-                className="group mt-8 flex w-full items-center justify-center gap-3 bg-rose px-6 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                className="group mt-8 flex w-full items-center justify-center gap-3 bg-ink px-6 py-4 font-body text-bone transition-colors hover:bg-rose-deep hover:text-ink"
               >
                 Enquire about this project
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
+              {/* Only rendered when a catalogue has been uploaded — an empty
+                  gate is worse than no button. */}
+              {project.catalogueUrl && (
+                <div className="mt-3">
+                  <CatalogueDownload slug={project.slug} projectName={project.name} />
+                </div>
+              )}
+
               <div className="mt-6 space-y-2 border-t border-hair pt-5">
                 <Link
                   href="/projects"
-                  className="block font-body text-sm text-mist transition-colors hover:text-rose"
+                  className="block font-body text-sm text-mist transition-colors hover:text-rose-deep"
                 >
                   ← All developments
                 </Link>
                 <Link
                   href={relatedInsight.href}
-                  className="block font-body text-sm text-mist transition-colors hover:text-rose"
+                  className="block font-body text-sm text-mist transition-colors hover:text-rose-deep"
                 >
                   {relatedInsight.label} →
                 </Link>
@@ -176,11 +185,11 @@ export default async function ProjectDetailPage({
           back to null. Both leave gallery empty, so the whole section is
           conditional: rendering it would pass undefined down to next/image. */}
       {project.gallery.length > 0 && (
-      <section className="relative bg-carbon py-16 md:py-24">
+      <section className="section-light relative bg-shell py-16 md:py-24">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
-            <span className="eyebrow text-rose">Gallery</span>
+            <span className="eyebrow text-rose-deep">Gallery</span>
           </div>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-6">
             <ParallaxImage
@@ -210,17 +219,17 @@ export default async function ProjectDetailPage({
       )}
 
       {/* Features */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="section-light relative py-24 md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <div className="flex items-center gap-4">
               <span className="line-hair w-10" />
-              <span className="eyebrow text-rose">Features</span>
+              <span className="eyebrow text-rose-deep">Features</span>
             </div>
             <TextReveal
               as="h2"
               text="Considered in every detail."
-              className="mt-6 font-display display-md text-bone"
+              className="mt-6 font-display display-md text-ink"
             />
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
@@ -231,8 +240,8 @@ export default async function ProjectDetailPage({
                   delay={i * 0.05}
                   className="flex items-center gap-4 border-b border-hair py-5"
                 >
-                  <PeakMark className="h-4 w-auto shrink-0 text-rose" strokeWidth={11} />
-                  <span className="font-body text-base text-bone">{f}</span>
+                  <PeakMark className="h-4 w-auto shrink-0 text-rose-deep" strokeWidth={11} />
+                  <span className="font-body text-base text-ink">{f}</span>
                 </Reveal>
               ))}
             </div>
@@ -242,19 +251,19 @@ export default async function ProjectDetailPage({
 
       {/* Next project — only when there is another project to link to */}
       {next && (
-        <section className="relative overflow-hidden border-t border-hair bg-carbon">
+        <section className="section-light relative overflow-hidden border-t border-hair bg-shell">
           <Link href={`/projects/${next.slug}`} className="group block">
             <div className="container-edge flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
               <div>
                 <span className="eyebrow text-fog">Next project</span>
-                <h3 className="mt-3 font-display text-4xl text-bone transition-colors group-hover:text-rose md:text-6xl">
+                <h3 className="mt-3 font-display text-4xl text-ink transition-colors group-hover:text-rose-deep md:text-6xl">
                   {next.name}
                 </h3>
                 <p className="mt-2 font-body text-sm text-mist">
                   {next.type} · {next.location}
                 </p>
               </div>
-              <span className="flex h-16 w-16 items-center justify-center border border-hair-strong text-2xl text-bone transition-all duration-500 group-hover:border-rose group-hover:bg-rose group-hover:text-ink">
+              <span className="flex h-16 w-16 items-center justify-center border border-hair-strong text-2xl text-ink transition-all duration-500 group-hover:border-rose-deep group-hover:bg-rose-deep group-hover:text-bone">
                 →
               </span>
             </div>

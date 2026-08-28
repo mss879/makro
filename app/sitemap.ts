@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: url(`/projects/${p.slug}`),
     lastModified: now,
     changeFrequency: "monthly",
-    priority: p.status === "Now Selling" ? 0.9 : 0.8,
+    priority: p.status === "On-going" ? 0.9 : 0.8,
   }));
 
   // getInsights rather than getInsightSlugs: <lastmod> needs each article's

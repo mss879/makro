@@ -22,7 +22,7 @@ import {
  * matching the search when nothing is ticked.
  */
 
-const checkboxClass = "h-4 w-4 shrink-0 cursor-pointer accent-rose-deep align-middle";
+const checkboxClass = "h-4 w-4 shrink-0 cursor-pointer accent-rose align-middle";
 
 type Feedback = { tone: "ok" | "error"; message: string };
 
@@ -52,7 +52,14 @@ export default function SubscribersTable({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return subscribers;
-    return subscribers.filter((s) => s.email.toLowerCase().includes(q));
+    // Searches the source too, so "makro heights" finds everyone who came in
+    // through that project's catalogue — which is the question the tag exists
+    // to answer.
+    return subscribers.filter(
+      (s) =>
+        s.email.toLowerCase().includes(q) ||
+        (s.source ?? "").toLowerCase().includes(q)
+    );
   }, [subscribers, query]);
 
   // Clear the "Copied" flag on a timer. The setState is inside the timeout
@@ -125,8 +132,10 @@ export default function SubscribersTable({
   const exportCsv = () => {
     if (targets.length === 0) return;
     const rows = [
-      "email,subscribed_at",
-      ...targets.map((s) => `${csvCell(s.email)},${csvCell(s.created_at)}`),
+      "email,source,subscribed_at",
+      ...targets.map(
+        (s) => `${csvCell(s.email)},${csvCell(s.source ?? "")},${csvCell(s.created_at)}`
+      ),
     ];
     const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -188,7 +197,7 @@ export default function SubscribersTable({
           type="search"
           value={query}
           onChange={(e) => search(e.target.value)}
-          placeholder="Search addresses…"
+          placeholder="Search addresses or source…"
           aria-label="Search subscribers"
           className={`${inputClass} sm:w-64`}
         />
@@ -199,8 +208,8 @@ export default function SubscribersTable({
           role="alert"
           className={`border px-4 py-3 font-body text-sm ${
             feedback.tone === "ok"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-red-200 bg-red-50 text-red-700"
+              ? "border-success-line bg-success-soft text-success"
+              : "border-danger-line bg-danger-soft text-danger"
           }`}
         >
           {feedback.message}
@@ -208,13 +217,13 @@ export default function SubscribersTable({
       )}
 
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-ink/10 pb-4">
-        <p className="font-body text-sm text-ink/55">
+      <div className="flex flex-wrap items-center gap-3 border-b border-panel-line pb-4">
+        <p className="font-body text-sm text-panel-muted">
           {selected.size > 0
             ? `${selected.size} selected`
             : `${filtered.length} ${filtered.length === 1 ? "subscriber" : "subscribers"}`}
           {query && subscribers.length !== filtered.length && (
-            <span className="text-ink/35"> of {subscribers.length}</span>
+            <span className="text-panel-faint"> of {subscribers.length}</span>
           )}
         </p>
 
@@ -258,10 +267,10 @@ export default function SubscribersTable({
           }
         />
       ) : (
-        <div className="overflow-x-auto border border-ink/10">
+        <div className="overflow-x-auto border border-panel-line">
           <table className="w-full min-w-[32rem] border-collapse">
             <thead>
-              <tr className="border-b border-ink/10 bg-white/50 text-left">
+              <tr className="border-b border-panel-line bg-panel-raised text-left">
                 <th scope="col" className="w-10 px-4 py-3">
                   <input
                     type="checkbox"
@@ -276,13 +285,19 @@ export default function SubscribersTable({
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 font-body text-[0.7rem] uppercase tracking-[0.18em] text-ink/45"
+                  className="px-4 py-3 font-body text-[0.7rem] uppercase tracking-[0.18em] text-panel-faint"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 font-body text-[0.7rem] uppercase tracking-[0.18em] text-ink/45"
+                  className="px-4 py-3 font-body text-[0.7rem] uppercase tracking-[0.18em] text-panel-faint"
+                >
+                  Source
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 font-body text-[0.7rem] uppercase tracking-[0.18em] text-panel-faint"
                 >
                   Subscribed
                 </th>
@@ -292,8 +307,8 @@ export default function SubscribersTable({
               {filtered.map((s) => (
                 <tr
                   key={s.id}
-                  className={`border-b border-ink/5 last:border-b-0 transition-colors ${
-                    selected.has(s.id) ? "bg-rose-deep/5" : "hover:bg-ink/[0.02]"
+                  className={`border-b border-panel-line last:border-b-0 transition-colors ${
+                    selected.has(s.id) ? "bg-rose/12" : "hover:bg-panel-high"
                   }`}
                 >
                   <td className="px-4 py-3">
@@ -308,12 +323,19 @@ export default function SubscribersTable({
                   <td className="px-4 py-3">
                     <a
                       href={`mailto:${s.email}`}
-                      className="font-body text-sm text-ink transition-colors hover:text-rose-deep"
+                      className="font-body text-sm text-panel-text transition-colors hover:text-rose"
                     >
                       {s.email}
                     </a>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 font-body text-sm text-ink/55">
+                  {/* Where the address came from — "Catalogue — Makro Heights"
+                      for a gated download, blank for the footer signups that
+                      predate the column. Comma-separated when someone has come
+                      in through more than one route. */}
+                  <td className="px-4 py-3 font-body text-sm text-panel-muted">
+                    {s.source || <span className="text-panel-faint">Newsletter</span>}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 font-body text-sm text-panel-muted">
                     {formatDate(s.created_at, true)}
                   </td>
                 </tr>

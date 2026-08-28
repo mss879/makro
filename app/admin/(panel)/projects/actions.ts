@@ -25,10 +25,9 @@ import type {
 
 const TYPES: readonly ProjectTypeRow[] = ["Residential", "Commercial", "Mixed-Use"];
 const STATUSES: readonly ProjectStatusRow[] = [
-  "Completed",
-  "Now Selling",
-  "Under Construction",
-  "In Planning",
+  "Upcoming",
+  "On-going",
+  "Delivered",
 ];
 
 const NOT_CONFIGURED =
@@ -62,6 +61,9 @@ type ProjectInput = {
   specs: SpecRow[];
   specs_note: string | null;
   features: string[];
+  hero_image: string | null;
+  catalogue_url: string | null;
+  catalogue_name: string | null;
   published: boolean;
   sort_order: number;
 };
@@ -142,6 +144,12 @@ function readProject(formData: FormData): { error: string } | { payload: Project
       specs: specList(formData),
       specs_note: text(formData, "specs_note") || null,
       features: textList(formData, "features"),
+      // Empty means "no hero of its own" — the read path then falls back to
+      // cover, so clearing the field restores the previous behaviour rather
+      // than blanking the hero.
+      hero_image: text(formData, "hero_image") || null,
+      catalogue_url: text(formData, "catalogue_url") || null,
+      catalogue_name: text(formData, "catalogue_name") || null,
       published: formData.get("published") === "on",
       sort_order: sortOrder,
     },

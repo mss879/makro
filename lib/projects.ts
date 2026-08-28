@@ -1,6 +1,6 @@
 import { BRAND } from "./images";
 
-export type ProjectStatus = "Completed" | "Now Selling" | "Under Construction" | "In Planning";
+export type ProjectStatus = "Upcoming" | "On-going" | "Delivered";
 
 export interface Project {
   slug: string;
@@ -14,6 +14,16 @@ export interface Project {
   status: ProjectStatus;
   year: string;
   cover: string;
+  /**
+   * Full-bleed art for the detail-page hero, set independently of the gallery
+   * (client direction, Aug 2026). Falls back to `cover` when unset — the shot
+   * that works behind a headline is rarely the one that works as a card.
+   */
+  heroImage: string;
+  /** Catalogue PDF URL, or "" when the project has none. Empty hides the download. */
+  catalogueUrl: string;
+  /** Filename offered to the visitor. Empty falls back to a name built from the project. */
+  catalogueName: string;
   gallery: string[];
   /** Short display heading for the detail page. */
   headline: string;
@@ -34,9 +44,12 @@ export const PROJECTS: Project[] = [
     location: "Rohini Place, Dehiwala, Sri Lanka",
     city: "Dehiwala",
     type: "Residential",
-    status: "In Planning",
+    status: "Upcoming",
     year: "2026",
     cover: BRAND.towersRender,
+    heroImage: BRAND.towersRender,
+    catalogueUrl: "",
+    catalogueName: "",
     gallery: [BRAND.towersRender, BRAND.monoCorner, BRAND.lifestyleSuite],
     headline: "Approximately 120 residences. One uncompromising standard.",
     summary:
@@ -76,39 +89,44 @@ export const PROJECT_SLUGS = PROJECTS.map((p) => p.slug);
    life, not by its marketing status. The group is derived from
    `status` so a project never carries two sources of truth. */
 
-/* Two groups, not three (client, Aug 2026): the portfolio reads as delivered
-   work first, then everything still moving. "In Progress" deliberately absorbs
-   the old On-going and Upcoming buckets — a buyer does not distinguish between
-   a tower under construction and one in planning, they distinguish between one
-   they can walk through and one they cannot. */
-export type ProjectGroup = "Completed" | "In Progress";
+/* THREE groups, one per status (client, Aug 2026 — supersedes the earlier
+   two-group split).
 
-export const STATUS_GROUP: Record<ProjectStatus, ProjectGroup> = {
-  "Completed": "Completed",
-  "Under Construction": "In Progress",
-  "Now Selling": "In Progress",
-  "In Planning": "In Progress",
-};
+   The index used to fold Upcoming and On-going together under "In Progress",
+   on the reasoning that a buyer does not distinguish between a tower being
+   built and one in planning. The client does distinguish, and the practical
+   consequence was that the word "Upcoming" appeared nowhere on the site while
+   the only development they have is upcoming — so the portfolio read as though
+   it had nothing in it.
 
-/** Render order — delivered work leads, then everything still in motion. */
-export const GROUP_ORDER: ProjectGroup[] = ["Completed", "In Progress"];
+   The group IS the status now. There is no mapping table any more because
+   there is nothing left to map: keeping an identity Record around would be a
+   join waiting to drift out of step with the union beside it. */
+export type ProjectGroup = ProjectStatus;
+
+/** Render order — the lifecycle, in the order the client listed it. */
+export const GROUP_ORDER: ProjectGroup[] = ["Upcoming", "On-going", "Delivered"];
 
 /** Anchor ids for the in-page jump. Kept beside the group definition so a
     renamed group can never drift from the id the dropdown scrolls to. */
 export const GROUP_SLUG: Record<ProjectGroup, string> = {
-  "Completed": "completed",
-  "In Progress": "in-progress",
+  "Upcoming": "upcoming",
+  "On-going": "on-going",
+  "Delivered": "delivered",
 };
 
 export function projectsInGroup(g: ProjectGroup, list: Project[] = PROJECTS): Project[] {
-  return list.filter((p) => STATUS_GROUP[p.status] === g);
+  return list.filter((p) => p.status === g);
 }
 
 /**
  * Named-but-unrevealed work. Deliberately NOT part of PROJECTS — a teaser
  * has no slug and no detail page, so it can never reach the sitemap, the
- * static params or the project JSON-LD. It exists only to show the index
- * strip that more is in motion.
+ * static params or the project JSON-LD.
+ *
+ * NOT CURRENTLY RENDERED. Its only consumer was the /projects index strip,
+ * removed in Aug 2026 at the client's request. Kept because it is content, not
+ * code — if a "more in motion" strip is wanted back, this is the data for it.
  */
 export interface Teaser {
   name: string;

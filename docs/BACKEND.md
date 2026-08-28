@@ -39,7 +39,7 @@ openssl rand -hex 32
 Every table, policy, guard trigger, storage bucket and seed row lives in
 [`supabase/migrations/`](../supabase/migrations). Apply **every file, in
 filename order**, from `20260803000100_foundation.sql` through to
-`20260803000800_email_list.sql`.
+`20260828000500_project_catalogue.sql`.
 
 With the Supabase CLI, against a linked project:
 
@@ -48,7 +48,7 @@ supabase db push
 ```
 
 Without the CLI: open **SQL Editor → New query**, then paste and run each file
-one at a time, working down the list in filename order. Eight files, eight runs.
+one at a time, working down the list in filename order. Fourteen files, fourteen runs.
 
 **The order is mandatory, not a convention.** The files are numbered in
 dependency order and each one assumes the ones before it have already run —
@@ -93,6 +93,43 @@ audited and reasoned about in a single file.
 | `20260803000600_blog.sql` | 5. Blogs | `blog_posts`, the `blog-images` bucket, and the four `/insights` articles seeded verbatim from `lib/insights.ts`. |
 | `20260803000700_projects.sql` | 6. Projects | `projects`, `project_images`, the `project-images` bucket, and the Makro Heights seed with its three gallery rows. |
 | `20260803000800_email_list.sql` | 7. Email List | `newsletter_subscribers`. |
+| `20260803000900_projects_page.sql` | 6. Projects | The admin-driven `/projects` page itself — its hero, intro copy and carousel, separate from the per-project records above. |
+| `20260828000100_blog_copy_revision.sql` | 5. Blogs | **Not a schema file.** A one-off data update carrying the client's Aug 2026 copy revision into the four seeded articles. See the note below. |
+| `20260828000200_chat.sql` | 8. Chat | `chat_sessions`, `chat_messages` — the website AI assistant's conversations, its per-conversation human-takeover switch, and the link to the CRM lead it captured. |
+| `20260828000300_project_hero_image.sql` | 6. Projects | `projects.hero_image` — a hero image set independently of the gallery. |
+| `20260828000400_project_status_values.sql` | 6. Projects | **Data migration.** Narrows the four project statuses to Upcoming / On-going / Delivered and rewrites existing rows. |
+| `20260828000500_project_catalogue.sql` | 6. Projects + 7. Email List | `projects.catalogue_url` / `.catalogue_name`, `newsletter_subscribers.source`, and the `project-catalogues` bucket — the email-gated catalogue download. |
+
+`20260828000400_project_status_values.sql` is a DATA migration, not a schema
+one, and its three statements must stay in their written order: drop the old
+CHECK, rewrite the rows, add the new CHECK. Any other order fails, because a
+live row is always invalid under one of the two constraints. It is idempotent —
+the UPDATE matches nothing on a second pass.
+
+`20260828000500_project_catalogue.sql` deliberately spans two menu items. The
+gated download is one transaction in the visitor's head (get the PDF, join the
+list), and splitting it in two would allow a half-applied state where the
+download works and the captured address is silently dropped. Note that its
+bucket is PUBLIC on purpose: the email gate is lead capture, not access control,
+and the reasoning is written out at the top of that file.
+
+`20260828000200_chat.sql` is the only file whose tables grant anon NOTHING —
+not even INSERT. The public chat widget never talks to PostgREST; it goes
+through /api/chat and /api/chat/poll on the service-role client, authorised by
+an (id, token) pair. The reason is written out at the top of that file, and it
+has a consequence worth knowing before deploying: **without
+`SUPABASE_SERVICE_ROLE_KEY` the chat does not degrade, it switches off** and the
+widget is not rendered. The other public write paths (inquiries, newsletter) do
+have an anon fallback; this one deliberately does not.
+
+`20260828000100_blog_copy_revision.sql` is the one file that is neither a
+schema file nor a guarded seed. The `000600` seeds are deliberately written
+`where not exists`, so they never touch a row that already exists — which is
+what protects admin-panel edits, and also why a copy revision cannot reach a
+live database through them. That migration UPDATEs the four seeded articles'
+`display_title`, `excerpt`, `intro` and `sections` in place. It is idempotent,
+but it does overwrite: if an article has been rewritten in the admin panel since
+the first run, export it before applying.
 
 The file numbers follow **dependency** order, not menu order — the Dashboard is
 menu item 1 but sits at `000400` because it is mostly a window onto tables the

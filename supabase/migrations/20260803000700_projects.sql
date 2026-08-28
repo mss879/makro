@@ -28,8 +28,8 @@
 -- `type` and `status` are CHECK unions rather than free text because both are
 -- duplicated as TS consts (projects/actions.ts, ProjectForm.tsx) and as the
 -- ProjectTypeRow / ProjectStatusRow unions. `status` additionally drives the
--- public grouping — Under Construction + Now Selling → On-going, In Planning →
--- Upcoming, Completed → Past — and the sitemap priority bump. A value outside
+-- public grouping — Upcoming + On-going are shown together as "In Progress",
+-- Delivered leads the index — and the sitemap priority bump. A value outside
 -- this list would silently drop the project out of every group on /projects.
 -- Do not add or rename members without changing all four places.
 --
@@ -53,9 +53,12 @@ create table if not exists public.projects (
   type        text not null default 'Residential'
                 constraint projects_type_check
                 check (type in ('Residential', 'Commercial', 'Mixed-Use')),
-  status      text not null default 'In Planning'
+  status      text not null default 'Upcoming'
                 constraint projects_status_check
-                check (status in ('Completed', 'Now Selling', 'Under Construction', 'In Planning')),
+                -- Narrowed to three values by 20260828000400_project_status_values.sql
+                -- (client, Aug 2026). Kept in step here so a fresh database is
+                -- created in the end state rather than the superseded one.
+                check (status in ('Upcoming', 'On-going', 'Delivered')),
   year        text not null default '',
   headline    text not null default '',
   summary     text not null default '',
@@ -302,7 +305,7 @@ select
   'Rohini Place, Dehiwala, Sri Lanka',
   'Dehiwala',
   'Residential',
-  'In Planning',
+  'Upcoming',
   '2026',
   'Approximately 120 residences. One uncompromising standard.',
   'An upmarket, attainable condominium of approximately 120 two- and three-bedroom residences, planned around efficient layouts, premium specification and long-term value.',

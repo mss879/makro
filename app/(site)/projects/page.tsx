@@ -71,7 +71,7 @@ export default async function ProjectsPage() {
         />
       )}
 
-      {/* Lands /projects#completed and /projects#in-progress arriving from the
+      {/* Lands /projects#upcoming, #on-going and #delivered arriving from the
           navbar dropdown on another route. */}
       <HashScroll />
       <ProjectsIndex projects={projects} />
