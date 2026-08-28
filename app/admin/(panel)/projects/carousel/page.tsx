@@ -58,7 +58,7 @@ export default async function ProjectsCarouselPage() {
         {heading}
         <PageTabs />
         <Card>
-          <p className="font-body text-sm text-red-700">
+          <p className="font-body text-sm text-danger">
             {missing
               ? "The projects-page tables are not in the database yet. Apply supabase/migrations/20260803000900_projects_page.sql, then reload this screen."
               : `This screen could not be loaded: ${failure.message}`}

@@ -7,6 +7,13 @@ import * as React from "react";
  * motion or editorial scale — it is a tool, so density and legibility win.
  * Everything here is a plain server-safe component; interactivity lives in
  * the feature components that use them.
+ *
+ * COLOUR: use the `panel-*` role tokens (see the admin block in
+ * app/globals.css) — never `ink`/`cream`/`white` or an opacity modifier on
+ * them. Tailwind folds `text-ink/45` to a static hex at build time, so a
+ * component written that way is nailed to one theme and cannot follow the
+ * panel. Status colours have role tokens too: danger / success / warning,
+ * each with a `-line` and `-soft` companion.
  */
 
 export function PageHeading({
@@ -19,11 +26,11 @@ export function PageHeading({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-6">
+    <div className="flex flex-wrap items-end justify-between gap-4 border-b border-panel-line pb-6">
       <div>
-        <h1 className="font-display text-3xl text-ink md:text-4xl">{title}</h1>
+        <h1 className="font-display text-3xl text-panel-text md:text-4xl">{title}</h1>
         {subtitle && (
-          <p className="mt-2 max-w-2xl font-body text-sm text-ink/55">{subtitle}</p>
+          <p className="mt-2 max-w-2xl font-body text-sm text-panel-muted">{subtitle}</p>
         )}
       </div>
       {action}
@@ -39,7 +46,7 @@ export function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`border border-ink/10 bg-white/70 p-5 ${className}`}>{children}</div>
+    <div className={`border border-panel-line bg-panel-raised p-5 ${className}`}>{children}</div>
   );
 }
 
@@ -54,20 +61,20 @@ export function StatCard({
 }) {
   return (
     <Card>
-      <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+      <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
         {label}
       </p>
-      <p className="mt-3 font-display text-4xl text-ink">{value}</p>
-      {hint && <p className="mt-1 font-body text-xs text-ink/45">{hint}</p>}
+      <p className="mt-3 font-display text-4xl text-panel-text">{value}</p>
+      {hint && <p className="mt-1 font-body text-xs text-panel-faint">{hint}</p>}
     </Card>
   );
 }
 
 const BUTTON_VARIANTS = {
-  primary: "bg-ink text-cream hover:bg-rose-deep hover:text-ink",
-  secondary: "border border-ink/20 text-ink hover:border-rose-deep hover:text-rose-deep",
-  danger: "border border-red-300 text-red-700 hover:bg-red-50",
-  ghost: "text-ink/60 hover:text-ink",
+  primary: "bg-rose text-ink hover:bg-rose-soft",
+  secondary: "border border-panel-line-strong text-panel-text hover:border-rose hover:text-rose",
+  danger: "border border-danger-line text-danger hover:bg-danger-soft",
+  ghost: "text-panel-muted hover:text-panel-text",
 } as const;
 
 export type ButtonVariant = keyof typeof BUTTON_VARIANTS;
@@ -87,17 +94,17 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+      <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
         {label}
       </span>
       <div className="mt-2">{children}</div>
-      {hint && <p className="mt-1.5 font-body text-xs text-ink/45">{hint}</p>}
+      {hint && <p className="mt-1.5 font-body text-xs text-panel-faint">{hint}</p>}
     </label>
   );
 }
 
 export const inputClass =
-  "w-full border border-ink/15 bg-white px-3 py-2 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink/30 focus:border-rose-deep";
+  "w-full border border-panel-line bg-panel-raised px-3 py-2 font-body text-sm text-panel-text outline-none transition-colors placeholder:text-panel-faint focus:border-rose";
 
 export function EmptyState({
   title,
@@ -109,9 +116,9 @@ export function EmptyState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="border border-dashed border-ink/15 px-6 py-16 text-center">
-      <p className="font-display text-xl text-ink">{title}</p>
-      {body && <p className="mx-auto mt-2 max-w-md font-body text-sm text-ink/50">{body}</p>}
+    <div className="border border-dashed border-panel-line px-6 py-16 text-center">
+      <p className="font-display text-xl text-panel-text">{title}</p>
+      {body && <p className="mx-auto mt-2 max-w-md font-body text-sm text-panel-muted">{body}</p>}
       {action && <div className="mt-6 flex justify-center">{action}</div>}
     </div>
   );
@@ -125,10 +132,10 @@ export function Badge({
   tone?: "neutral" | "accent" | "muted" | "success";
 }) {
   const tones = {
-    neutral: "border-ink/20 text-ink/70",
-    accent: "border-rose-deep/50 bg-rose-deep/10 text-rose-deep",
-    muted: "border-ink/10 text-ink/40",
-    success: "border-emerald-300 bg-emerald-50 text-emerald-700",
+    neutral: "border-panel-line-strong text-panel-muted",
+    accent: "border-rose/50 bg-rose/15 text-rose",
+    muted: "border-panel-line text-panel-faint",
+    success: "border-success-line bg-success-soft text-success",
   } as const;
   return (
     <span
@@ -142,9 +149,9 @@ export function Badge({
 /** Shown wherever the panel needs credentials that are not in .env.local yet. */
 export function NotConfigured() {
   return (
-    <div className="border border-amber-300 bg-amber-50 px-6 py-10 text-center">
-      <p className="font-display text-xl text-ink">Supabase is not connected yet</p>
-      <p className="mx-auto mt-3 max-w-lg font-body text-sm text-ink/60">
+    <div className="border border-warning-line bg-warning-soft px-6 py-10 text-center">
+      <p className="font-display text-xl text-panel-text">Supabase is not connected yet</p>
+      <p className="mx-auto mt-3 max-w-lg font-body text-sm text-panel-muted">
         Add <code className="font-mono text-xs">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
         <code className="font-mono text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and{" "}
         <code className="font-mono text-xs">SUPABASE_SERVICE_ROLE_KEY</code> to{" "}

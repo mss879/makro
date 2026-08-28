@@ -159,14 +159,14 @@ export default function ImageManager({
   return (
     <div className="space-y-4">
       {images.length === 0 ? (
-        <p className="border border-dashed border-ink/15 px-4 py-8 text-center font-body text-sm text-ink/45">
+        <p className="border border-dashed border-panel-line px-4 py-8 text-center font-body text-sm text-panel-faint">
           No images yet. The first one you upload becomes the cover.
         </p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {images.map((image, index) => (
-            <li key={image.id} className="border border-ink/10 bg-white/70 p-2">
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-ink/5">
+            <li key={image.id} className="border border-panel-line bg-panel-raised p-2">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-panel-high">
                 <Image
                   src={image.path}
                   alt={`${slug} image ${index + 1}`}
@@ -180,7 +180,7 @@ export default function ImageManager({
                 {index === 0 ? (
                   <Badge tone="accent">Cover</Badge>
                 ) : (
-                  <span className="font-body text-xs text-ink/40">
+                  <span className="font-body text-xs text-panel-faint">
                     Position {index + 1}
                   </span>
                 )}
@@ -230,23 +230,23 @@ export default function ImageManager({
           onChange={onFile}
           disabled={busy || atCap}
           aria-label="Upload a project image"
-          className="block w-full cursor-pointer border border-dashed border-ink/20 bg-white/60 p-3 font-body text-xs text-ink/60 transition-colors file:mr-3 file:cursor-pointer file:border file:border-ink/15 file:bg-cream file:px-3 file:py-1.5 file:font-body file:text-xs file:text-ink hover:border-ink/35 disabled:cursor-not-allowed disabled:opacity-50"
+          className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
         />
-        <p className="mt-2 font-body text-xs text-ink/45">
+        <p className="mt-2 font-body text-xs text-panel-faint">
           {atCap
             ? `Maximum of ${MAX_PROJECT_IMAGES} images reached — delete one before uploading another.`
             : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP and resized to 2000px on the long edge; 25 MB in, maximum.`}
         </p>
       </div>
 
-      {busy && <p className="font-body text-xs text-ink/45">Working…</p>}
+      {busy && <p className="font-body text-xs text-panel-faint">Working…</p>}
       {error && (
-        <p role="alert" className="font-body text-sm text-red-700">
+        <p role="alert" className="font-body text-sm text-danger">
           {error}
         </p>
       )}
       {notice && !error && (
-        <p className="font-body text-sm text-emerald-700">{notice}</p>
+        <p className="font-body text-sm text-success">{notice}</p>
       )}
     </div>
   );

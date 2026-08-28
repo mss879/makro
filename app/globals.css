@@ -49,9 +49,85 @@
      indices and accent strokes in shared components. */
   --color-accent: #e2a388;
 
+  /* ---------- Admin panel chrome ----------
+     The /admin panel is a tool, not a page: it is stared at for hours at a
+     stretch, so it gets its own dark surface ramp instead of the marketing
+     site's cream sections (client direction, Aug 2026 — the cream panel was
+     "hard on the eyes").
+
+     Named by ROLE, not by value, and used as whole tokens rather than
+     opacity modifiers on --color-ink. That is deliberate: Tailwind v4 folds
+     `text-ink/45` down to a static hex at build time, so an opacity-modified
+     brand colour cannot be re-themed by overriding a variable. A real token
+     per role can — which is what would let this panel ship a light mode
+     later without touching a single component.
+
+     Warm neutrals throughout, never cold grey, so the panel still reads as
+     Makro next to the site. Contrast on --color-panel: text ~15:1,
+     muted ~8:1, faint ~5:1 — all clear of WCAG AA for their sizes. */
+  --color-panel: #0c0a08; /* page ground */
+  --color-panel-raised: #14110f; /* cards, inputs, table bodies */
+  --color-panel-high: #1e1a16; /* hover, active row, popovers, wells */
+  --color-panel-line: #2b2622; /* hairline */
+  --color-panel-line-strong: #3d3630; /* input borders, emphasis rules */
+  --color-panel-text: #ece7df; /* primary copy */
+  --color-panel-muted: #b3aaa0; /* secondary copy */
+  --color-panel-faint: #8b8179; /* labels, placeholders, tertiary */
+
+  /* Status tones, mixed for a dark ground. Tailwind's own red-50/red-700
+     pairs assume a white page and turn into a glowing swatch on this one. */
+  --color-danger: #f2a49b;
+  --color-danger-line: #5e2f29;
+  --color-danger-soft: #26120f;
+  --color-success: #7fd8a8;
+  --color-success-line: #275341;
+  --color-success-soft: #0f2018;
+  --color-warning: #efc389;
+  --color-warning-line: #5c4526;
+  --color-warning-soft: #241a0e;
+
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ---------- Admin panel: light mode ----------
+   The panel defaults to dark (client, Aug 2026 — the cream panel was "hard on
+   the eyes"), and this is the opt-out. Every value below overrides a
+   `--color-panel-*` / status token declared in @theme, so nothing that CONSUMES
+   them changes: the whole panel flips because it was built on role tokens
+   rather than on `ink`/`cream` with opacity modifiers. That was the point of
+   the token layer, and this rule is the proof of it.
+
+   Scoped to [data-admin-theme="light"] on <html>, set by the toggle in the
+   sidebar and applied before first paint by the inline script in the panel
+   layout, so a light-mode admin never sees a dark flash on load.
+
+   Values are the panel's own, not the marketing site's: `--color-cream` is a
+   warm editorial ground for a page you read, and it is too saturated behind
+   dense tables you stare at all day. This is a step lighter and quieter, with
+   the same warm cast so the panel still reads as Makro. */
+:root[data-admin-theme="light"] {
+  --color-panel: #f7f4ee; /* page ground */
+  --color-panel-raised: #ffffff; /* cards, inputs, table bodies */
+  --color-panel-high: #efeae0; /* hover, active row, popovers, wells */
+  --color-panel-line: #e2dbcd; /* hairline */
+  --color-panel-line-strong: #c9c0ae; /* input borders, emphasis rules */
+  --color-panel-text: #14100d; /* primary copy   — ~16:1 on panel */
+  --color-panel-muted: #5c554e; /* secondary copy — ~7:1 */
+  --color-panel-faint: #837b72; /* labels, placeholders — ~4.6:1 */
+
+  /* Status tones back to a light ground. Mirrors of the dark set, not
+     Tailwind's defaults, so the two modes stay a matched pair. */
+  --color-danger: #a3271b;
+  --color-danger-line: #e8bdb6;
+  --color-danger-soft: #fdf2f0;
+  --color-success: #1d6b45;
+  --color-success-line: #b6ddc8;
+  --color-success-soft: #eff7f2;
+  --color-warning: #855211;
+  --color-warning-line: #e6cfa6;
+  --color-warning-soft: #fdf6ea;
 }
 
 /* ---------- Base ---------- */
@@ -311,6 +387,42 @@
     --color-mist: #675f5a; /* muted warm grey on white */
     --color-fog: #9c938d;
     --color-accent: var(--color-rose-deep);
+  }
+
+  /* Markdown inside a chat bubble. The bubble sets the type; this only has
+     to stop the browser's default block margins from opening gaps the size of
+     the bubble itself, and keep lists from hanging off the left edge. */
+  .chat-prose > :first-child {
+    margin-top: 0;
+  }
+  .chat-prose > :last-child {
+    margin-bottom: 0;
+  }
+  .chat-prose p {
+    margin-block: 0.5rem;
+  }
+  .chat-prose ul,
+  .chat-prose ol {
+    margin-block: 0.5rem;
+    padding-inline-start: 1.1rem;
+  }
+  .chat-prose ul {
+    list-style: disc;
+  }
+  .chat-prose ol {
+    list-style: decimal;
+  }
+  .chat-prose li {
+    margin-block: 0.2rem;
+  }
+  .chat-prose strong {
+    color: var(--color-bone);
+    font-weight: 600;
+  }
+  .chat-prose a {
+    color: var(--color-rose);
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .container-edge {

@@ -52,7 +52,7 @@ function isTransferred(inquiry: InquiryRow) {
 }
 
 const checkboxClass =
-  "h-4 w-4 shrink-0 cursor-pointer accent-rose-deep align-middle";
+  "h-4 w-4 shrink-0 cursor-pointer accent-rose align-middle";
 
 export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] }) {
   const router = useRouter();
@@ -202,12 +202,12 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
               aria-pressed={active}
               className={`border px-3 py-1.5 font-body text-xs uppercase tracking-[0.14em] transition-colors ${
                 active
-                  ? "border-ink bg-ink text-cream"
-                  : "border-ink/15 text-ink/55 hover:border-ink/40 hover:text-ink"
+                  ? "border-rose bg-rose text-ink"
+                  : "border-panel-line text-panel-muted hover:border-panel-line-strong hover:text-panel-text"
               }`}
             >
               {option.label}
-              <span className={`ml-2 ${active ? "text-cream/60" : "text-ink/35"}`}>
+              <span className={`ml-2 ${active ? "text-ink/75" : "text-panel-faint"}`}>
                 {counts[option.value]}
               </span>
             </button>
@@ -220,8 +220,8 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
           role="status"
           className={`border px-4 py-2.5 font-body text-sm ${
             notice.tone === "ok"
-              ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-              : "border-red-200 bg-red-50 text-red-700"
+              ? "border-success-line bg-success-soft text-success"
+              : "border-danger-line bg-danger-soft text-danger"
           }`}
         >
           {notice.text}
@@ -239,10 +239,10 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
           }
         />
       ) : (
-        <div className="overflow-x-auto border border-ink/10 bg-white/70">
+        <div className="overflow-x-auto border border-panel-line bg-panel-raised">
           <table className="w-full min-w-[52rem] border-collapse text-left">
             <thead>
-              <tr className="border-b border-ink/10">
+              <tr className="border-b border-panel-line">
                 <th scope="col" className="w-10 px-4 py-3">
                   <input
                     ref={selectAllRef}
@@ -257,7 +257,7 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
                   <th
                     key={label}
                     scope="col"
-                    className="px-4 py-3 font-body text-[0.65rem] uppercase tracking-[0.18em] text-ink/45"
+                    className="px-4 py-3 font-body text-[0.65rem] uppercase tracking-[0.18em] text-panel-faint"
                   >
                     {label}
                   </th>
@@ -279,8 +279,8 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
                     }}
                     tabIndex={0}
                     aria-label={`Open inquiry from ${inquiry.name}`}
-                    className={`cursor-pointer border-b border-ink/[0.07] align-middle outline-none transition-colors last:border-b-0 focus-visible:bg-rose-deep/10 ${
-                      checked ? "bg-rose-deep/[0.07]" : "hover:bg-ink/[0.03]"
+                    className={`cursor-pointer border-b border-panel-line align-middle outline-none transition-colors last:border-b-0 focus-visible:bg-rose/15 ${
+                      checked ? "bg-rose/12" : "hover:bg-panel-high"
                     }`}
                   >
                     <td
@@ -296,15 +296,15 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
                         className={checkboxClass}
                       />
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3.5 font-body text-sm text-ink/55">
+                    <td className="whitespace-nowrap px-4 py-3.5 font-body text-sm text-panel-muted">
                       {formatDate(inquiry.created_at)}
                     </td>
-                    <td className="px-4 py-3.5 font-body text-sm text-ink">{inquiry.name}</td>
-                    <td className="px-4 py-3.5 font-body text-sm text-ink/70">{inquiry.email}</td>
-                    <td className="px-4 py-3.5 font-body text-sm text-ink/55">
+                    <td className="px-4 py-3.5 font-body text-sm text-panel-text">{inquiry.name}</td>
+                    <td className="px-4 py-3.5 font-body text-sm text-panel-muted">{inquiry.email}</td>
+                    <td className="px-4 py-3.5 font-body text-sm text-panel-muted">
                       {inquiry.interest || "—"}
                     </td>
-                    <td className="px-4 py-3.5 font-body text-sm text-ink/55">
+                    <td className="px-4 py-3.5 font-body text-sm text-panel-muted">
                       {inquiry.project || "—"}
                     </td>
                     <td className="px-4 py-3.5">
@@ -323,11 +323,11 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
       {/* Sticky action bar — only present while something is selected. */}
       {selectedIds.length > 0 && (
         <div className="sticky bottom-4 z-20">
-          <div className="flex flex-wrap items-center gap-3 border border-ink/15 bg-cream px-4 py-3 shadow-[0_8px_30px_rgba(5,2,3,0.12)]">
-            <p className="font-body text-sm text-ink">
+          <div className="flex flex-wrap items-center gap-3 border border-panel-line bg-panel px-4 py-3 shadow-[0_8px_30px_rgba(5,2,3,0.12)]">
+            <p className="font-body text-sm text-panel-text">
               <strong className="font-normal">{selectedIds.length}</strong> selected
               {transferableCount !== selectedIds.length && (
-                <span className="text-ink/45">
+                <span className="text-panel-faint">
                   {" "}
                   · {selectedIds.length - transferableCount} already in the CRM
                 </span>
@@ -385,9 +385,9 @@ export default function InquiriesTable({ inquiries }: { inquiries: InquiryRow[] 
 
 function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="border-b border-ink/[0.07] py-3">
-      <p className="font-body text-[0.65rem] uppercase tracking-[0.18em] text-ink/40">{label}</p>
-      <div className="mt-1.5 font-body text-sm text-ink">{children}</div>
+    <div className="border-b border-panel-line py-3">
+      <p className="font-body text-[0.65rem] uppercase tracking-[0.18em] text-panel-faint">{label}</p>
+      <div className="mt-1.5 font-body text-sm text-panel-text">{children}</div>
     </div>
   );
 }
@@ -412,26 +412,26 @@ function InquiryDrawer({
       <div
         onClick={onClose}
         aria-hidden
-        className="fixed inset-0 z-40 bg-ink/25 backdrop-blur-[1px]"
+        className="fixed inset-0 z-40 bg-ink/60 backdrop-blur-[1px]"
       />
       <aside
         role="dialog"
         aria-modal="true"
         aria-label={`Inquiry from ${inquiry.name}`}
-        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-ink/10 bg-cream shadow-[0_0_60px_rgba(5,2,3,0.25)]"
+        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-panel-line bg-panel shadow-[0_0_60px_rgba(5,2,3,0.25)]"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-ink/10 px-6 py-5">
+        <header className="flex items-start justify-between gap-4 border-b border-panel-line px-6 py-5">
           <div>
-            <p className="font-body text-[0.65rem] uppercase tracking-[0.18em] text-ink/40">
+            <p className="font-body text-[0.65rem] uppercase tracking-[0.18em] text-panel-faint">
               Inquiry
             </p>
-            <h2 className="mt-1 font-display text-2xl text-ink">{inquiry.name}</h2>
+            <h2 className="mt-1 font-display text-2xl text-panel-text">{inquiry.name}</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="font-body text-xs uppercase tracking-[0.18em] text-ink/45 transition-colors hover:text-ink"
+            className="font-body text-xs uppercase tracking-[0.18em] text-panel-faint transition-colors hover:text-panel-text"
           >
             Close
           </button>
@@ -447,7 +447,7 @@ function InquiryDrawer({
           <DetailRow label="Email">
             <a
               href={`mailto:${inquiry.email}`}
-              className="text-rose-deep underline-offset-4 hover:underline"
+              className="text-rose underline-offset-4 hover:underline"
             >
               {inquiry.email}
             </a>
@@ -457,31 +457,31 @@ function InquiryDrawer({
             {inquiry.phone ? (
               <a
                 href={`tel:${inquiry.phone.replace(/[^\d+]/g, "")}`}
-                className="text-rose-deep underline-offset-4 hover:underline"
+                className="text-rose underline-offset-4 hover:underline"
               >
                 {inquiry.phone}
               </a>
             ) : (
-              <span className="text-ink/40">Not given</span>
+              <span className="text-panel-faint">Not given</span>
             )}
           </DetailRow>
 
           <DetailRow label="Interested in">
-            {inquiry.interest || <span className="text-ink/40">—</span>}
+            {inquiry.interest || <span className="text-panel-faint">—</span>}
           </DetailRow>
 
           <DetailRow label="Project">
-            {inquiry.project || <span className="text-ink/40">No specific project</span>}
+            {inquiry.project || <span className="text-panel-faint">No specific project</span>}
           </DetailRow>
 
           <DetailRow label="Source">{inquiry.source}</DetailRow>
 
           <DetailRow label="Message">
-            <p className="whitespace-pre-line leading-relaxed text-ink/80">{inquiry.message}</p>
+            <p className="whitespace-pre-line leading-relaxed text-panel-text">{inquiry.message}</p>
           </DetailRow>
 
           {transferred && (
-            <p className="mt-4 border border-emerald-300 bg-emerald-50 px-4 py-3 font-body text-sm text-emerald-800">
+            <p className="mt-4 border border-success-line bg-success-soft px-4 py-3 font-body text-sm text-success">
               This inquiry is already in the CRM.{" "}
               <Link href="/admin/crm" className="underline underline-offset-4">
                 Open the pipeline
@@ -490,7 +490,7 @@ function InquiryDrawer({
           )}
         </div>
 
-        <footer className="flex items-center gap-2 border-t border-ink/10 px-6 py-4">
+        <footer className="flex items-center gap-2 border-t border-panel-line px-6 py-4">
           {!transferred && (
             <button
               type="button"

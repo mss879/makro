@@ -32,7 +32,7 @@ export default function IntroForm({
   return (
     <Card>
       <form action={action} className="space-y-5">
-        <label className="flex items-center gap-3 font-body text-sm text-ink/70">
+        <label className="flex items-center gap-3 font-body text-sm text-panel-muted">
           <input type="checkbox" name="intro_enabled" defaultChecked={enabled} />
           Show this section on /projects
         </label>
@@ -58,7 +58,7 @@ export default function IntroForm({
             {pending ? "Saving…" : "Save intro"}
           </button>
           {state.message && (
-            <p className={`font-body text-sm ${state.ok ? "text-ink/60" : "text-red-700"}`}>
+            <p className={`font-body text-sm ${state.ok ? "text-panel-muted" : "text-danger"}`}>
               {state.message}
             </p>
           )}

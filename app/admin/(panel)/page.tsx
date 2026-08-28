@@ -141,7 +141,7 @@ function topPaths(viewRows: ViewSlice[]): TopPage[] {
 function SectionHead({ title, action }: { title: string; action?: ReactNode }) {
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-3">
-      <h2 className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">{title}</h2>
+      <h2 className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">{title}</h2>
       {action}
     </div>
   );
@@ -155,10 +155,10 @@ function SectionHead({ title, action }: { title: string; action?: ReactNode }) {
 function Tile({ href, label, children }: { href: string; label: string; children: ReactNode }) {
   return (
     <Link href={href} className="group block">
-      <Card className="h-full transition-colors group-hover:border-ink/35">
+      <Card className="h-full transition-colors group-hover:border-panel-line-strong">
         <div className="flex items-baseline justify-between gap-3">
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">{label}</p>
-          <span className="font-body text-xs text-ink/30 transition-colors group-hover:text-rose-deep">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">{label}</p>
+          <span className="font-body text-xs text-panel-faint transition-colors group-hover:text-rose">
             →
           </span>
         </div>
@@ -169,16 +169,16 @@ function Tile({ href, label, children }: { href: string; label: string; children
 }
 
 function Figure({ children }: { children: ReactNode }) {
-  return <p className="mt-3 font-display text-4xl text-ink">{children}</p>;
+  return <p className="mt-3 font-display text-4xl text-panel-text">{children}</p>;
 }
 
 function Hint({ children }: { children: ReactNode }) {
-  return <p className="mt-1 font-body text-xs text-ink/45">{children}</p>;
+  return <p className="mt-1 font-body text-xs text-panel-faint">{children}</p>;
 }
 
 /** Secondary detail, ruled off from the headline figure above it. */
 function Detail({ children }: { children: ReactNode }) {
-  return <div className="mt-4 border-t border-ink/10 pt-3">{children}</div>;
+  return <div className="mt-4 border-t border-panel-line pt-3">{children}</div>;
 }
 
 export default async function AdminDashboardPage() {
@@ -328,7 +328,7 @@ export default async function AdminDashboardPage() {
             <Figure>{num(inquiriesNew)}</Figure>
             <Hint>New — not yet transferred or archived</Hint>
             <Detail>
-              <p className="font-body text-xs text-ink/55">{num(inquiriesTotal)} received in total</p>
+              <p className="font-body text-xs text-panel-muted">{num(inquiriesTotal)} received in total</p>
             </Detail>
           </Tile>
 
@@ -337,16 +337,16 @@ export default async function AdminDashboardPage() {
             <Hint>Leads across every pipeline</Hint>
             {defaultPipeline && stages.length > 0 && (
               <Detail>
-                <p className="font-body text-[0.6rem] uppercase tracking-[0.18em] text-ink/35">
+                <p className="font-body text-[0.6rem] uppercase tracking-[0.18em] text-panel-faint">
                   {defaultPipeline.name}
                 </p>
                 <dl className="mt-2 flex flex-col gap-1">
                   {stages.map((stage) => (
                     <div key={stage.id} className="flex items-baseline justify-between gap-3">
-                      <dt className="min-w-0 truncate font-body text-xs text-ink/55">
+                      <dt className="min-w-0 truncate font-body text-xs text-panel-muted">
                         {stage.name}
                       </dt>
-                      <dd className="font-body text-xs tabular-nums text-ink">
+                      <dd className="font-body text-xs tabular-nums text-panel-text">
                         {perStage.get(stage.id) ?? 0}
                       </dd>
                     </div>
@@ -369,10 +369,10 @@ export default async function AdminDashboardPage() {
                 <div className="mt-3 flex items-center gap-3">
                   <span
                     className={`h-3 w-3 shrink-0 ${
-                      selectedWork.enabled ? "bg-emerald-500" : "bg-red-500"
+                      selectedWork.enabled ? "bg-success" : "bg-danger"
                     }`}
                   />
-                  <span className="font-display text-4xl text-ink">
+                  <span className="font-display text-4xl text-panel-text">
                     {selectedWork.enabled ? "On" : "Off"}
                   </span>
                 </div>
@@ -382,7 +382,7 @@ export default async function AdminDashboardPage() {
                     : "Hidden from the home page"}
                 </Hint>
                 <Detail>
-                  <p className="font-body text-xs text-ink/55">
+                  <p className="font-body text-xs text-panel-muted">
                     {num(selectedWorkCards)} published{" "}
                     {selectedWorkCards === 1 ? "card" : "cards"}
                   </p>
@@ -399,15 +399,15 @@ export default async function AdminDashboardPage() {
             <Detail>
               {latestPost ? (
                 <>
-                  <p className="truncate font-body text-xs text-ink/70">
+                  <p className="truncate font-body text-xs text-panel-muted">
                     {latestPost.display_title || latestPost.title || "Untitled article"}
                   </p>
-                  <p className="mt-0.5 font-body text-[0.7rem] text-ink/40">
+                  <p className="mt-0.5 font-body text-[0.7rem] text-panel-faint">
                     Latest · {formatDate(latestPost.published_on)}
                   </p>
                 </>
               ) : (
-                <p className="font-body text-xs text-ink/40">No published articles yet</p>
+                <p className="font-body text-xs text-panel-faint">No published articles yet</p>
               )}
             </Detail>
           </Tile>
@@ -416,7 +416,7 @@ export default async function AdminDashboardPage() {
             <Figure>{num(projectsPublished)}</Figure>
             <Hint>Published on the public site</Hint>
             <Detail>
-              <p className="font-body text-xs text-ink/55">{num(projectsDrafts)} in draft</p>
+              <p className="font-body text-xs text-panel-muted">{num(projectsDrafts)} in draft</p>
             </Detail>
           </Tile>
 
@@ -438,7 +438,7 @@ export default async function AdminDashboardPage() {
           action={
             <Link
               href="/admin/inquiries"
-              className="font-body text-xs text-ink/45 transition-colors hover:text-rose-deep"
+              className="font-body text-xs text-panel-faint transition-colors hover:text-rose"
             >
               View all →
             </Link>
@@ -447,27 +447,27 @@ export default async function AdminDashboardPage() {
 
         <Card>
           {recentInquiries.length === 0 ? (
-            <p className="font-body text-sm text-ink/45">
+            <p className="font-body text-sm text-panel-faint">
               Nothing has come through the contact form yet.
             </p>
           ) : (
-            <ul className="-my-1 divide-y divide-ink/10">
+            <ul className="-my-1 divide-y divide-panel-line">
               {recentInquiries.map((inquiry) => (
                 <li key={inquiry.id}>
                   <Link
                     href="/admin/inquiries"
-                    className="-mx-2 flex flex-wrap items-center justify-between gap-3 px-2 py-3 transition-colors hover:bg-ink/5"
+                    className="-mx-2 flex flex-wrap items-center justify-between gap-3 px-2 py-3 transition-colors hover:bg-panel-high"
                   >
                     <span className="min-w-0">
-                      <span className="block truncate font-body text-sm text-ink">
+                      <span className="block truncate font-body text-sm text-panel-text">
                         {inquiry.name}
                       </span>
-                      <span className="block truncate font-body text-xs text-ink/50">
+                      <span className="block truncate font-body text-xs text-panel-muted">
                         {inquiry.email}
                       </span>
                     </span>
                     <span className="flex shrink-0 items-center gap-3">
-                      <span className="font-body text-xs text-ink/40">
+                      <span className="font-body text-xs text-panel-faint">
                         {formatDate(inquiry.created_at)}
                       </span>
                       <Badge tone={STATUS_TONE[inquiry.status] ?? "neutral"}>

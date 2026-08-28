@@ -127,7 +127,7 @@ export default function LeadDialog({
         type="button"
         aria-label="Close"
         onClick={onClose}
-        className="fixed inset-0 h-full w-full cursor-default bg-ink/40"
+        className="fixed inset-0 h-full w-full cursor-default bg-ink/70"
       />
 
       <form
@@ -135,21 +135,21 @@ export default function LeadDialog({
         role="dialog"
         aria-modal="true"
         aria-label={lead ? `Edit ${lead.name}` : "New lead"}
-        className="relative w-full max-w-2xl border border-ink/10 bg-cream p-6 md:p-8"
+        className="relative w-full max-w-2xl border border-panel-line bg-panel p-6 md:p-8"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-ink/10 pb-4">
-          <h2 className="font-display text-2xl text-ink">{lead ? "Edit lead" : "New lead"}</h2>
+        <div className="flex items-start justify-between gap-4 border-b border-panel-line pb-4">
+          <h2 className="font-display text-2xl text-panel-text">{lead ? "Edit lead" : "New lead"}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="font-body text-xs uppercase tracking-[0.18em] text-ink/50 transition-colors hover:text-ink"
+            className="font-body text-xs uppercase tracking-[0.18em] text-panel-muted transition-colors hover:text-panel-text"
           >
             Close
           </button>
         </div>
 
         {error && (
-          <p className="mt-4 border border-red-200 bg-red-50 px-3 py-2 font-body text-sm text-red-700">
+          <p className="mt-4 border border-danger-line bg-danger-soft px-3 py-2 font-body text-sm text-danger">
             {error}
           </p>
         )}
@@ -274,7 +274,7 @@ export default function LeadDialog({
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-ink/10 pt-5">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-panel-line pt-5">
           {lead ? (
             <button
               type="button"

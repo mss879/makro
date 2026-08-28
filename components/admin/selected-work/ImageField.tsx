@@ -40,14 +40,19 @@ export default function ImageField({
   onChange,
   target = "selected-work",
 }: {
-  /** Undefined until the card exists; uploads then land under `unsorted/`. */
+  /**
+   * The folder segment uploads land in — a card id for Selected Work, a project
+   * slug for a project hero. Undefined until the record exists, in which case
+   * the route files them under `unsorted/`.
+   */
   cardId?: string;
   /**
    * Which upload target (and therefore which bucket) this field writes to.
    * Defaults to selected-work so every existing caller is unchanged; the
-   * /projects hero passes "projects-page".
+   * /projects hero passes "projects-page", and a project's own hero passes
+   * "project" so its art sits in the same bucket as that project's gallery.
    */
-  target?: "selected-work" | "projects-page";
+  target?: "selected-work" | "projects-page" | "project";
   value: string;
   onChange: (next: string) => void;
 }) {
@@ -109,17 +114,41 @@ export default function ImageField({
   return (
     <div className="grid gap-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
       {/* The rail crops every panel to 4/5, so the preview does too. */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden border border-ink/10 bg-ink/5">
+      <div className="group relative aspect-[4/5] w-full overflow-hidden border border-panel-line bg-panel-high">
         {value ? (
-          <Image
-            src={unsplash(value)}
-            alt=""
-            fill
-            sizes="9rem"
-            className="object-cover"
-          />
+          <>
+            <Image
+              src={unsplash(value)}
+              alt=""
+              fill
+              sizes="9rem"
+              className="object-cover"
+            />
+            {/* Clearing the text field by hand was the only way to drop an
+                image, which nobody guesses. Matches the × on each gallery
+                tile in ImageManager so the two read as the same control.
+
+                It clears the value rather than deleting the object: this
+                field also holds seeded /brand/… paths and Unsplash ids, which
+                have nothing in storage to delete, and an uploaded file that is
+                still referenced elsewhere must not vanish underneath it. */}
+            <button
+              type="button"
+              onClick={() => {
+                onChange("");
+                setNotice(null);
+                setError(null);
+              }}
+              disabled={busy}
+              aria-label="Remove this image"
+              title="Remove this image"
+              className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center border border-panel-line bg-panel/85 font-body text-sm leading-none text-panel-text backdrop-blur transition-colors hover:border-danger-line hover:bg-danger-soft hover:text-danger disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              ×
+            </button>
+          </>
         ) : (
-          <span className="absolute inset-0 flex items-center justify-center px-2 text-center font-body text-xs text-ink/35">
+          <span className="absolute inset-0 flex items-center justify-center px-2 text-center font-body text-xs text-panel-faint">
             No image yet
           </span>
         )}
@@ -132,7 +161,7 @@ export default function ImageField({
           onChange={onFile}
           disabled={busy}
           aria-label="Upload a panel image"
-          className="block w-full cursor-pointer border border-dashed border-ink/20 bg-white/60 p-3 font-body text-xs text-ink/60 transition-colors file:mr-3 file:cursor-pointer file:border file:border-ink/15 file:bg-cream file:px-3 file:py-1.5 file:font-body file:text-xs file:text-ink hover:border-ink/35 disabled:cursor-not-allowed disabled:opacity-50"
+          className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
         />
 
         <Field
@@ -149,19 +178,19 @@ export default function ImageField({
           />
         </Field>
 
-        <p className="font-body text-xs text-ink/45">
+        <p className="font-body text-xs text-panel-faint">
           Uploads are converted to WebP and resized to 2000px on the long edge; 25 MB
           in, maximum. Panels are cropped to a tall 4:5 frame, so shoot or pick
           accordingly.
         </p>
 
-        {busy && <p className="font-body text-xs text-ink/45">Uploading…</p>}
+        {busy && <p className="font-body text-xs text-panel-faint">Uploading…</p>}
         {error && (
-          <p role="alert" className="font-body text-sm text-red-700">
+          <p role="alert" className="font-body text-sm text-danger">
             {error}
           </p>
         )}
-        {notice && !error && <p className="font-body text-sm text-emerald-700">{notice}</p>}
+        {notice && !error && <p className="font-body text-sm text-success">{notice}</p>}
       </div>
     </div>
   );

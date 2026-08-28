@@ -73,24 +73,24 @@ function Column({
 
   return (
     <section className="flex w-[17.5rem] shrink-0 flex-col">
-      <header className="flex items-center justify-between gap-2 border-b border-ink/15 pb-2">
+      <header className="flex items-center justify-between gap-2 border-b border-panel-line pb-2">
         <div className="flex min-w-0 items-center gap-1.5">
           <h2
             title={column.name}
-            className="truncate font-body text-xs uppercase tracking-[0.18em] text-ink/70"
+            className="truncate font-body text-xs uppercase tracking-[0.18em] text-panel-muted"
           >
             {column.name}
           </h2>
           {column.is_locked && (
             <span
-              className="shrink-0 text-ink/35"
+              className="shrink-0 text-panel-faint"
               title="Intake stage — every contact-form inquiry lands here."
             >
               <LockIcon />
             </span>
           )}
         </div>
-        <span className="shrink-0 font-body text-xs tabular-nums text-ink/40">
+        <span className="shrink-0 font-body text-xs tabular-nums text-panel-faint">
           {column.leads.length}
         </span>
       </header>
@@ -98,7 +98,7 @@ function Column({
       <div
         ref={setNodeRef}
         className={`mt-3 flex min-h-24 flex-1 flex-col gap-2 border border-dashed p-2 transition-colors ${
-          isOver ? "border-rose-deep/50 bg-rose-deep/5" : "border-transparent"
+          isOver ? "border-rose/50 bg-rose/10" : "border-transparent"
         }`}
       >
         <SortableContext items={ids} strategy={verticalListSortingStrategy}>
@@ -114,7 +114,7 @@ function Column({
         </SortableContext>
 
         {column.leads.length === 0 && (
-          <p className="px-1 py-6 text-center font-body text-xs text-ink/35">
+          <p className="px-1 py-6 text-center font-body text-xs text-panel-faint">
             Drop a lead here
           </p>
         )}
@@ -123,7 +123,7 @@ function Column({
       <button
         type="button"
         onClick={onAdd}
-        className="mt-2 border border-dashed border-ink/20 px-3 py-2 font-body text-xs text-ink/55 transition-colors hover:border-rose-deep hover:text-rose-deep"
+        className="mt-2 border border-dashed border-panel-line-strong px-3 py-2 font-body text-xs text-panel-muted transition-colors hover:border-rose hover:text-rose"
       >
         + Add lead
       </button>
@@ -329,7 +329,7 @@ export default function KanbanBoard({
   return (
     <div className="mt-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="font-body text-xs uppercase tracking-[0.18em] text-ink/45">
+        <p className="font-body text-xs uppercase tracking-[0.18em] text-panel-faint">
           {allLeads.length} lead{allLeads.length === 1 ? "" : "s"} in {pipeline.name}
           {isPending && <span className="ml-2 normal-case tracking-normal">Saving…</span>}
         </p>
@@ -344,12 +344,12 @@ export default function KanbanBoard({
       </div>
 
       {error && (
-        <div className="mt-4 flex items-start justify-between gap-4 border border-red-200 bg-red-50 px-4 py-3">
-          <p className="font-body text-sm text-red-700">{error}</p>
+        <div className="mt-4 flex items-start justify-between gap-4 border border-danger-line bg-danger-soft px-4 py-3">
+          <p className="font-body text-sm text-danger">{error}</p>
           <button
             type="button"
             onClick={() => setError(null)}
-            className="shrink-0 font-body text-xs uppercase tracking-[0.16em] text-red-700/70 hover:text-red-700"
+            className="shrink-0 font-body text-xs uppercase tracking-[0.16em] text-danger/70 hover:text-danger"
           >
             Dismiss
           </button>

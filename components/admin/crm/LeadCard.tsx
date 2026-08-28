@@ -73,7 +73,7 @@ function IconButton({
         event.stopPropagation();
         onClick();
       }}
-      className="inline-flex h-7 w-7 items-center justify-center border border-transparent text-ink/35 transition-colors hover:border-ink/15 hover:text-rose-deep focus-visible:border-ink/15 focus-visible:text-rose-deep"
+      className="inline-flex h-7 w-7 items-center justify-center border border-transparent text-panel-faint transition-colors hover:border-panel-line hover:text-rose focus-visible:border-panel-line focus-visible:text-rose"
     >
       {children}
     </button>
@@ -98,12 +98,12 @@ export function LeadCardBody({
 
   return (
     <article
-      className={`border border-ink/10 bg-white px-3.5 py-3 transition-shadow ${
-        overlay ? "shadow-lg shadow-ink/15" : "hover:border-ink/25"
+      className={`border border-panel-line bg-panel-raised px-3.5 py-3 transition-shadow ${
+        overlay ? "shadow-lg shadow-black/60" : "hover:border-panel-line-strong"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="min-w-0 break-words font-body text-sm font-medium leading-snug text-ink">
+        <p className="min-w-0 break-words font-body text-sm font-medium leading-snug text-panel-text">
           {lead.name}
         </p>
         <div className="flex shrink-0 items-center gap-0.5">
@@ -117,21 +117,21 @@ export function LeadCardBody({
       </div>
 
       {detail && (
-        <p className="mt-1.5 line-clamp-2 font-body text-xs text-ink/55">{detail}</p>
+        <p className="mt-1.5 line-clamp-2 font-body text-xs text-panel-muted">{detail}</p>
       )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <Badge tone={lead.inquiry_id ? "accent" : "muted"}>
           {lead.inquiry_id ? "Inquiry" : "Manual"}
         </Badge>
-        <span className="font-body text-[0.65rem] uppercase tracking-[0.12em] text-ink/40">
+        <span className="font-body text-[0.65rem] uppercase tracking-[0.12em] text-panel-faint">
           {formatDate(lead.created_at)}
         </span>
       </div>
 
       {value && (
-        <p className="mt-2 border-t border-ink/10 pt-2 font-body text-xs text-ink/60">
-          Value <span className="text-ink">{value}</span>
+        <p className="mt-2 border-t border-panel-line pt-2 font-body text-xs text-panel-muted">
+          Value <span className="text-panel-text">{value}</span>
         </p>
       )}
     </article>

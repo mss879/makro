@@ -71,7 +71,7 @@ function StageRow({
   }
 
   return (
-    <li className="flex flex-wrap items-center gap-2 border-b border-ink/10 py-2.5 last:border-b-0">
+    <li className="flex flex-wrap items-center gap-2 border-b border-panel-line py-2.5 last:border-b-0">
       <div className="min-w-40 flex-1">
         <input
           value={name}
@@ -79,7 +79,7 @@ function StageRow({
           disabled={locked || busy}
           title={locked ? LOCK_REASON : undefined}
           aria-label={`Stage name — ${stage.name}`}
-          className={`${inputClass} disabled:cursor-not-allowed disabled:bg-ink/5 disabled:text-ink/40`}
+          className={`${inputClass} disabled:cursor-not-allowed disabled:bg-panel-high disabled:text-panel-faint`}
         />
       </div>
 
@@ -219,9 +219,9 @@ export default function PipelineControls({
   }
 
   return (
-    <div className="mt-6 border border-ink/10 bg-white/70 p-5">
+    <div className="mt-6 border border-panel-line bg-panel-raised p-5">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="mr-1 font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+        <span className="mr-1 font-body text-[0.65rem] uppercase tracking-[0.2em] text-panel-faint">
           Pipeline
         </span>
 
@@ -234,15 +234,15 @@ export default function PipelineControls({
               aria-current={active ? "page" : undefined}
               className={`inline-flex items-center gap-2 border px-4 py-2 font-body text-sm transition-colors ${
                 active
-                  ? "border-ink bg-ink text-cream"
-                  : "border-ink/15 text-ink/60 hover:border-rose-deep hover:text-rose-deep"
+                  ? "border-rose bg-rose text-ink"
+                  : "border-panel-line text-panel-muted hover:border-rose hover:text-rose"
               }`}
             >
               {option.name}
               {option.is_default && (
                 <span
                   className={`font-body text-[0.6rem] uppercase tracking-[0.16em] ${
-                    active ? "text-cream/60" : "text-ink/35"
+                    active ? "text-ink/75" : "text-panel-faint"
                   }`}
                 >
                   default
@@ -281,12 +281,12 @@ export default function PipelineControls({
       </div>
 
       {error && (
-        <div className="mt-4 flex items-start justify-between gap-4 border border-red-200 bg-red-50 px-4 py-3">
-          <p className="font-body text-sm text-red-700">{error}</p>
+        <div className="mt-4 flex items-start justify-between gap-4 border border-danger-line bg-danger-soft px-4 py-3">
+          <p className="font-body text-sm text-danger">{error}</p>
           <button
             type="button"
             onClick={() => setError(null)}
-            className="shrink-0 font-body text-xs uppercase tracking-[0.16em] text-red-700/70 hover:text-red-700"
+            className="shrink-0 font-body text-xs uppercase tracking-[0.16em] text-danger/70 hover:text-danger"
           >
             Dismiss
           </button>
@@ -294,13 +294,13 @@ export default function PipelineControls({
       )}
 
       {panel === "stages" && (
-        <div className="mt-5 border-t border-ink/10 pt-5">
-          <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+        <div className="mt-5 border-t border-panel-line pt-5">
+          <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-panel-faint">
             Stages in {pipeline.name}
           </p>
 
           {stages.length === 0 ? (
-            <p className="mt-3 font-body text-sm text-ink/50">
+            <p className="mt-3 font-body text-sm text-panel-muted">
               No stages yet — add the first one below.
             </p>
           ) : (
@@ -337,7 +337,7 @@ export default function PipelineControls({
       )}
 
       {panel === "new-pipeline" && (
-        <form onSubmit={handleCreatePipeline} className="mt-5 border-t border-ink/10 pt-5">
+        <form onSubmit={handleCreatePipeline} className="mt-5 border-t border-panel-line pt-5">
           <div className="max-w-md">
             <Field label="Pipeline name">
               <input
@@ -350,14 +350,14 @@ export default function PipelineControls({
             </Field>
           </div>
 
-          <p className="mt-5 font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+          <p className="mt-5 font-body text-[0.65rem] uppercase tracking-[0.2em] text-panel-faint">
             Stages
           </p>
           <ul className="mt-2 max-w-md">
             {newStages.map((value, index) => (
               // These rows have no stable id yet, so the index is the key.
               <li key={index} className="flex items-center gap-2 py-1.5">
-                <span className="w-5 shrink-0 font-body text-xs text-ink/35">{index + 1}</span>
+                <span className="w-5 shrink-0 font-body text-xs text-panel-faint">{index + 1}</span>
                 <input
                   value={value}
                   onChange={(event) =>
@@ -391,7 +391,7 @@ export default function PipelineControls({
           <button
             type="button"
             onClick={() => setNewStages((current) => [...current, ""])}
-            className="mt-2 font-body text-xs text-ink/55 underline-offset-4 transition-colors hover:text-rose-deep hover:underline"
+            className="mt-2 font-body text-xs text-panel-muted underline-offset-4 transition-colors hover:text-rose hover:underline"
           >
             + Add another stage
           </button>

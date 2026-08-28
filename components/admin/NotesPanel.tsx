@@ -84,7 +84,7 @@ export default function NotesPanel({ notes }: { notes: NoteRow[] }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="font-body text-sm text-ink/55">
+        <p className="font-body text-sm text-panel-muted">
           {notes.length === 0
             ? "No notes yet."
             : `${notes.length} note${notes.length === 1 ? "" : "s"}, most recently updated first.`}
@@ -104,7 +104,7 @@ export default function NotesPanel({ notes }: { notes: NoteRow[] }) {
       </div>
 
       {error && (
-        <p role="alert" className="font-body text-sm text-red-700">
+        <p role="alert" className="font-body text-sm text-danger">
           {error}
         </p>
       )}
@@ -152,14 +152,14 @@ export default function NotesPanel({ notes }: { notes: NoteRow[] }) {
               </Card>
             ) : (
               <Card key={note.id} className="flex flex-col">
-                <h3 className="font-display text-xl text-ink">{note.title || "Untitled note"}</h3>
+                <h3 className="font-display text-xl text-panel-text">{note.title || "Untitled note"}</h3>
                 {note.body && (
-                  <p className="mt-3 whitespace-pre-line font-body text-sm leading-relaxed text-ink/65">
+                  <p className="mt-3 whitespace-pre-line font-body text-sm leading-relaxed text-panel-muted">
                     {note.body}
                   </p>
                 )}
                 <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
-                  <span className="font-body text-xs text-ink/40">
+                  <span className="font-body text-xs text-panel-faint">
                     Updated {formatDate(note.updated_at)}
                   </span>
                   <span className="flex items-center gap-1">
@@ -178,7 +178,7 @@ export default function NotesPanel({ notes }: { notes: NoteRow[] }) {
                       type="button"
                       disabled={pending}
                       onClick={() => handleDelete(note)}
-                      className={buttonClass("ghost", "px-2 py-1 text-xs hover:text-red-700")}
+                      className={buttonClass("ghost", "px-2 py-1 text-xs hover:text-danger")}
                     >
                       Delete
                     </button>

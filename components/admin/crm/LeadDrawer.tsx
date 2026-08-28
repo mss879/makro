@@ -9,11 +9,11 @@ import { formatValue } from "./LeadCard";
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="border-b border-ink/10 py-3">
-      <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+    <div className="border-b border-panel-line py-3">
+      <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-panel-faint">
         {label}
       </p>
-      <div className="mt-1 font-body text-sm text-ink">{children}</div>
+      <div className="mt-1 font-body text-sm text-panel-text">{children}</div>
     </div>
   );
 }
@@ -91,21 +91,21 @@ export default function LeadDrawer({
         type="button"
         aria-label="Close lead"
         onClick={onClose}
-        className="absolute inset-0 h-full w-full cursor-default bg-ink/40"
+        className="absolute inset-0 h-full w-full cursor-default bg-ink/70"
       />
 
       <aside
         role="dialog"
         aria-modal="true"
         aria-label={`Lead — ${lead.name}`}
-        className="relative flex h-full w-full max-w-md flex-col overflow-y-auto border-l border-ink/10 bg-cream"
+        className="relative flex h-full w-full max-w-md flex-col overflow-y-auto border-l border-panel-line bg-panel"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-ink/10 px-6 py-5">
+        <header className="flex items-start justify-between gap-4 border-b border-panel-line px-6 py-5">
           <div className="min-w-0">
-            <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+            <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-panel-faint">
               Lead
             </p>
-            <h2 className="mt-1 break-words font-display text-2xl text-ink">{lead.name}</h2>
+            <h2 className="mt-1 break-words font-display text-2xl text-panel-text">{lead.name}</h2>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <Badge tone={lead.inquiry_id ? "accent" : "muted"}>
                 {lead.inquiry_id ? "Inquiry" : "Manual"}
@@ -117,7 +117,7 @@ export default function LeadDrawer({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="shrink-0 font-body text-xs uppercase tracking-[0.18em] text-ink/50 transition-colors hover:text-ink"
+            className="shrink-0 font-body text-xs uppercase tracking-[0.18em] text-panel-muted transition-colors hover:text-panel-text"
           >
             Close
           </button>
@@ -130,7 +130,7 @@ export default function LeadDrawer({
                 {lead.email}
               </a>
             ) : (
-              <span className="text-ink/40">—</span>
+              <span className="text-panel-faint">—</span>
             )}
           </Row>
           <Row label="Phone">
@@ -139,48 +139,48 @@ export default function LeadDrawer({
                 {lead.phone}
               </a>
             ) : (
-              <span className="text-ink/40">—</span>
+              <span className="text-panel-faint">—</span>
             )}
           </Row>
-          <Row label="Interest">{lead.interest ?? <span className="text-ink/40">—</span>}</Row>
-          <Row label="Project">{lead.project ?? <span className="text-ink/40">—</span>}</Row>
-          <Row label="Value">{value ?? <span className="text-ink/40">—</span>}</Row>
+          <Row label="Interest">{lead.interest ?? <span className="text-panel-faint">—</span>}</Row>
+          <Row label="Project">{lead.project ?? <span className="text-panel-faint">—</span>}</Row>
+          <Row label="Value">{value ?? <span className="text-panel-faint">—</span>}</Row>
           <Row label="Pipeline">{pipelineName}</Row>
           <Row label="Stage">{stageName}</Row>
           <Row label="Created">{formatDate(lead.created_at, true)}</Row>
           <Row label="Last updated">{formatDate(lead.updated_at, true)}</Row>
           <Row label="Notes">
             {lead.notes ? (
-              <span className="whitespace-pre-wrap text-ink/80">{lead.notes}</span>
+              <span className="whitespace-pre-wrap text-panel-text">{lead.notes}</span>
             ) : (
-              <span className="text-ink/40">No notes yet.</span>
+              <span className="text-panel-faint">No notes yet.</span>
             )}
           </Row>
 
           {lead.inquiry_id && (
             <div className="py-4">
-              <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+              <p className="font-body text-[0.65rem] uppercase tracking-[0.2em] text-panel-faint">
                 Original inquiry
               </p>
               {loading && (
-                <p className="mt-2 font-body text-sm text-ink/45">Loading the message…</p>
+                <p className="mt-2 font-body text-sm text-panel-faint">Loading the message…</p>
               )}
               {error && (
-                <p className="mt-2 border border-red-200 bg-red-50 px-3 py-2 font-body text-sm text-red-700">
+                <p className="mt-2 border border-danger-line bg-danger-soft px-3 py-2 font-body text-sm text-danger">
                   {error}
                 </p>
               )}
               {!loading && !error && !inquiry && (
-                <p className="mt-2 font-body text-sm text-ink/45">
+                <p className="mt-2 font-body text-sm text-panel-faint">
                   That inquiry has since been deleted.
                 </p>
               )}
               {inquiry && (
-                <div className="mt-2 border border-ink/10 bg-white/70 px-4 py-3">
-                  <p className="font-body text-xs text-ink/45">
+                <div className="mt-2 border border-panel-line bg-panel-raised px-4 py-3">
+                  <p className="font-body text-xs text-panel-faint">
                     {formatDate(inquiry.created_at, true)} · via {inquiry.source}
                   </p>
-                  <p className="mt-2 whitespace-pre-wrap font-body text-sm text-ink/80">
+                  <p className="mt-2 whitespace-pre-wrap font-body text-sm text-panel-text">
                     {inquiry.message}
                   </p>
                 </div>
@@ -189,7 +189,7 @@ export default function LeadDrawer({
           )}
         </div>
 
-        <footer className="sticky bottom-0 border-t border-ink/10 bg-cream px-6 py-4">
+        <footer className="sticky bottom-0 border-t border-panel-line bg-panel px-6 py-4">
           <button type="button" onClick={onEdit} className={buttonClass("primary", "w-full")}>
             Edit lead
           </button>

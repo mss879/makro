@@ -45,7 +45,7 @@ export default function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-4">
       <label className="block">
-        <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+        <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
           Email
         </span>
         <input
@@ -60,7 +60,7 @@ export default function LoginForm() {
       </label>
 
       <label className="block">
-        <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+        <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
           Password
         </span>
         <input
@@ -75,7 +75,7 @@ export default function LoginForm() {
       </label>
 
       {error && (
-        <p role="alert" className="font-body text-sm text-red-700">
+        <p role="alert" className="font-body text-sm text-danger">
           {error}
         </p>
       )}

@@ -39,12 +39,12 @@ export default function ViewsChart({
     <div className="grid gap-4 lg:grid-cols-3">
       <Card className="lg:col-span-2">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Page views · last 30 days
           </p>
-          <p className="font-body text-xs text-ink/45">
+          <p className="font-body text-xs text-panel-faint">
             {total.toLocaleString("en-GB")} total · peak{" "}
-            <span className="text-ink/70">{peak.toLocaleString("en-GB")}</span> in a day
+            <span className="text-panel-muted">{peak.toLocaleString("en-GB")}</span> in a day
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export default function ViewsChart({
               >
                 <div
                   className={`w-full transition-colors ${
-                    day.count > 0 ? "bg-ink/70 hover:bg-rose-deep" : "bg-ink/10"
+                    day.count > 0 ? "bg-rose/60 hover:bg-rose" : "bg-panel-high"
                   }`}
                   style={{ height: day.count > 0 ? `max(2px, ${pct}%)` : "2px" }}
                 />
@@ -68,9 +68,9 @@ export default function ViewsChart({
           })}
         </div>
 
-        <div className="mt-3 flex items-baseline justify-between border-t border-ink/10 pt-3">
-          <span className="font-body text-xs text-ink/45">{first?.label}</span>
-          <span className="font-body text-xs text-ink/45">{last?.label}</span>
+        <div className="mt-3 flex items-baseline justify-between border-t border-panel-line pt-3">
+          <span className="font-body text-xs text-panel-faint">{first?.label}</span>
+          <span className="font-body text-xs text-panel-faint">{last?.label}</span>
         </div>
 
         {/* The bars are decorative; this keeps the numbers available to
@@ -81,12 +81,12 @@ export default function ViewsChart({
       </Card>
 
       <Card>
-        <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+        <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
           Top pages
         </p>
 
         {topPages.length === 0 ? (
-          <p className="mt-4 font-body text-sm text-ink/45">
+          <p className="mt-4 font-body text-sm text-panel-faint">
             No page views recorded in the last 30 days.
           </p>
         ) : (
@@ -94,15 +94,15 @@ export default function ViewsChart({
             {topPages.map((page) => (
               <li key={page.path} className="relative overflow-hidden">
                 <div
-                  className="absolute inset-y-0 left-0 bg-rose-deep/15"
+                  className="absolute inset-y-0 left-0 bg-rose/20"
                   style={{ width: `${busiest > 0 ? (page.count / busiest) * 100 : 0}%` }}
                   aria-hidden="true"
                 />
                 <div className="relative flex items-baseline justify-between gap-3 px-2 py-1.5">
-                  <span className="truncate font-body text-sm text-ink/80" title={page.path}>
+                  <span className="truncate font-body text-sm text-panel-text" title={page.path}>
                     {page.path}
                   </span>
-                  <span className="font-body text-xs tabular-nums text-ink/50">
+                  <span className="font-body text-xs tabular-nums text-panel-muted">
                     {page.count.toLocaleString("en-GB")}
                   </span>
                 </div>

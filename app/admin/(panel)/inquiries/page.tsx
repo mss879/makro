@@ -46,7 +46,7 @@ export default async function InquiriesPage() {
       />
 
       {error && (
-        <p role="alert" className="border border-red-200 bg-red-50 px-4 py-3 font-body text-sm text-red-700">
+        <p role="alert" className="border border-danger-line bg-danger-soft px-4 py-3 font-body text-sm text-danger">
           The inquiries could not be loaded: {error.message}
         </p>
       )}

@@ -102,7 +102,7 @@ export default function CoverPicker({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-start gap-4">
-        <div className="relative aspect-[16/10] w-full max-w-xs shrink-0 overflow-hidden border border-ink/10 bg-ink/5">
+        <div className="relative aspect-[16/10] w-full max-w-xs shrink-0 overflow-hidden border border-panel-line bg-panel-high">
           {value ? (
             <Image
               src={unsplash(value, 800)}
@@ -112,7 +112,7 @@ export default function CoverPicker({
               className="object-cover"
             />
           ) : (
-            <span className="absolute inset-0 flex items-center justify-center font-body text-xs text-ink/35">
+            <span className="absolute inset-0 flex items-center justify-center font-body text-xs text-panel-faint">
               No cover yet
             </span>
           )}
@@ -125,15 +125,15 @@ export default function CoverPicker({
             onChange={onFile}
             disabled={busy}
             aria-label="Upload a cover image"
-            className="block w-full cursor-pointer border border-dashed border-ink/20 bg-white/60 p-3 font-body text-xs text-ink/60 transition-colors file:mr-3 file:cursor-pointer file:border file:border-ink/15 file:bg-cream file:px-3 file:py-1.5 file:font-body file:text-xs file:text-ink hover:border-ink/35 disabled:cursor-not-allowed disabled:opacity-50"
+            className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
           />
-          <p className="font-body text-xs text-ink/45">
+          <p className="font-body text-xs text-panel-faint">
             Converted to WebP and resized to 2000px on the long edge; 25 MB in,
             maximum. Replacing a cover deletes the old file when you save.
           </p>
 
           <label className="block">
-            <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+            <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
               Or an image reference
             </span>
             <input
@@ -146,7 +146,7 @@ export default function CoverPicker({
               className={`${inputClass} mt-2`}
             />
           </label>
-          <p className="font-body text-xs text-ink/45">
+          <p className="font-body text-xs text-panel-faint">
             An uploaded cover fills this in for you. Otherwise: a{" "}
             <code className="font-mono text-[0.7rem]">/brand/…</code> asset path or a
             bare Unsplash photo id.
@@ -154,13 +154,13 @@ export default function CoverPicker({
         </div>
       </div>
 
-      {busy && <p className="font-body text-xs text-ink/45">Uploading…</p>}
+      {busy && <p className="font-body text-xs text-panel-faint">Uploading…</p>}
       {error && (
-        <p role="alert" className="font-body text-sm text-red-700">
+        <p role="alert" className="font-body text-sm text-danger">
           {error}
         </p>
       )}
-      {notice && !error && <p className="font-body text-sm text-emerald-700">{notice}</p>}
+      {notice && !error && <p className="font-body text-sm text-success">{notice}</p>}
     </div>
   );
 }

@@ -68,8 +68,8 @@ export default function CardsManager({ cards }: { cards: SelectedWorkCardRow[] }
     <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="font-display text-xl text-ink">Panels</h2>
-          <p className="mt-1 font-body text-xs text-ink/45">
+          <h2 className="font-display text-xl text-panel-text">Panels</h2>
+          <p className="mt-1 font-body text-xs text-panel-faint">
             They scroll past in this order, left to right, between the intro panel and
             the end cap.
             {pending && <span className="ml-2">Saving…</span>}
@@ -85,12 +85,12 @@ export default function CardsManager({ cards }: { cards: SelectedWorkCardRow[] }
       </div>
 
       {error && (
-        <div className="flex items-start justify-between gap-4 border border-red-200 bg-red-50 px-4 py-3">
-          <p className="font-body text-sm text-red-700">{error}</p>
+        <div className="flex items-start justify-between gap-4 border border-danger-line bg-danger-soft px-4 py-3">
+          <p className="font-body text-sm text-danger">{error}</p>
           <button
             type="button"
             onClick={() => setError(null)}
-            className="shrink-0 font-body text-xs uppercase tracking-[0.16em] text-red-700/70 hover:text-red-700"
+            className="shrink-0 font-body text-xs uppercase tracking-[0.16em] text-danger/70 hover:text-danger"
           >
             Dismiss
           </button>
@@ -98,7 +98,7 @@ export default function CardsManager({ cards }: { cards: SelectedWorkCardRow[] }
       )}
 
       {order.length > 0 && publishedCount === 0 && (
-        <p className="border border-amber-300 bg-amber-50 px-4 py-3 font-body text-sm text-ink/70">
+        <p className="border border-warning-line bg-warning-soft px-4 py-3 font-body text-sm text-panel-muted">
           None of these panels are published, so the rail has nothing to scroll
           through. Publish at least one, or switch the whole section off above.
         </p>
@@ -128,13 +128,13 @@ export default function CardsManager({ cards }: { cards: SelectedWorkCardRow[] }
             return (
               <li
                 key={card.id}
-                className="flex items-center gap-4 border border-ink/10 bg-white/70 p-3"
+                className="flex items-center gap-4 border border-panel-line bg-panel-raised p-3"
               >
-                <span className="w-6 shrink-0 text-center font-body text-xs tabular-nums text-ink/35">
+                <span className="w-6 shrink-0 text-center font-body text-xs tabular-nums text-panel-faint">
                   {index + 1}
                 </span>
 
-                <div className="relative aspect-[4/5] w-14 shrink-0 overflow-hidden bg-ink/5">
+                <div className="relative aspect-[4/5] w-14 shrink-0 overflow-hidden bg-panel-high">
                   {card.image && (
                     <Image
                       src={unsplash(card.image)}
@@ -148,7 +148,7 @@ export default function CardsManager({ cards }: { cards: SelectedWorkCardRow[] }
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="truncate font-body text-sm text-ink">
+                    <p className="truncate font-body text-sm text-panel-text">
                       {card.title || card.caption || "Untitled panel"}
                     </p>
                     <Badge tone={card.kind === "cover" ? "accent" : "neutral"}>
@@ -160,7 +160,7 @@ export default function CardsManager({ cards }: { cards: SelectedWorkCardRow[] }
                       <Badge tone="muted">Draft</Badge>
                     )}
                   </div>
-                  <p className="mt-1 truncate font-body text-xs text-ink/40">
+                  <p className="mt-1 truncate font-body text-xs text-panel-faint">
                     {card.kind === "cover" && card.title && card.caption
                       ? `${card.caption} · `
                       : ""}

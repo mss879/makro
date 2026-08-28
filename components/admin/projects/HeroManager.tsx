@@ -19,7 +19,7 @@ const IDLE: ProjectsPageFormState = { ok: false, message: "" };
 function Result({ state }: { state: ProjectsPageFormState }) {
   if (!state.message) return null;
   return (
-    <p className={`font-body text-sm ${state.ok ? "text-ink/60" : "text-red-700"}`}>
+    <p className={`font-body text-sm ${state.ok ? "text-panel-muted" : "text-danger"}`}>
       {state.message}
     </p>
   );
@@ -62,7 +62,7 @@ function SlideEditor({ slide }: { slide?: ProjectsPageHeroSlideRow }) {
         <textarea name="body" rows={3} defaultValue={slide?.body ?? ""} className={inputClass} />
       </Field>
 
-      <label className="flex items-center gap-3 font-body text-sm text-ink/70">
+      <label className="flex items-center gap-3 font-body text-sm text-panel-muted">
         <input type="checkbox" name="published" defaultChecked={slide?.published ?? true} />
         Show this slide on the site
       </label>
@@ -145,15 +145,15 @@ export default function HeroManager({
     <div className="space-y-8">
       <Card>
         <form action={settingsAction} className="space-y-5">
-          <label className="flex items-center gap-3 font-body text-sm text-ink/70">
+          <label className="flex items-center gap-3 font-body text-sm text-panel-muted">
             <input type="checkbox" name="hero_enabled" defaultChecked={enabled} />
             Show the hero on /projects
           </label>
-          <label className="flex items-center gap-3 font-body text-sm text-ink/70">
+          <label className="flex items-center gap-3 font-body text-sm text-panel-muted">
             <input type="checkbox" name="hero_autoplay" defaultChecked={autoplay} />
             Advance slides automatically
           </label>
-          <label className="flex items-center gap-3 font-body text-sm text-ink/70">
+          <label className="flex items-center gap-3 font-body text-sm text-panel-muted">
             <input type="checkbox" name="hero_show_dots" defaultChecked={showDots} />
             Show the slide indicators
           </label>
@@ -184,7 +184,7 @@ export default function HeroManager({
           <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {slide.image && (
-                <div className="relative h-14 w-20 shrink-0 overflow-hidden bg-shell">
+                <div className="relative h-14 w-20 shrink-0 overflow-hidden bg-panel-high">
                   <Image
                     src={unsplash(slide.image, 200)}
                     alt=""
@@ -195,11 +195,11 @@ export default function HeroManager({
                 </div>
               )}
               <div>
-                <p className="font-body text-sm text-ink">
+                <p className="font-body text-sm text-panel-text">
                   Slide {i + 1} · {shapeOf(slide)}
                 </p>
                 {!slide.published && (
-                  <p className="font-body text-xs text-ink/40">Hidden from the site</p>
+                  <p className="font-body text-xs text-panel-faint">Hidden from the site</p>
                 )}
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function HeroManager({
       ))}
 
       <Card>
-        <h2 className="mb-5 font-display text-xl text-ink">Add a slide</h2>
+        <h2 className="mb-5 font-display text-xl text-panel-text">Add a slide</h2>
         <input type="hidden" />
         <SlideEditor />
       </Card>

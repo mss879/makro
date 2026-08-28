@@ -106,7 +106,7 @@ export default function CardDialog({
         type="button"
         aria-label="Close"
         onClick={onClose}
-        className="fixed inset-0 h-full w-full cursor-default bg-ink/40"
+        className="fixed inset-0 h-full w-full cursor-default bg-ink/70"
       />
 
       <form
@@ -114,18 +114,18 @@ export default function CardDialog({
         role="dialog"
         aria-modal="true"
         aria-label={card ? "Edit panel" : "New panel"}
-        className="relative w-full max-w-3xl border border-ink/10 bg-cream p-6 md:p-8"
+        className="relative w-full max-w-3xl border border-panel-line bg-panel p-6 md:p-8"
       >
         {card && <input type="hidden" name="id" value={card.id} />}
 
-        <div className="flex items-start justify-between gap-4 border-b border-ink/10 pb-4">
-          <h2 className="font-display text-2xl text-ink">
+        <div className="flex items-start justify-between gap-4 border-b border-panel-line pb-4">
+          <h2 className="font-display text-2xl text-panel-text">
             {card ? "Edit panel" : "New panel"}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="font-body text-xs uppercase tracking-[0.18em] text-ink/50 transition-colors hover:text-ink"
+            className="font-body text-xs uppercase tracking-[0.18em] text-panel-muted transition-colors hover:text-panel-text"
           >
             Close
           </button>
@@ -134,7 +134,7 @@ export default function CardDialog({
         {(state.message || deleteError) && (
           <p
             role="alert"
-            className="mt-4 border border-red-200 bg-red-50 px-3 py-2 font-body text-sm text-red-700"
+            className="mt-4 border border-danger-line bg-danger-soft px-3 py-2 font-body text-sm text-danger"
           >
             {deleteError ?? state.message}
           </p>
@@ -142,7 +142,7 @@ export default function CardDialog({
 
         {/* ---- kind ---------------------------------------------------- */}
         <fieldset className="mt-5">
-          <legend className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <legend className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Panel type
           </legend>
           <div className="mt-2 grid gap-2 sm:grid-cols-2">
@@ -151,8 +151,8 @@ export default function CardDialog({
                 key={option.value}
                 className={`flex cursor-pointer items-start gap-3 border p-3 transition-colors ${
                   kind === option.value
-                    ? "border-rose-deep bg-rose-deep/[0.06]"
-                    : "border-ink/15 bg-white/70 hover:border-ink/30"
+                    ? "border-rose bg-rose/10"
+                    : "border-panel-line bg-panel-raised hover:border-panel-line-strong"
                 }`}
               >
                 <input
@@ -161,11 +161,11 @@ export default function CardDialog({
                   value={option.value}
                   checked={kind === option.value}
                   onChange={() => setKind(option.value)}
-                  className="mt-0.5 h-4 w-4 accent-rose-deep"
+                  className="mt-0.5 h-4 w-4 accent-rose"
                 />
                 <span>
-                  <span className="block font-body text-sm text-ink">{option.label}</span>
-                  <span className="mt-0.5 block font-body text-xs text-ink/45">
+                  <span className="block font-body text-sm text-panel-text">{option.label}</span>
+                  <span className="mt-0.5 block font-body text-xs text-panel-faint">
                     {option.hint}
                   </span>
                 </span>
@@ -175,7 +175,7 @@ export default function CardDialog({
         </fieldset>
 
         {/* ---- image --------------------------------------------------- */}
-        <div className="mt-6 border-t border-ink/10 pt-5">
+        <div className="mt-6 border-t border-panel-line pt-5">
           <ImageField cardId={card?.id} value={image} onChange={setImage} />
 
           <div className="mt-4">
@@ -197,7 +197,7 @@ export default function CardDialog({
         </div>
 
         {/* ---- caption ------------------------------------------------- */}
-        <div className="mt-6 border-t border-ink/10 pt-5">
+        <div className="mt-6 border-t border-panel-line pt-5">
           <Field
             label="Caption"
             hint={
@@ -219,12 +219,12 @@ export default function CardDialog({
 
         {/* ---- cover-only copy ----------------------------------------- */}
         <div
-          className={`mt-6 border-t border-ink/10 pt-5 ${isCover ? "" : "opacity-60"}`}
+          className={`mt-6 border-t border-panel-line pt-5 ${isCover ? "" : "opacity-60"}`}
         >
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Cover panel only
           </p>
-          <p className="mt-1.5 font-body text-xs text-ink/45">
+          <p className="mt-1.5 font-body text-xs text-panel-faint">
             {isCover
               ? "Printed over the image on the cover panel."
               : "This panel is a gallery image, so these four are not rendered. They are kept in case you switch it back to a cover."}
@@ -278,8 +278,8 @@ export default function CardDialog({
         </div>
 
         {/* ---- link ---------------------------------------------------- */}
-        <div className="mt-6 border-t border-ink/10 pt-5">
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+        <div className="mt-6 border-t border-panel-line pt-5">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Where the panel links
           </p>
 
@@ -312,10 +312,10 @@ export default function CardDialog({
             </Field>
           </div>
 
-          <p className="mt-3 border border-ink/10 bg-white/70 px-3 py-2 font-body text-xs text-ink/55">
+          <p className="mt-3 border border-panel-line bg-panel-raised px-3 py-2 font-body text-xs text-panel-muted">
             {effectiveHref ? (
               <>
-                This panel links to <span className="font-mono text-ink">{effectiveHref}</span>.
+                This panel links to <span className="font-mono text-panel-text">{effectiveHref}</span>.
               </>
             ) : (
               "Both empty — this panel renders as a picture, with nothing to click."
@@ -324,24 +324,24 @@ export default function CardDialog({
         </div>
 
         {/* ---- published ----------------------------------------------- */}
-        <label className="mt-6 flex items-start gap-3 border border-ink/10 bg-white/70 px-4 py-3">
+        <label className="mt-6 flex items-start gap-3 border border-panel-line bg-panel-raised px-4 py-3">
           <input
             type="checkbox"
             name="published"
             checked={published}
             onChange={(event) => setPublished(event.target.checked)}
-            className="mt-0.5 h-4 w-4 accent-rose-deep"
+            className="mt-0.5 h-4 w-4 accent-rose"
           />
           <span>
-            <span className="block font-body text-sm text-ink">Published</span>
-            <span className="block font-body text-xs text-ink/45">
+            <span className="block font-body text-sm text-panel-text">Published</span>
+            <span className="block font-body text-xs text-panel-faint">
               Unpublished panels stay here but are left out of the rail. Use this to
               draft a replacement alongside the panel it will succeed.
             </span>
           </span>
         </label>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-ink/10 pt-5">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-panel-line pt-5">
           {card ? (
             <button
               type="button"

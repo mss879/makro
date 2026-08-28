@@ -31,7 +31,7 @@ import type { BlogSection } from "@/lib/supabase/types";
  */
 
 const addSectionClass =
-  "inline-flex items-center gap-1.5 border border-dashed border-ink/25 px-3 py-2 font-body text-sm text-ink/60 transition-colors hover:border-rose-deep hover:text-rose-deep";
+  "inline-flex items-center gap-1.5 border border-dashed border-panel-line-strong px-3 py-2 font-body text-sm text-panel-muted transition-colors hover:border-rose hover:text-rose";
 
 type SectionRow = {
   key: string;
@@ -92,7 +92,7 @@ export default function SectionsEditor({ initial }: { initial: BlogSection[] }) 
   return (
     <div className="space-y-4">
       {rows.length === 0 && (
-        <p className="border border-dashed border-ink/15 px-4 py-8 text-center font-body text-sm text-ink/45">
+        <p className="border border-dashed border-panel-line px-4 py-8 text-center font-body text-sm text-panel-faint">
           No sections yet. Each one becomes a headed block on the article page.
         </p>
       )}
@@ -102,12 +102,12 @@ export default function SectionsEditor({ initial }: { initial: BlogSection[] }) 
         const duplicate = heading !== "" && (counts.get(heading) ?? 0) > 1;
 
         return (
-          <div key={row.key} className="space-y-4 border border-ink/15 bg-cream/50 p-4">
+          <div key={row.key} className="space-y-4 border border-panel-line bg-panel/50 p-4">
             <input type="hidden" name="section_key" value={row.key} />
 
             <div className="flex items-start gap-2">
               <div className="min-w-0 flex-1">
-                <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+                <span className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
                   Section {index + 1} — heading
                 </span>
                 <input
@@ -120,7 +120,7 @@ export default function SectionsEditor({ initial }: { initial: BlogSection[] }) 
                   className={`${inputClass} mt-2`}
                 />
                 {duplicate && (
-                  <p className="mt-1.5 font-body text-xs text-red-700">
+                  <p className="mt-1.5 font-body text-xs text-danger">
                     Another section already uses this heading — headings must be
                     unique within an article.
                   </p>
@@ -161,10 +161,10 @@ export default function SectionsEditor({ initial }: { initial: BlogSection[] }) 
             </div>
 
             <div>
-              <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+              <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
                 Paragraphs
               </p>
-              <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+              <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
                 One block per paragraph, in the order they should read.
               </p>
               <StringList
@@ -178,10 +178,10 @@ export default function SectionsEditor({ initial }: { initial: BlogSection[] }) 
             </div>
 
             <div>
-              <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+              <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
                 Bullets — optional
               </p>
-              <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+              <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
                 Rendered as a list under the paragraphs. Leave empty for a
                 prose-only section; each bullet must be distinct from the others.
               </p>

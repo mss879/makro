@@ -52,7 +52,7 @@ export default function SlugList({
         ))}
       </datalist>
 
-      {rows.length === 0 && <p className="font-body text-xs text-ink/40">{emptyLabel}</p>}
+      {rows.length === 0 && <p className="font-body text-xs text-panel-faint">{emptyLabel}</p>}
 
       {rows.map((row, index) => {
         const value = row.value.trim();
@@ -119,7 +119,7 @@ export default function SlugList({
             </div>
 
             {unknown && (
-              <p className="mt-1 font-body text-xs text-amber-700">
+              <p className="mt-1 font-body text-xs text-warning">
                 No published entry with that slug right now — saved anyway, and it
                 starts linking as soon as one exists.
               </p>
@@ -130,7 +130,7 @@ export default function SlugList({
 
       <button
         type="button"
-        className="inline-flex items-center gap-1.5 border border-dashed border-ink/25 px-3 py-1.5 font-body text-xs text-ink/60 transition-colors hover:border-rose-deep hover:text-rose-deep"
+        className="inline-flex items-center gap-1.5 border border-dashed border-panel-line-strong px-3 py-1.5 font-body text-xs text-panel-muted transition-colors hover:border-rose hover:text-rose"
         onClick={() => {
           seq.current += 1;
           setRows((prev) => [...prev, { key: `row-${seq.current}`, value: "" }]);

@@ -58,7 +58,7 @@ export default async function SelectedWorkPage() {
       <div className="space-y-8">
         {heading}
         <Card>
-          <p className="font-body text-sm text-red-700">
+          <p className="font-body text-sm text-danger">
             The Selected Work section could not be loaded: {failure.message}
           </p>
         </Card>

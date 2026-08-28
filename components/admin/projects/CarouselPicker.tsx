@@ -21,7 +21,7 @@ export type PickableProject = {
 function Result({ state }: { state: ProjectsPageFormState }) {
   if (!state.message) return null;
   return (
-    <p className={`font-body text-sm ${state.ok ? "text-ink/60" : "text-red-700"}`}>
+    <p className={`font-body text-sm ${state.ok ? "text-panel-muted" : "text-danger"}`}>
       {state.message}
     </p>
   );
@@ -82,7 +82,7 @@ export default function CarouselPicker({
     <div className="space-y-8">
       <Card>
         <form action={settingsAction} className="space-y-5">
-          <label className="flex items-center gap-3 font-body text-sm text-ink/70">
+          <label className="flex items-center gap-3 font-body text-sm text-panel-muted">
             <input type="checkbox" name="carousel_enabled" defaultChecked={enabled} />
             Show the carousel on /projects
           </label>
@@ -102,15 +102,15 @@ export default function CarouselPicker({
       </Card>
 
       <Card>
-        <h2 className="font-display text-xl text-ink">In the carousel</h2>
-        <p className="mt-2 font-body text-sm text-ink/50">
+        <h2 className="font-display text-xl text-panel-text">In the carousel</h2>
+        <p className="mt-2 font-body text-sm text-panel-muted">
           Each card shows the project&rsquo;s own cover image, name, location and the first four
           of its specs. Edit those on the project itself.
         </p>
 
         <form action={selectionAction} className="mt-6 space-y-3">
           {chosen.length === 0 && (
-            <p className="font-body text-sm text-ink/40">
+            <p className="font-body text-sm text-panel-faint">
               Nothing selected — the carousel will not render.
             </p>
           )}
@@ -120,14 +120,14 @@ export default function CarouselPicker({
             return (
               <div
                 key={id}
-                className="flex flex-wrap items-center justify-between gap-3 border border-ink/10 px-4 py-3"
+                className="flex flex-wrap items-center justify-between gap-3 border border-panel-line px-4 py-3"
               >
                 <input type="hidden" name="project_id" value={id} />
                 <div>
-                  <p className="font-body text-sm text-ink">
+                  <p className="font-body text-sm text-panel-text">
                     {i + 1}. {project?.name ?? "Unknown project"}
                   </p>
-                  <p className="font-body text-xs text-ink/45">
+                  <p className="font-body text-xs text-panel-faint">
                     {project?.city}
                     {project && !project.published && " · draft, will not appear publicly"}
                   </p>
@@ -173,19 +173,19 @@ export default function CarouselPicker({
       </Card>
 
       <Card>
-        <h2 className="font-display text-xl text-ink">Available projects</h2>
+        <h2 className="font-display text-xl text-panel-text">Available projects</h2>
         {unchosen.length === 0 ? (
-          <p className="mt-4 font-body text-sm text-ink/40">Every project is already in the carousel.</p>
+          <p className="mt-4 font-body text-sm text-panel-faint">Every project is already in the carousel.</p>
         ) : (
           <ul className="mt-4 space-y-2">
             {unchosen.map((project) => (
               <li
                 key={project.id}
-                className="flex flex-wrap items-center justify-between gap-3 border border-ink/10 px-4 py-3"
+                className="flex flex-wrap items-center justify-between gap-3 border border-panel-line px-4 py-3"
               >
                 <div>
-                  <p className="font-body text-sm text-ink">{project.name}</p>
-                  <p className="font-body text-xs text-ink/45">
+                  <p className="font-body text-sm text-panel-text">{project.name}</p>
+                  <p className="font-body text-xs text-panel-faint">
                     {project.city} · {project.status}
                     {!project.published && " · draft"}
                   </p>
@@ -201,7 +201,7 @@ export default function CarouselPicker({
             ))}
           </ul>
         )}
-        <p className="mt-4 font-body text-xs text-ink/40">
+        <p className="mt-4 font-body text-xs text-panel-faint">
           Adding or reordering here is not saved until you press “Save carousel” above.
         </p>
       </Card>

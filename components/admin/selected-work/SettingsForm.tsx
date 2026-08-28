@@ -36,7 +36,11 @@ function HeadingPreview({
   const empty = !before && !highlight && !after;
 
   return (
-    <div className="border border-ink/10 bg-ink px-5 py-6">
+    // Deliberately NOT on the panel's dark tokens: this is a live preview of
+    // how the heading renders on the HOME PAGE, whose Selected Work band is
+    // ink with bone type. It has to keep the site's colours to be a preview
+    // at all — leave bg-ink / text-bone alone here.
+    <div className="border border-panel-line bg-ink px-5 py-6">
       <p className="font-body text-[0.65rem] uppercase tracking-[0.22em] text-bone/40">
         Preview
       </p>
@@ -74,8 +78,8 @@ export default function SettingsForm({ copy }: { copy: SelectedWorkCopy }) {
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
         <div>
-          <h2 className="font-display text-xl text-ink">Intro panel</h2>
-          <p className="mt-1 font-body text-xs text-ink/45">
+          <h2 className="font-display text-xl text-panel-text">Intro panel</h2>
+          <p className="mt-1 font-body text-xs text-panel-faint">
             The first thing in the rail, before the panels start.
           </p>
         </div>
@@ -105,12 +109,12 @@ export default function SettingsForm({ copy }: { copy: SelectedWorkCopy }) {
         </div>
 
         {/* ---- the split heading -------------------------------------- */}
-        <div className="space-y-4 border border-ink/10 bg-cream/60 p-4">
+        <div className="space-y-4 border border-panel-line bg-panel/60 p-4">
           <div>
-            <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+            <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
               Heading
             </p>
-            <p className="mt-1.5 font-body text-xs text-ink/45">
+            <p className="mt-1.5 font-body text-xs text-panel-faint">
               One sentence in three fields, because the highlighted words sit in the
               middle of it. They are joined exactly as typed — so keep the spaces:
               “A portfolio built on&nbsp;” ends with one, “, not haste.” starts with a
@@ -142,7 +146,7 @@ export default function SettingsForm({ copy }: { copy: SelectedWorkCopy }) {
                 value={highlight}
                 onChange={(event) => setHighlight(event.target.value)}
                 placeholder="discipline"
-                className={`${inputClass} border-rose-deep/40 bg-rose-deep/[0.06]`}
+                className={`${inputClass} border-rose/40 bg-rose/10`}
               />
             </Field>
 
@@ -214,8 +218,8 @@ export default function SettingsForm({ copy }: { copy: SelectedWorkCopy }) {
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
         <div>
-          <h2 className="font-display text-xl text-ink">End cap</h2>
-          <p className="mt-1 font-body text-xs text-ink/45">
+          <h2 className="font-display text-xl text-panel-text">End cap</h2>
+          <p className="mt-1 font-body text-xs text-panel-faint">
             The last panel in the rail, after every card.
           </p>
         </div>
@@ -266,7 +270,7 @@ export default function SettingsForm({ copy }: { copy: SelectedWorkCopy }) {
             role="status"
             aria-live="polite"
             className={`font-body text-sm ${
-              state.ok ? "text-emerald-700" : "text-red-700"
+              state.ok ? "text-success" : "text-danger"
             }`}
           >
             {state.message}

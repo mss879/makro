@@ -26,7 +26,7 @@ export default function PageTabs() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Projects sections" className="flex flex-wrap gap-1 border-b border-ink/10">
+    <nav aria-label="Projects sections" className="flex flex-wrap gap-1 border-b border-panel-line">
       {TABS.map((tab) => {
         // Exact match only. A `startsWith` would light "Projects" up on every
         // one of the others, since they all sit beneath it.
@@ -38,8 +38,8 @@ export default function PageTabs() {
             aria-current={active ? "page" : undefined}
             className={`-mb-px border-b-2 px-4 py-3 font-body text-sm transition-colors ${
               active
-                ? "border-ink text-ink"
-                : "border-transparent text-ink/50 hover:border-ink/20 hover:text-ink"
+                ? "border-panel-line-strong text-panel-text"
+                : "border-transparent text-panel-muted hover:border-panel-line-strong hover:text-panel-text"
             }`}
           >
             {tab.label}

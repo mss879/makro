@@ -21,14 +21,14 @@ import { inputClass } from "@/components/admin/ui";
  * class list resolve by stylesheet order, not by which was appended last.
  */
 const ICON_BASE =
-  "inline-flex h-7 w-7 shrink-0 items-center justify-center border border-ink/15 bg-white font-body text-xs leading-none transition-colors disabled:cursor-not-allowed disabled:opacity-35";
+  "inline-flex h-7 w-7 shrink-0 items-center justify-center border border-panel-line bg-panel-raised font-body text-xs leading-none transition-colors disabled:cursor-not-allowed disabled:opacity-35";
 
-export const iconButtonClass = `${ICON_BASE} text-ink/60 hover:border-rose-deep hover:text-rose-deep`;
+export const iconButtonClass = `${ICON_BASE} text-panel-muted hover:border-rose hover:text-rose`;
 
-export const dangerIconButtonClass = `${ICON_BASE} text-ink/50 hover:border-red-400 hover:text-red-600`;
+export const dangerIconButtonClass = `${ICON_BASE} text-panel-muted hover:border-danger-line hover:text-danger`;
 
 const addButtonClass =
-  "inline-flex items-center gap-1.5 border border-dashed border-ink/25 px-3 py-1.5 font-body text-xs text-ink/60 transition-colors hover:border-rose-deep hover:text-rose-deep";
+  "inline-flex items-center gap-1.5 border border-dashed border-panel-line-strong px-3 py-1.5 font-body text-xs text-panel-muted transition-colors hover:border-rose hover:text-rose";
 
 function useRowKeys() {
   const seq = useRef(0);
@@ -121,7 +121,7 @@ export function StringList({
   return (
     <div className="space-y-2">
       {rows.length === 0 && (
-        <p className="font-body text-xs text-ink/40">{emptyLabel}</p>
+        <p className="font-body text-xs text-panel-faint">{emptyLabel}</p>
       )}
 
       {rows.map((row, index) => (
@@ -189,7 +189,7 @@ export function SpecList({ initial }: { initial: { label: string; value: string 
   return (
     <div className="space-y-2">
       {rows.length === 0 && (
-        <p className="font-body text-xs text-ink/40">
+        <p className="font-body text-xs text-panel-faint">
           No specs yet — these are the At-a-glance pairs on the project page.
         </p>
       )}

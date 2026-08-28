@@ -112,7 +112,7 @@ export default function BlogForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Identity</h2>
+        <h2 className="font-display text-xl text-panel-text">Identity</h2>
 
         <Field
           label="Title"
@@ -172,7 +172,7 @@ export default function BlogForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Publishing</h2>
+        <h2 className="font-display text-xl text-panel-text">Publishing</h2>
 
         <div className="grid gap-5 md:grid-cols-2">
           <Field label="Category" hint="Shown as the card eyebrow and as the article's section in structured data.">
@@ -224,17 +224,17 @@ export default function BlogForm({
           </Field>
         </div>
 
-        <label className="flex items-start gap-3 border border-ink/10 bg-cream/60 px-4 py-3">
+        <label className="flex items-start gap-3 border border-panel-line bg-panel/60 px-4 py-3">
           <input
             type="checkbox"
             name="published"
             checked={published}
             onChange={(event) => setPublished(event.target.checked)}
-            className="mt-0.5 h-4 w-4 accent-rose-deep"
+            className="mt-0.5 h-4 w-4 accent-rose"
           />
           <span>
-            <span className="block font-body text-sm text-ink">Published</span>
-            <span className="block font-body text-xs text-ink/45">
+            <span className="block font-body text-sm text-panel-text">Published</span>
+            <span className="block font-body text-xs text-panel-faint">
               Unpublished articles are invisible to the public site and to search
               engines. Leave this off until the copy is final.
             </span>
@@ -245,8 +245,8 @@ export default function BlogForm({
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-4">
         <div>
-          <h2 className="font-display text-xl text-ink">Cover</h2>
-          <p className="mt-1 font-body text-xs text-ink/45">
+          <h2 className="font-display text-xl text-panel-text">Cover</h2>
+          <p className="mt-1 font-body text-xs text-panel-faint">
             Used by the article hero, the /insights cards, the home-page preview
             and the social share image.
           </p>
@@ -256,7 +256,7 @@ export default function BlogForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Copy</h2>
+        <h2 className="font-display text-xl text-panel-text">Copy</h2>
 
         <Field label="Excerpt" hint="One or two lines — the card summary on /insights.">
           <textarea
@@ -294,8 +294,8 @@ export default function BlogForm({
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-4">
         <div>
-          <h2 className="font-display text-xl text-ink">Sections</h2>
-          <p className="mt-1 font-body text-xs text-ink/45">
+          <h2 className="font-display text-xl text-panel-text">Sections</h2>
+          <p className="mt-1 font-body text-xs text-panel-faint">
             The body of the article. Each section is a heading, its paragraphs
             and — optionally — a bullet list.
           </p>
@@ -305,13 +305,13 @@ export default function BlogForm({
 
       {/* ------------------------------------------------------------- */}
       <Card className="space-y-5">
-        <h2 className="font-display text-xl text-ink">Search &amp; further reading</h2>
+        <h2 className="font-display text-xl text-panel-text">Search &amp; further reading</h2>
 
         <div>
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Keywords
           </p>
-          <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+          <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
             One search phrase per row — the topic this article is meant to own.
           </p>
           <StringList
@@ -324,10 +324,10 @@ export default function BlogForm({
         </div>
 
         <div>
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Related articles
           </p>
-          <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+          <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
             Article slugs, two is the house pattern. Suggestions come from the
             articles that exist now.
           </p>
@@ -342,10 +342,10 @@ export default function BlogForm({
         </div>
 
         <div>
-          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-ink/45">
+          <p className="font-body text-[0.7rem] uppercase tracking-[0.22em] text-panel-faint">
             Related projects
           </p>
-          <p className="mb-3 mt-1.5 font-body text-xs text-ink/45">
+          <p className="mb-3 mt-1.5 font-body text-xs text-panel-faint">
             Project slugs this article should funnel readers toward. Leave empty
             and the sidebar falls back to the whole portfolio.
           </p>
@@ -361,7 +361,7 @@ export default function BlogForm({
       </Card>
 
       {/* ------------------------------------------------------------- */}
-      <div className="sticky bottom-0 -mx-6 border-t border-ink/10 bg-cream/95 px-6 py-4 backdrop-blur md:-mx-10 md:px-10">
+      <div className="sticky bottom-0 -mx-6 border-t border-panel-line bg-panel/95 px-6 py-4 backdrop-blur md:-mx-10 md:px-10">
         <div className="flex flex-wrap items-center gap-3">
           <button type="submit" disabled={busy} className={buttonClass("primary")}>
             {pending ? "Saving…" : isEdit ? "Save changes" : "Create article"}
@@ -398,7 +398,7 @@ export default function BlogForm({
             role="status"
             aria-live="polite"
             className={`mt-3 font-body text-sm ${
-              state.ok && !deleteError ? "text-emerald-700" : "text-red-700"
+              state.ok && !deleteError ? "text-success" : "text-danger"
             }`}
           >
             {deleteError ?? state.message}

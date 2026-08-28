@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { PeakMark } from "@/components/brand/PeakMark";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import ThemeToggle from "@/components/admin/ThemeToggle";
 
 /**
  * Menu order mirrors the workflow, not the schema: an inquiry arrives, gets
@@ -14,6 +15,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 const NAV = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/inquiries", label: "Inquiries" },
+  { href: "/admin/chat", label: "Chat" },
   { href: "/admin/crm", label: "CRM" },
   { href: "/admin/selected-work", label: "Selected Work" },
   { href: "/admin/blog", label: "Blogs" },
@@ -50,14 +52,14 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-ink/10 bg-cream px-5 py-3 md:hidden">
+      <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-panel-line bg-panel px-5 py-3 md:hidden">
         <Link href="/admin" className="flex items-center gap-2">
-          <PeakMark className="h-4 w-auto text-ink" strokeWidth={10} />
-          <span className="font-body text-xs uppercase tracking-[0.2em] text-ink">Makro Admin</span>
+          <PeakMark className="h-4 w-auto text-panel-text" strokeWidth={10} />
+          <span className="font-body text-xs uppercase tracking-[0.2em] text-panel-text">Makro Admin</span>
         </Link>
         <button
           onClick={() => setOpen((v) => !v)}
-          className="font-body text-xs uppercase tracking-[0.18em] text-ink/60"
+          className="font-body text-xs uppercase tracking-[0.18em] text-panel-muted"
         >
           {open ? "Close" : "Menu"}
         </button>
@@ -66,11 +68,11 @@ export default function AdminSidebar() {
       <aside
         className={`${
           open ? "block" : "hidden"
-        } fixed inset-x-0 top-[3.25rem] z-30 border-b border-ink/10 bg-cream px-5 py-4 md:sticky md:top-0 md:block md:h-screen md:w-60 md:shrink-0 md:border-b-0 md:border-r md:px-6 md:py-8`}
+        } fixed inset-x-0 top-[3.25rem] z-30 border-b border-panel-line bg-panel px-5 py-4 md:sticky md:top-0 md:block md:h-screen md:w-60 md:shrink-0 md:border-b-0 md:border-r md:px-6 md:py-8`}
       >
         <Link href="/admin" className="hidden items-center gap-2.5 md:flex">
-          <PeakMark className="h-5 w-auto text-ink" strokeWidth={9} />
-          <span className="font-body text-xs uppercase tracking-[0.2em] text-ink">
+          <PeakMark className="h-5 w-auto text-panel-text" strokeWidth={9} />
+          <span className="font-body text-xs uppercase tracking-[0.2em] text-panel-text">
             Makro Admin
           </span>
         </Link>
@@ -83,8 +85,8 @@ export default function AdminSidebar() {
               onClick={() => setOpen(false)}
               className={`px-3 py-2 font-body text-sm transition-colors ${
                 isActive(item.href)
-                  ? "bg-ink text-cream"
-                  : "text-ink/60 hover:bg-ink/5 hover:text-ink"
+                  ? "bg-rose text-ink"
+                  : "text-panel-muted hover:bg-panel-high hover:text-panel-text"
               }`}
             >
               {item.label}
@@ -92,17 +94,20 @@ export default function AdminSidebar() {
           ))}
         </nav>
 
-        <div className="mt-6 border-t border-ink/10 pt-4 md:absolute md:bottom-8 md:left-6 md:right-6 md:mt-0">
+        <div className="mt-6 border-t border-panel-line pt-4 md:absolute md:bottom-8 md:left-6 md:right-6 md:mt-0">
+          <div className="mb-3">
+            <ThemeToggle />
+          </div>
           <Link
             href="/"
-            className="block px-3 py-2 font-body text-xs text-ink/50 transition-colors hover:text-ink"
+            className="block px-3 py-2 font-body text-xs text-panel-muted transition-colors hover:text-panel-text"
           >
             View site →
           </Link>
           <button
             onClick={signOut}
             disabled={signingOut}
-            className="block w-full px-3 py-2 text-left font-body text-xs text-ink/50 transition-colors hover:text-rose-deep disabled:opacity-50"
+            className="block w-full px-3 py-2 text-left font-body text-xs text-panel-muted transition-colors hover:text-rose disabled:opacity-50"
           >
             {signingOut ? "Signing out…" : "Sign out"}
           </button>

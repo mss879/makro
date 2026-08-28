@@ -52,20 +52,20 @@ export default function SectionToggle({ enabled }: { enabled: boolean }) {
   return (
     <div
       className={`border-2 p-6 transition-colors ${
-        on ? "border-ink bg-white" : "border-ink/25 bg-ink/[0.03]"
+        on ? "border-rose/40 bg-rose/10" : "border-panel-line bg-panel-raised"
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0 max-w-xl">
-          <h2 className="font-display text-2xl text-ink">
+          <h2 className="font-display text-2xl text-panel-text">
             Show Selected Work on the home page
           </h2>
-          <p className="mt-2 font-body text-sm text-ink/60">
+          <p className="mt-2 font-body text-sm text-panel-muted">
             {on
               ? "ON — the black, side-scrolling Selected Work section is live on the home page, between the brand statement and what follows it."
               : "OFF — the section is removed from the home page entirely. Visitors scroll straight past it, and none of the copy or panels below are published anywhere."}
           </p>
-          <p className="mt-2 font-body text-xs text-ink/45">
+          <p className="mt-2 font-body text-xs text-panel-faint">
             This saves the moment you click it and takes effect on the live site
             immediately. The copy and panels below are kept either way, so switching
             it back on restores exactly what is here now.
@@ -75,7 +75,7 @@ export default function SectionToggle({ enabled }: { enabled: boolean }) {
         <div className="flex shrink-0 items-center gap-4">
           <span
             className={`font-body text-xs uppercase tracking-[0.22em] ${
-              on ? "text-ink" : "text-ink/40"
+              on ? "text-panel-text" : "text-panel-faint"
             }`}
           >
             {pending ? "Saving…" : on ? "On" : "Off"}
@@ -93,13 +93,13 @@ export default function SectionToggle({ enabled }: { enabled: boolean }) {
             onClick={toggle}
             disabled={pending}
             className={`relative inline-flex h-9 w-[4.5rem] shrink-0 items-center border transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
-              on ? "border-ink bg-ink" : "border-ink/30 bg-white"
+              on ? "border-rose bg-rose" : "border-panel-line-strong bg-panel-high"
             }`}
           >
             <span
               aria-hidden="true"
               className={`absolute top-1 h-7 w-8 transition-all ${
-                on ? "left-[2.125rem] bg-rose-deep" : "left-1 bg-ink/25"
+                on ? "left-[2.125rem] bg-ink" : "left-1 bg-panel-faint"
               }`}
             />
           </button>
@@ -107,7 +107,7 @@ export default function SectionToggle({ enabled }: { enabled: boolean }) {
       </div>
 
       {error && (
-        <p role="alert" className="mt-4 border border-red-200 bg-red-50 px-3 py-2 font-body text-sm text-red-700">
+        <p role="alert" className="mt-4 border border-danger-line bg-danger-soft px-3 py-2 font-body text-sm text-danger">
           {error}
         </p>
       )}
