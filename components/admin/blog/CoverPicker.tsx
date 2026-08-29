@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { inputClass } from "@/components/admin/ui";
 import { unsplash } from "@/lib/images";
+import ImageSpecHint from "@/components/admin/ImageSpecHint";
 
 /**
  * The `cover` column — a single image, not a gallery, so there is no join table
@@ -127,7 +128,8 @@ export default function CoverPicker({
             aria-label="Upload a cover image"
             className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
           />
-          <p className="font-body text-xs text-panel-faint">
+          <ImageSpecHint spec="blogCover" className="mb-3" />
+            <p className="font-body text-xs text-panel-faint">
             Converted to WebP at high quality, resized only if wider than 3840px; 50 MB in,
             maximum. Replacing a cover deletes the old file when you save.
           </p>

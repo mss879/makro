@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { MAX_PROJECT_IMAGES } from "@/lib/supabase/config";
+import ImageSpecHint from "@/components/admin/ImageSpecHint";
 import { Badge } from "@/components/admin/ui";
 import { dangerIconButtonClass, iconButtonClass } from "./RepeatableList";
 import {
@@ -235,8 +236,18 @@ export default function ImageManager({
         <p className="mt-2 font-body text-xs text-panel-faint">
           {atCap
             ? `Maximum of ${MAX_PROJECT_IMAGES} images reached — delete one before uploading another.`
-            : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP at high quality and resized only if wider than 3840px; 50 MB in, maximum.`}
+            : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP at high quality and resized only if wider than 3840px; 50 MB in, maximum. A smaller file is never enlarged, so upload the original rather than an export you have already shrunk.`}
         </p>
+      </div>
+
+      {/* Two specs, because the first image has two jobs. Everything in the
+          gallery band is shown uncropped at its own shape — but image one is
+          also the project's cover, and the cards crop it. Showing only the
+          relaxed rule would quietly set them up to lose the sides of the one
+          image that appears everywhere else on the site. */}
+      <div className="space-y-3">
+        <ImageSpecHint spec="projectGallery" />
+        {images.length === 0 && <ImageSpecHint spec="projectCover" />}
       </div>
 
       {busy && <p className="font-body text-xs text-panel-faint">Working…</p>}

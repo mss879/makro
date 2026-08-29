@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { unsplash } from "@/lib/images";
 import { Field, inputClass } from "@/components/admin/ui";
+import ImageSpecHint from "@/components/admin/ImageSpecHint";
 
 /**
  * The one image a Selected Work panel carries.
@@ -205,12 +206,25 @@ export default function ImageField({
           </div>
         </details>
 
+        {/* One field, three slots — a Selected Work panel, the /projects hero
+            and a project's own hero all crop differently and want different
+            shapes, so the guidance is keyed off the same `target` that decides
+            the bucket rather than written as one sentence that fits none of
+            them. */}
+        <ImageSpecHint
+          spec={
+            target === "selected-work"
+              ? "selectedWork"
+              : target === "projects-page"
+                ? "projectsPageHero"
+                : "projectHero"
+          }
+        />
+
         <p className="font-body text-xs leading-relaxed text-panel-faint">
-          Uploads are converted to WebP at high quality, resized only if wider than 3840px;
-          50 MB in, maximum.{" "}
-          {target === "selected-work"
-            ? "Panels are cropped to a tall 4:5 frame, so shoot or pick accordingly."
-            : "This one runs full-bleed behind the heading, so pick a wide shot with room at the bottom for type."}
+          Uploads are converted to WebP at high quality, resized only if wider
+          than 3840px; 50 MB in, maximum. A smaller file is never enlarged, so
+          upload the original rather than an export you have already shrunk.
         </p>
 
         {busy && <p className="font-body text-xs text-panel-faint">Uploading…</p>}
