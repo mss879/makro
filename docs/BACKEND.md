@@ -26,7 +26,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon / public key>
 SUPABASE_SERVICE_ROLE_KEY=<service_role key — server only, never commit>
 PAGEVIEW_HASH_SALT=<any long random string>
-NEXT_PUBLIC_SITE_URL=https://makrodevelopers.lk
+NEXT_PUBLIC_SITE_URL=https://makrodevelopers.com
 ```
 
 Generate the salt with:

@@ -1,6 +1,6 @@
 # Makro Developers — Website SEO & Architecture Handover
 
-**Site:** https://makrodevelopers.lk
+**Site:** https://makrodevelopers.com
 **Prepared:** July 2026
 **Stack:** Next.js 16 (App Router) · React 19 · Statically generated (all pages pre-rendered as HTML)
 
@@ -13,7 +13,7 @@ This document is the complete reference for the website's structure, search-engi
 The site is organised into **three content pillars, one conversion point**:
 
 ```
-makrodevelopers.lk
+makrodevelopers.com
 │
 ├── TRUST PILLAR — who we are and how we work
 │   ├── /about               About Us
@@ -78,8 +78,8 @@ Generated from `app/robots.ts`:
 User-Agent: *
 Allow: /
 
-Host: https://makrodevelopers.lk
-Sitemap: https://makrodevelopers.lk/sitemap.xml
+Host: https://makrodevelopers.com
+Sitemap: https://makrodevelopers.com/sitemap.xml
 ```
 
 All pages are open to all crawlers; the sitemap is declared so search engines discover every URL immediately.
@@ -176,7 +176,7 @@ Every schema is emitted as JSON-LD `<script>` tags — the format Google explici
 | `LocalBusiness` + `RealEstateAgent` | `/contact` | Local-SEO anchor: address, phone, email, opening hours (Mon–Fri 9:00–18:00), price range. Supports Google Business Profile and map-pack visibility. |
 | `WebPage` | `/approach`, `/sustainability`, `/careers`, legal pages | Baseline typed identity connected to the site entity. |
 
-**Entity linking:** the Organization is declared once with the stable ID `https://makrodevelopers.lk/#organization`; every other schema references it (`@id`), so Google sees one coherent entity rather than fragments.
+**Entity linking:** the Organization is declared once with the stable ID `https://makrodevelopers.com/#organization`; every other schema references it (`@id`), so Google sees one coherent entity rather than fragments.
 
 **Validation:** paste any page URL into https://search.google.com/test/rich-results after launch.
 
@@ -234,7 +234,7 @@ Every page is linked to and from other pages **by editorial intent, not randomly
 
 ## 7. Post-Launch Checklist (for the client)
 
-1. **Google Search Console** — verify the domain, submit `https://makrodevelopers.lk/sitemap.xml`.
+1. **Google Search Console** — verify the domain, submit `https://makrodevelopers.com/sitemap.xml`.
 2. **Google Business Profile** — create/claim the Colombo 05 head-office listing; keep name, address, phone identical to the site (the LocalBusiness schema mirrors these).
 3. **Analytics** — add GA4 (or equivalent) before launch.
 4. **Social profiles** — the footer's Instagram/LinkedIn/Facebook links are placeholders (`#`). Once live profiles exist, update `SOCIALS` in `lib/site.ts` and add the profile URLs to a `sameAs` array in `organizationSchema()` (`lib/seo.ts`).

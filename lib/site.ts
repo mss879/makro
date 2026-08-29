@@ -1,3 +1,32 @@
+/**
+ * Resolves the canonical origin, defaulting to the live domain.
+ *
+ * NEXT_PUBLIC_SITE_URL exists so a staging or preview deployment can advertise
+ * its own origin instead of claiming to be production. It is deliberately
+ * NARROW: only a well-formed `https://` origin is honoured.
+ *
+ * That guard is the whole point. This variable is set to http://localhost:3000
+ * in local .env files, and without the check a production build run from a
+ * developer machine would ship `<link rel="canonical" href="http://localhost:3000/...">`
+ * on every page — an error that builds green, deploys clean, and quietly tells
+ * Google the whole site lives on a host it cannot reach. Anything that is not
+ * an https origin falls back to the real domain, so the failure mode is
+ * "ignored the override", never "published the wrong domain".
+ */
+function canonicalOrigin(): string {
+  const PRODUCTION = "https://makrodevelopers.com";
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!raw) return PRODUCTION;
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "https:") return PRODUCTION;
+    // origin drops any path, query or trailing slash the variable carried.
+    return url.origin;
+  } catch {
+    return PRODUCTION;
+  }
+}
+
 export const SITE = {
   name: "Makro Developers",
   legal: "Makro Developers (Pvt) Ltd",
@@ -8,7 +37,13 @@ export const SITE = {
   email: "info@makrodevelopers.com",
   phone: "+94 707 21 21 21",
   address: "10, Esther Avenue, Park Road, Colombo 05",
-  url: "https://makrodevelopers.lk",
+  /**
+   * Canonical origin. Everything SEO-facing derives from this one string —
+   * canonical links, the sitemap, robots.txt, Open Graph URLs and every
+   * schema.org @id — so it has to be the origin the site is actually served
+   * from, with no trailing slash.
+   */
+  url: canonicalOrigin(),
 };
 
 export const NAV = [
