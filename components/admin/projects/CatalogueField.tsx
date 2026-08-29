@@ -16,7 +16,7 @@ import { useState } from "react";
 
 const STATUS_FALLBACK: Record<number, string> = {
   401: "Your admin session has expired — sign in again, then retry the upload.",
-  413: "That file is larger than 25 MB.",
+  413: "That file is larger than 50 MB.",
   415: "That file is not a PDF.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -147,7 +147,7 @@ export default function CatalogueField({
       <input type="hidden" name="catalogue_name" value={name} />
 
       <p className="font-body text-xs leading-relaxed text-panel-faint">
-        PDF only, 25 MB maximum. Visitors give an email address before it
+        PDF only, 50 MB maximum. Visitors give an email address before it
         downloads, and that address goes to the Email List tagged with this
         project.
       </p>

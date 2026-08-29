@@ -89,7 +89,7 @@ export default function ProjectsCarousel({
             <article
               key={project.slug}
               data-card
-              className="w-[85vw] shrink-0 snap-start border border-hair bg-cream sm:w-[420px]"
+              className="w-[85vw] shrink-0 snap-start border border-hair bg-paper sm:w-[420px]"
             >
               <Link href={`/projects/${project.slug}`} className="group block">
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-shell">

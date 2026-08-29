@@ -56,7 +56,7 @@ export default function Services() {
           </Reveal>
         </div>
 
-        {/* Image cards on the cream field. The imagery stays fully visible
+        {/* Image cards on the paper field. The imagery stays fully visible
             (client direction — no dark hover-reveal); a bottom scrim keeps
             the text legible. Title and body live in fixed-height rows so
             both cards align horizontally regardless of text length. */}

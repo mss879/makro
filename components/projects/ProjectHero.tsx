@@ -45,7 +45,16 @@ export default function ProjectHero({ project }: { project: Project }) {
   );
 
   return (
-    <section ref={ref} className="relative flex min-h-[90vh] items-end overflow-hidden pb-16 pt-40">
+    /* 100svh, not 90vh (client, Aug 2026: "there's a gap — make the image fit
+       the screen"). At 90vh the cover stopped ~90px above the fold on a laptop
+       and the next section's ground showed as a band under it, so the hero read
+       as a picture that had not quite loaded rather than a full-bleed plate.
+       svh rather than vh so mobile browsers measure against the SMALL viewport
+       — with dvh the hero resizes as the URL bar retracts, which restarts the
+       scrub; with vh it sits taller than the visible area and the headline is
+       cropped behind the browser chrome. Matches ProjectsPageHero, which was
+       already 100svh and already fit. */
+    <section ref={ref} className="relative flex min-h-[100svh] items-end overflow-hidden pb-16 pt-40">
       {/* No art yet means NO image, not a stand-in. This used to fall through
           to a shared placeholder, which is fine until a second project exists
           — then every imageless development wears the first one's building as
@@ -63,7 +72,14 @@ export default function ProjectHero({ project }: { project: Project }) {
             alt={project.name}
             fill
             priority
-            sizes="100vw"
+            /* 120vw, not 100vw. The cover is set to scale 1.2 and scrubs back
+               to 1 as you scroll, so at the moment it is first seen — the LCP
+               frame, at the top of the page — it is painted 20% wider than the
+               viewport. `sizes` is how the browser chooses from srcset, and it
+               cannot see the transform: at 100vw a phone was picking the
+               1200px candidate for a slot being displayed at ~1400 device px
+               and upscaling the difference. */
+            sizes="120vw"
             className="img-warm object-cover"
           />
         )}

@@ -7,7 +7,7 @@ import { pageMetadata, breadcrumbSchema, projectSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import ProjectHero from "@/components/projects/ProjectHero";
 import CatalogueDownload from "@/components/projects/CatalogueDownload";
-import ParallaxImage from "@/components/ui/ParallaxImage";
+import ProjectGallery from "@/components/projects/ProjectGallery";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import { PeakMark } from "@/components/brand/PeakMark";
@@ -210,29 +210,11 @@ export default async function ProjectDetailPage({
             <span className="line-hair w-10" />
             <span className="eyebrow text-rose-deep">Gallery</span>
           </div>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-6">
-            <ParallaxImage
-              id={project.gallery[0]}
-              alt={`${project.name} — view 1`}
-              treatment="warm"
-              className="aspect-[16/10] md:col-span-4"
-              sizes="66vw"
-            />
-            <ParallaxImage
-              id={project.gallery[1] ?? project.cover}
-              alt={`${project.name} — view 2`}
-              treatment="warm"
-              className="aspect-[3/4] md:col-span-2 md:row-span-2"
-              sizes="33vw"
-            />
-            <ParallaxImage
-              id={project.gallery[2] ?? project.cover}
-              alt={`${project.name} — view 3`}
-              treatment="mono"
-              className="aspect-[16/10] md:col-span-4"
-              sizes="66vw"
-            />
-          </div>
+          {/* Every uploaded image, at its own aspect — see ProjectGallery for
+              why this is no longer three fixed frames. The `mono` treatment
+              that used to sit on the third frame is gone with them: B&W is a
+              black-section device in this brand, and this band is light. */}
+          <ProjectGallery images={project.gallery} name={project.name} />
         </div>
       </section>
       )}

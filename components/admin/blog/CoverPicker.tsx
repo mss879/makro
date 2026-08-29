@@ -24,7 +24,7 @@ import { unsplash } from "@/lib/images";
 const STATUS_FALLBACK: Record<number, string> = {
   400: "That upload target was rejected — reload the page and try again.",
   401: "Your admin session has expired — sign in again, then retry the upload.",
-  413: "That image is larger than 25 MB.",
+  413: "That image is larger than 50 MB.",
   415: "That file could not be read as an image.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -128,7 +128,7 @@ export default function CoverPicker({
             className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
           />
           <p className="font-body text-xs text-panel-faint">
-            Converted to WebP and resized to 2000px on the long edge; 25 MB in,
+            Converted to WebP at high quality, resized only if wider than 3840px; 50 MB in,
             maximum. Replacing a cover deletes the old file when you save.
           </p>
 

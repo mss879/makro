@@ -10,7 +10,7 @@ import { Field, inputClass } from "@/components/admin/ui";
  *
  * Upload goes to POST /api/admin/upload with `bucket: "selected-work"`, which
  * is the only place that touches the bucket: it converts whatever is picked to
- * WebP, caps the long edge at 2000px and returns the public URL. That URL is
+ * WebP, caps the long edge at 3840px and returns the public URL. That URL is
  * what lands in the field — the column stores the full URL, never a storage key.
  *
  * The field itself stays a plain text input rather than hiding behind the
@@ -22,7 +22,7 @@ import { Field, inputClass } from "@/components/admin/ui";
 /** Used only when the route replies without a JSON body of its own. */
 const STATUS_FALLBACK: Record<number, string> = {
   401: "Your admin session has expired — sign in again, then retry the upload.",
-  413: "That image is larger than 25 MB.",
+  413: "That image is larger than 50 MB.",
   415: "That file could not be read as an image.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -206,8 +206,8 @@ export default function ImageField({
         </details>
 
         <p className="font-body text-xs leading-relaxed text-panel-faint">
-          Uploads are converted to WebP and resized to 2000px on the long edge;
-          25 MB in, maximum.{" "}
+          Uploads are converted to WebP at high quality, resized only if wider than 3840px;
+          50 MB in, maximum.{" "}
           {target === "selected-work"
             ? "Panels are cropped to a tall 4:5 frame, so shoot or pick accordingly."
             : "This one runs full-bleed behind the heading, so pick a wide shot with room at the bottom for type."}

@@ -18,7 +18,7 @@ function isResolved(id: string): boolean {
   return id.startsWith("/") || id.startsWith("http");
 }
 
-export function unsplash(id: string | null | undefined, w = 1600, q = 80): string {
+export function unsplash(id: string | null | undefined, w = 1600, q = 90): string {
   if (!id) return PLACEHOLDER;
   if (isResolved(id)) return id;
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=${q}`;

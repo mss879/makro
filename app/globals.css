@@ -34,15 +34,30 @@
   --font-display: var(--font-marcellus), Georgia, "Times New Roman", serif;
   --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
-  /* Warm cream — light-section surface (client direction, July 2026:
-     softer than pure white, in the family of the normcph.com reference
-     but deepened a step so it unmistakably reads cream, not white).
-     Pure white (--color-bone) remains for text on dark surfaces. */
-  --color-cream: #f2ecdc;
+  /* ---------- Light-section surfaces ----------
+     The ground under every `.section-light`. Off-white GREY, not cream
+     (client direction, Aug 2026): the warm cream read too yellow next to
+     the rose gold and the photography, so the light sections move to a
+     near-neutral grey with only a trace of warmth left in it — enough that
+     it still sits in the same family as the rose, never enough to read as
+     a colour. Pure white (--color-bone) stays a text colour on dark
+     surfaces; it is never a page ground.
 
-  /* Warm paper tint for panels/cards sitting on cream sections — one
-     step deeper than cream so tiles still read against it */
-  --color-shell: #e8e0cc;
+     Named `paper`/`shell` by ROLE rather than by hue, so the next tuning
+     pass is a value change here and nothing else. (Renamed from `cream`
+     in the same pass — a token called cream holding a grey is a trap.)
+
+     Signed off by the client at this value after one lift from #f1f0ed
+     ("slightly lighter"). There is deliberately headroom left above it:
+     a light section must never land on pure white — that is the one rule
+     that has survived both retunes of this ground (white → cream, July
+     2026; cream → grey, Aug 2026). Lighten further only on an explicit
+     ask, and stop short of #fafafa.
+
+     The /projects routes override all three under `.surface-deep` below. */
+  --color-paper: #f5f4f2; /* page ground for light sections */
+  --color-shell: #eae8e5; /* panels, cards, image wells on that ground */
+  --color-shell-deep: #dfdcd8; /* one step further: hover / pressed tiles */
 
   /* Rose accent that self-adjusts for contrast: rose on dark sections,
      rose-deep inside `.section-light`. Prefer text-accent for eyebrows,
@@ -52,7 +67,7 @@
   /* ---------- Admin panel chrome ----------
      The /admin panel is a tool, not a page: it is stared at for hours at a
      stretch, so it gets its own dark surface ramp instead of the marketing
-     site's cream sections (client direction, Aug 2026 — the cream panel was
+     site's light sections (client direction, Aug 2026 — the cream panel was
      "hard on the eyes").
 
      Named by ROLE, not by value, and used as whole tokens rather than
@@ -96,17 +111,17 @@
    the eyes"), and this is the opt-out. Every value below overrides a
    `--color-panel-*` / status token declared in @theme, so nothing that CONSUMES
    them changes: the whole panel flips because it was built on role tokens
-   rather than on `ink`/`cream` with opacity modifiers. That was the point of
+   rather than on `ink`/`paper` with opacity modifiers. That was the point of
    the token layer, and this rule is the proof of it.
 
    Scoped to [data-admin-theme="light"] on <html>, set by the toggle in the
    sidebar and applied before first paint by the inline script in the panel
    layout, so a light-mode admin never sees a dark flash on load.
 
-   Values are the panel's own, not the marketing site's: `--color-cream` is a
-   warm editorial ground for a page you read, and it is too saturated behind
-   dense tables you stare at all day. This is a step lighter and quieter, with
-   the same warm cast so the panel still reads as Makro. */
+   Values are the panel's own, not the marketing site's: `--color-paper` is a
+   ground tuned for a page you read, and it is too cool behind dense tables you
+   stare at all day. This keeps a warmer cast so the panel still reads as
+   Makro. */
 :root[data-admin-theme="light"] {
   --color-panel: #f7f4ee; /* page ground */
   --color-panel-raised: #ffffff; /* cards, inputs, table bodies */
@@ -231,9 +246,19 @@
   }
 
   /* Hero display heading — floors on mobile, scales up through the mid
-     range (tablet/large-phone), and caps so it stays composed on desktop. */
+     range (tablet/large-phone), and caps so it stays composed on desktop.
+
+     Trimmed Aug 2026 (client: the home and project heroes read "way too big").
+     Was clamp(2.6rem, 11vw, 6.4rem) — 102px at any desktop width, which is a
+     lot of Marcellus for a two-line headline. The cut is deliberately weighted
+     to the large end, where the complaint was: ~28% off from tablet up, ~10%
+     off on a phone, where the old size was already close to right.
+
+     Used by exactly two elements — the home hero h1 and the project detail
+     hero h1 — so this class IS the hero heading scale; there is no third
+     caller to surprise. */
   .display-fluid {
-    font-size: clamp(2.6rem, 11vw, 6.4rem);
+    font-size: clamp(2.35rem, 8vw, 4.6rem);
     line-height: 1.1;
   }
 
@@ -311,7 +336,7 @@
 
        The blend mode itself has to stay. feTurbulence noise sits around 0.5,
        so effective alpha here is ~0.025; under `overlay` that is a delta of
-       <0.3/255 on ink and <0.7/255 on cream. Swapped to `normal` it becomes
+       <0.3/255 on ink and <0.7/255 on paper. Swapped to `normal` it becomes
        ~6/255 — 20x stronger, and it visibly lifts the blacks. */
     position: fixed;
     inset: 0;
@@ -374,19 +399,47 @@
 
   /* ---------- Light section theme ----------
      Scope a section with `section-light` and the shared colour tokens
-     flip for a warm cream background: hairlines and muted text darken,
+     flip for the light grey ground: hairlines and muted text darken,
      so components built with border-hair / text-mist / text-fog /
      line-hair read correctly without per-element overrides. Explicit
      text-bone / bg-ink usages must still be swapped by hand inside
      light sections. */
   .section-light {
-    background: var(--color-cream);
+    background: var(--color-paper);
     color: var(--color-ink);
     --color-hair: rgba(5, 2, 3, 0.12);
     --color-hair-strong: rgba(5, 2, 3, 0.26);
-    --color-mist: #675f5a; /* muted warm grey on white */
-    --color-fog: #9c938d;
+    --color-mist: #5b5854; /* muted grey on paper — ~6:1 */
+    --color-fog: #918d88; /* tertiary / decorative only */
     --color-accent: var(--color-rose-deep);
+  }
+
+  /* ---------- Deeper light ground — /projects ----------
+     Client direction, Aug 2026. The portfolio routes get their own,
+     distinctly heavier grey so the developments read as a separate chapter
+     of the site rather than more of the home page. Still a LIGHT surface —
+     ink type on it, same `.section-light` contract — just a ground a couple
+     of steps down from --color-paper.
+
+     Applied as an override of the three surface tokens on a wrapper (see
+     app/(site)/projects/layout.tsx) rather than as a `bg-*` on each section.
+     That is the whole reason these are tokens: every `.section-light`,
+     `bg-paper`, `bg-shell` and `bg-shell-deep` inside the route moves
+     together, and not one component had to learn which page it is on.
+
+     Contrast on this ground: ink ~13.8:1, mist ~5.6:1 — both clear of AA. */
+  .surface-deep {
+    --color-paper: #dcd9d4;
+    --color-shell: #cdc9c3;
+    --color-shell-deep: #c2beb7;
+  }
+  .surface-deep .section-light {
+    /* Hairlines and muted copy step with the ground: what reads as a
+       hairline on near-white disappears on a grey two shades down. */
+    --color-hair: rgba(5, 2, 3, 0.16);
+    --color-hair-strong: rgba(5, 2, 3, 0.3);
+    --color-mist: #514e4a;
+    --color-fog: #7d7973;
   }
 
   /* Markdown inside a chat bubble. The bubble sets the type; this only has

@@ -257,7 +257,7 @@ export default function ApproachPreview() {
           );
 
           // The pour. Material arrives only after the storey is surveyed —
-          // this is the beat that gives the section weight. Cream to shell,
+          // this is the beat that gives the section weight. Paper to shell,
           // a deliberately small delta: the mass comes from the hard edge
           // and the ease, never from contrast.
           tl.fromTo(
@@ -495,7 +495,7 @@ export default function ApproachPreview() {
                 /* Five into two leaves the last cell alone on its row at sm,
                    and an empty half-row in a gap-px grid paints as a bare
                    slab of hairline. It spans the row instead. */
-                className={`group relative flex flex-col bg-cream p-8 ${
+                className={`group relative flex flex-col bg-paper p-8 ${
                   i === STEPS.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""
                 }`}
               >
@@ -515,7 +515,7 @@ export default function ApproachPreview() {
                   {/* Material. Never translate-y-full — GSAP owns transform. */}
                   <span
                     data-fill
-                    className="absolute inset-0 bg-shell transition-colors duration-500 group-hover:bg-[#ded5c0]"
+                    className="absolute inset-0 bg-shell transition-colors duration-500 group-hover:bg-shell-deep"
                   />
                 </span>
 
@@ -618,8 +618,8 @@ export default function ApproachPreview() {
                       A cover slab was the obvious alternative and does not
                       work: [data-fill] is still pouring up behind this copy
                       while it unrolls, so the backdrop is mid-transition from
-                      cream to shell and no flat colour could match it — and
-                      group-hover:bg-[#ded5c0] would break it again. These
+                      paper to shell and no flat colour could match it — and
+                      group-hover:bg-shell-deep would break it again. These
                       masks are transparent, so hover is untouched. */}
                   <div data-body-win className="mt-3 mb-[-2px]">
                     <div data-body className="overflow-hidden">

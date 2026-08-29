@@ -5,7 +5,7 @@ property developer and subsidiary of the Wheels Lanka Group.
 
 Built to the official **Makro Developers Brand Identity Guide**:
 
-- **Palette** — Pure Black `#050203`, Pure White `#FFFFFF`, Rose Gold `#E2A388`, with cream `#F2ECDC` surfaces, applied at the guideline's 70 / 20 / 10 ratio.
+- **Palette** — Pure Black `#050203`, Pure White `#FFFFFF`, Rose Gold `#E2A388`, over off-white grey light surfaces (`paper` `#F5F4F2`, deepened to `#DCD9D4` across `/projects`), applied at the guideline's 70 / 20 / 10 ratio.
 - **Type** — **Marcellus** for display, **Manrope** for body. Both self-hosted from `app/fonts/`.
 - **Logomark** — the twin-peaks "M" as clean SVG (`components/brand/PeakMark.tsx`), used throughout: nav lockup, preloader, section accents, watermarks, favicon.
 - **Voice** — expertise, quiet confidence and assurance, per the guideline.

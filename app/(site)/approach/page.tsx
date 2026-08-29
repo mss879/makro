@@ -138,7 +138,7 @@ export default function ApproachPage() {
                   alt={s.title}
                   treatment={s.treatment}
                   className="aspect-[4/3] w-full"
-                  sizes="50vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <div className={i % 2 === 1 ? "lg:pr-10" : "lg:pl-10"}>
                   <div className="flex items-center gap-4">

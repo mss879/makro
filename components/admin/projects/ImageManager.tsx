@@ -18,7 +18,7 @@ import type { ProjectImageRow } from "@/lib/supabase/types";
  *
  * Upload goes to POST /api/admin/upload, which is the only place that touches
  * the bucket: it converts whatever is picked to WebP, caps the long edge at
- * 2000px and returns the public URL. That URL is then attached to the project
+ * 3840px and returns the public URL. That URL is then attached to the project
  * by a Server Action, which also keeps projects.cover pointed at position 0.
  *
  * The actions return the authoritative gallery, so this component's state is
@@ -29,7 +29,7 @@ import type { ProjectImageRow } from "@/lib/supabase/types";
 const STATUS_FALLBACK: Record<number, string> = {
   401: "Your admin session has expired — sign in again, then retry the upload.",
   409: `A project can have at most ${MAX_PROJECT_IMAGES} images.`,
-  413: "That image is larger than 25 MB.",
+  413: "That image is larger than 50 MB.",
   415: "That file could not be read as an image.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -235,7 +235,7 @@ export default function ImageManager({
         <p className="mt-2 font-body text-xs text-panel-faint">
           {atCap
             ? `Maximum of ${MAX_PROJECT_IMAGES} images reached — delete one before uploading another.`
-            : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP and resized to 2000px on the long edge; 25 MB in, maximum.`}
+            : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP at high quality and resized only if wider than 3840px; 50 MB in, maximum.`}
         </p>
       </div>
 

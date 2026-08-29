@@ -109,7 +109,7 @@ export default function CatalogueDownload({
           onChange={(event) => setEmail(event.target.value)}
           placeholder="you@example.com"
           aria-label="Your email address"
-          className="mt-2 w-full border border-hair-strong bg-cream px-3 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-fog focus:border-rose-deep"
+          className="mt-2 w-full border border-hair-strong bg-paper px-3 py-2.5 font-body text-sm text-ink outline-none transition-colors placeholder:text-fog focus:border-rose-deep"
         />
       </label>
 

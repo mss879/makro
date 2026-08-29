@@ -195,7 +195,7 @@ export default function AboutPage() {
             alt="Makro Developers leadership reviewing a scale model of a residential tower alongside drawings and material samples"
             treatment="warm"
             className="aspect-[4/3] w-full"
-            sizes="50vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
           />
           <div>
             <div className="flex items-center gap-4">

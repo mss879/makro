@@ -4,7 +4,7 @@ import { PeakMark } from "./PeakMark";
 /**
  * Drawn brand lockup — twin-peak mark beside the letterspaced wordmark.
  * Tone-agnostic: every part inherits `currentColor`, so the caller sets the
- * colour (`text-ink` on cream, `text-bone` on dark) and the secondary word
+ * colour (`text-ink` on paper, `text-bone` on dark) and the secondary word
  * steps back on opacity rather than a hardcoded grey.
  */
 export function Logo({

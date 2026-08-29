@@ -25,6 +25,48 @@ type Props = {
   reveal?: boolean;
 };
 
+/**
+ * Inflate the `vw` widths in a `sizes` string by the inner layer's zoom.
+ *
+ * The image is painted into a box the size of the wrapper, then GSAP scales
+ * that layer by `zoom` (1.18 by default) so the parallax has room to travel.
+ * The browser knows nothing about that transform: it picks a candidate from
+ * srcset using `sizes`, which describes the UNZOOMED box — so every parallax
+ * image on the site was being served ~18% fewer pixels than it is displayed
+ * at, and then upscaled. Small on its own, compounding with everything else.
+ *
+ * Rewriting the string here rather than at each call site keeps the nine
+ * callers readable and keeps this correct if `zoom` is ever tuned. Values above
+ * 100vw are legal and meaningful: the box really is wider than the viewport
+ * once scaled.
+ *
+ * The parsing is the fiddly part. A `sizes` entry is `<media-condition> <length>`
+ * and BOTH halves can carry a `px` — `(max-width: 640px) 768px` — so a blanket
+ * regex would "zoom" the breakpoint and silently move which images get which
+ * treatment. Media conditions are always parenthesised, so each comma-separated
+ * entry is split at its last `)` and only the length after it is scaled.
+ */
+function zoomedSizes(sizes: string, zoom: number): string {
+  if (!(zoom > 1)) return sizes;
+  const scale = (length: string) =>
+    length.replace(
+      /(\d+(?:\.\d+)?)(vw|px)/g,
+      (_, n: string, unit: string) => `${Math.round(Number(n) * zoom)}${unit}`
+    );
+
+  return sizes
+    .split(",")
+    .map((entry) => {
+      const close = entry.lastIndexOf(")");
+      // No parenthesis: the whole entry is a bare length (`"50vw"`).
+      if (close === -1) return scale(entry);
+      // Otherwise everything up to and including `)` is the media condition
+      // and must survive untouched.
+      return entry.slice(0, close + 1) + scale(entry.slice(close + 1));
+    })
+    .join(",");
+}
+
 /** Scroll-parallax image with a clip-path reveal and brand tonal treatment. */
 export default function ParallaxImage({
   id,
@@ -110,7 +152,7 @@ export default function ParallaxImage({
           src={unsplash(id, width)}
           alt={alt}
           fill
-          sizes={sizes}
+          sizes={zoomedSizes(sizes, zoom)}
           priority={priority}
           className={`object-cover ${treatClass} ${imgClassName ?? ""}`}
         />

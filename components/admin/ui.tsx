@@ -9,7 +9,7 @@ import * as React from "react";
  * the feature components that use them.
  *
  * COLOUR: use the `panel-*` role tokens (see the admin block in
- * app/globals.css) — never `ink`/`cream`/`white` or an opacity modifier on
+ * app/globals.css) — never `ink`/`paper`/`white` or an opacity modifier on
  * them. Tailwind folds `text-ink/45` to a static hex at build time, so a
  * component written that way is nailed to one theme and cannot follow the
  * panel. Status colours have role tokens too: danger / success / warning,

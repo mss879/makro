@@ -19,7 +19,7 @@ type Entry = {
  * one real date followed by three relative markers.
  *
  * Every box, border, panel and fill from the old four-cell grid is gone. The
- * section is cream, two 1px hairlines, a 6px graduation comb and type. The
+ * section is paper, two 1px hairlines, a 6px graduation comb and type. The
  * years are the hero because they are the most evocative content here and
  * used to be the smallest thing in it.
  *

@@ -147,7 +147,7 @@ export default function SustainabilityPage() {
             alt="A warm, naturally lit interior — the everyday comfort responsible design delivers"
             treatment="warm"
             className="aspect-[4/5] w-full"
-            sizes="50vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
           />
           <div>
             <div className="flex items-center gap-4">

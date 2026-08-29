@@ -73,9 +73,9 @@ export default function SectionJump({ options }: { options: JumpOption[] }) {
           role="listbox"
           aria-label="Jump to a section of the portfolio"
           /* min-w matches the trigger so the panel never looks narrower than
-             the control it drops from. Sharp edges, cream ground, hairline
+             the control it drops from. Sharp edges, paper ground, hairline
              border — the same construction as every other panel on the site. */
-          className="absolute left-0 top-[calc(100%+0.5rem)] z-20 min-w-full whitespace-nowrap border border-hair-strong bg-cream"
+          className="absolute left-0 top-[calc(100%+0.5rem)] z-20 min-w-full whitespace-nowrap border border-hair-strong bg-paper"
         >
           {options.map((o) => (
             <li key={o.slug} role="option" aria-selected={false}>

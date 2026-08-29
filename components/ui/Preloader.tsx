@@ -7,7 +7,7 @@ import { PeakMark } from "@/components/brand/PeakMark";
 /**
  * Intro curtain: the twin-peak mark draws itself while a solid copy of it
  * floods up from the baseline — that rising fill is the loading indicator,
- * in place of a percentage counter. The cream panels then collapse away to
+ * in place of a percentage counter. The paper panels then collapse away to
  * reveal the site. Runs on every full page load (client-side navigations
  * don't remount it), doubling as cover while the hero video buffers.
  */
@@ -152,7 +152,7 @@ export default function Preloader() {
   return (
     <div ref={root} className="fixed inset-0 z-[10000]">
       {/* The row must stay transparent — an opaque backdrop behind the
-          panels would keep painting cream through the whole collapse, so the
+          panels would keep painting paper through the whole collapse, so the
           wipe would be invisible and the reveal a hard cut. The panels are
           flex-1, so sub-pixel rounding leaves hairline gaps; a 1px overlap
           covers them and collapses along with each panel. */}
@@ -160,7 +160,7 @@ export default function Preloader() {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="pl-panel h-full flex-1 bg-cream"
+            className="pl-panel h-full flex-1 bg-paper"
             style={i < 5 ? { marginRight: -1 } : undefined}
           />
         ))}

@@ -15,9 +15,9 @@ import {
  * Admin image upload — the one place in the app that writes to a bucket.
  *
  * Every IMAGE that lands in a bucket is normalised to WebP first — the client
- * uploads whatever they have (HEIC off a phone, a 12 MB PNG export) and the
- * site only ever serves a resized, stripped, ~82-quality WebP. Project
- * catalogues are the exception and are stored byte-for-byte; see `kind` below.
+ * uploads whatever they have (HEIC off a phone, a 40 MB PNG export) and the
+ * site stores one high-quality WebP master per upload. Project catalogues are
+ * the exception and are stored byte-for-byte; see `kind` below.
  *
  * Each content area has its own bucket so art can be purged or re-permissioned
  * without touching the others. The caller names a *target*, not a bucket:
@@ -46,8 +46,37 @@ type TargetName = keyof typeof TARGETS;
 /** Omitting `bucket` means "project", so the existing gallery callers keep working. */
 const DEFAULT_TARGET: TargetName = "project";
 
-const MAX_UPLOAD_BYTES = 25 * 1024 * 1024; // 25 MB in, before conversion
-const MAX_EDGE = 2000; // px on the long side
+const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50 MB in, before conversion
+
+/**
+ * Long-edge cap for the stored master, and the quality it is encoded at.
+ *
+ * Both were raised in Aug 2026 because uploaded photography was visibly
+ * over-compressed on the live site. The old numbers were 2000px / q82, and the
+ * damage compounded: a 2000px master is already short of what a full-bleed hero
+ * needs on a retina laptop (next/image's largest breakpoint is 3840), so the
+ * browser was upscaling a lossy file — and then next/image re-encoded it a
+ * SECOND time at its default quality of 75. Two lossy passes, the harsher of
+ * them last. See `images.qualities` in next.config.ts for the other half of
+ * this fix; changing one without the other does very little.
+ *
+ * 3840 matches the largest deviceSize, so the master is never the limiting
+ * factor and never bigger than something that can actually be served. Nothing
+ * is upscaled on the way in (`withoutEnlargement`), so a small upload stays
+ * small rather than being blown up into a soft master.
+ */
+const MAX_EDGE = 3840; // px on the long side — next/image's largest breakpoint
+/**
+ * 95, not the 92 the site SERVES at, and the gap is deliberate.
+ *
+ * This file is a master, never delivered to a browser: every <Image> re-encodes
+ * it (to AVIF, at quality 92 — see next.config.ts). That makes two lossy passes,
+ * and the second one faithfully reproduces whatever the first one damaged. At 95
+ * the master is effectively transparent to the upload, so the only generation
+ * the visitor sees is Next's. The extra bytes cost storage and one server-side
+ * decode; they never cost the visitor anything.
+ */
+const WEBP_QUALITY = 95;
 
 /**
  * The folder segment of the key — a project slug, a card id, a post slug.
@@ -131,7 +160,7 @@ function explainStorageFailure(message: string, bucket: string): string {
  * converter rejects: a pooled Buffer with a non-zero byteOffset, and a
  * resizable or growable ArrayBuffer.
  *
- * Costs one copy of at most 25 MB on an upload that is already doing far more
+ * Costs one copy of at most 50 MB on an upload that is already doing far more
  * work than that.
  */
 function toPlainBytes(input: Uint8Array): Uint8Array {
@@ -168,7 +197,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "No file provided." }, { status: 400 });
   }
   if (file.size > MAX_UPLOAD_BYTES) {
-    return NextResponse.json({ error: "That file is larger than 25 MB." }, { status: 413 });
+    return NextResponse.json({ error: "That file is larger than 50 MB." }, { status: 413 });
   }
 
   // Enforce the 5-image cap here too, so the user gets a clean message instead
@@ -214,7 +243,22 @@ export async function POST(request: NextRequest) {
       body = await sharp(raw, { failOn: "none" })
         .rotate() // honour EXIF orientation before metadata is stripped
         .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true })
-        .webp({ quality: 82 })
+        // Convert to sRGB and SHIP THE PROFILE. Cameras and Lightroom exports
+        // are routinely Display P3 or Adobe RGB; dropping the profile without
+        // converting leaves a browser to read wide-gamut numbers as sRGB, and
+        // the result is the flat, faded look that reads as "over-compressed"
+        // long before any encoder artefact does.
+        .toColourspace("srgb")
+        .withIccProfile("srgb")
+        .webp({
+          quality: WEBP_QUALITY,
+          // Lossy WebP is 4:2:0 by default, which smears colour across the
+          // hard edges this photography is full of — glazing mullions,
+          // railings, the rose-gold linework. smartSubsample keeps those
+          // transitions clean for a few percent more bytes.
+          smartSubsample: true,
+          effort: 6, // slower encode, smaller file at the same quality
+        })
         .toBuffer();
     } catch (err) {
       console.error("[makro] Image conversion failed:", err);
