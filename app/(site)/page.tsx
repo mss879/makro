@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { preload } from "react-dom";
 import { FEATURES, SITE } from "@/lib/site";
 import { BRAND, ogImage } from "@/lib/images";
+import { webPageSchema } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 import { getSelectedWork } from "@/lib/selected-work-data";
 import Hero from "@/components/home/Hero";
 import BrandStatement from "@/components/home/BrandStatement";
@@ -59,6 +61,18 @@ export default async function Home() {
 
   return (
     <>
+      {/* The home page was the one route emitting no page-level node: the
+          layout's Organization and WebSite describe the SITE, but nothing
+          described this PAGE, so the graph had a gap exactly where crawlers
+          enter. isPartOf/about wire it to the two ids the layout already
+          declares, keeping one entity rather than three loose fragments. */}
+      <JsonLd
+        data={webPageSchema({
+          name: `${SITE.name} — ${SITE.tagline}`,
+          description: SITE.description,
+          path: "/",
+        })}
+      />
       <Hero />
       <BrandStatement />
       {/* Hidden at the client's request — the component is kept so the band

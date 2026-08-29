@@ -5,7 +5,6 @@ import { pageMetadata, breadcrumbSchema, webPageSchema, localBusinessSchema } fr
 import JsonLd from "@/components/seo/JsonLd";
 import ContactForm from "@/components/contact/ContactForm";
 import { getProjects } from "@/lib/projects-data";
-import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
 import Drift from "@/components/anim/Drift";
 import { PeakMark } from "@/components/brand/PeakMark";
