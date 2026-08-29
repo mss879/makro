@@ -49,20 +49,28 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
     [projects, filter]
   );
 
-  /** EVERY group renders, even when empty. The client asked for the page to be
-      split by stage — Upcoming, On-going, Delivered — with a dropdown that
-      jumps between them; hiding an empty stage would leave the dropdown with a
-      dead option, or with only one, which is no dropdown at all. An empty stage
-      states so plainly rather than being papered over, and with one live
-      development that honesty is the point: it shows what is coming rather
-      than implying a back catalogue that does not exist. */
+  /** ONLY stages that actually hold a development (client, Aug 2026 —
+      previously every stage rendered, and an empty On-going or Delivered
+      announced itself with "No developments at this stage yet"). The earlier
+      reasoning was that an empty stage is honest where a hidden one implies a
+      back catalogue; the client's position is that a heading over nothing
+      reads as a page still being built. Their call, and it is their track
+      record being described.
+
+      Note this is computed from `visible`, not from every project, so it
+      follows the type filter too: narrowing to Commercial drops any stage with
+      no commercial work rather than leaving it standing and empty. */
   const groups = useMemo(
-    () => GROUP_ORDER.map((group) => ({ group, items: projectsInGroup(group, visible) })),
+    () =>
+      GROUP_ORDER.map((group) => ({ group, items: projectsInGroup(group, visible) })).filter(
+        ({ items }) => items.length > 0
+      ),
     [visible]
   );
 
-  /** The dropdown mirrors what is actually on the page, counts included, so a
-      visitor knows before clicking that a stage is empty. */
+  /** The dropdown mirrors what is actually on the page — which is now only
+      the stages that render, so it can no longer offer an option that scrolls
+      to nothing. */
   const jumpOptions = useMemo(
     () => groups.map(({ group, items }) => ({ label: group, slug: GROUP_SLUG[group], count: items.length })),
     [groups]
@@ -109,7 +117,11 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
             it — a visitor scanning left to right meets "where do I want to be"
             before "what do I want to see". */}
         <div className="mt-16 flex flex-wrap items-center gap-3 border-b border-hair pb-8">
-          <SectionJump options={jumpOptions} />
+          {/* A jump control needs somewhere to jump. With one stage left
+              standing it would be a dropdown holding the section the visitor
+              is already looking at — the same reason `showFilters` hides the
+              type buttons when there is only one type. */}
+          {groups.length > 1 && <SectionJump options={jumpOptions} />}
           {showFilters &&
             activeFilters.map((f) => (
               <button
@@ -130,9 +142,22 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
           </span>
         </div>
 
-        {/* One block per stage, in GROUP_ORDER — Upcoming, On-going,
-            Delivered. Every stage renders even when empty; see the note on
-            `groups` above for why. */}
+        {/* One block per NON-EMPTY stage, in GROUP_ORDER — Upcoming, On-going,
+            Delivered. See the note on `groups` above.
+
+            Hiding empty stages means the whole list can now come back empty,
+            which the old markup could never do: a filter matching nothing used
+            to produce three "No developments at this stage yet" blocks, and
+            would now produce a bare page under a filter bar. One statement in
+            the filter's own terms replaces all three. */}
+        {groups.length === 0 && (
+          <p className="mt-16 border-t border-hair pt-8 font-body text-base text-mist">
+            {filter === "All"
+              ? "No developments to show yet."
+              : `No ${filter.toLowerCase()} developments yet.`}
+          </p>
+        )}
+
         <div ref={grid}>
           {groups.map(({ group, items }, gi) => {
             const feature = items.length === 1;
@@ -155,15 +180,6 @@ export default function ProjectsIndex({ projects }: { projects: Project[] }) {
                     {countLabel(items.length)}
                   </span>
                 </div>
-
-                {items.length === 0 && (
-                  /* Said plainly rather than dressed up. The brand rule is no
-                     fabricated track record, so an empty stage says nothing is
-                     here yet and points at the one that is. */
-                  <p className="mt-8 border-t border-hair pt-8 font-body text-base text-mist">
-                    No developments at this stage yet.
-                  </p>
-                )}
 
                 <div
                   className={`mt-10 grid grid-cols-1 ${
