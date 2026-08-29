@@ -46,7 +46,32 @@ type TargetName = keyof typeof TARGETS;
 /** Omitting `bucket` means "project", so the existing gallery callers keep working. */
 const DEFAULT_TARGET: TargetName = "project";
 
-const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50 MB in, before conversion
+/**
+ * No app-side size gate.
+ *
+ * Client direction, Aug 2026: remove the ceiling — any size file can be
+ * uploaded. This used to reject anything over 50 MB with a clean 413 before
+ * the file was read, which is what blocked the project catalogue.
+ *
+ * What still bounds an upload, in the order it bites:
+ *
+ *   1. THE HOSTING PLATFORM'S REQUEST BODY LIMIT. This is a normal multipart
+ *      POST, so the whole file has to fit in one serverless request. That
+ *      limit is not configurable from this repo and rejects the request at
+ *      the edge, before any code here runs — so it cannot be turned into a
+ *      helpful message from in here. If a large catalogue still fails after
+ *      this change, this is the reason, and the fix is to stop proxying the
+ *      bytes: hand the browser a Supabase signed upload URL and let it PUT
+ *      straight to Storage, which bypasses the function entirely.
+ *   2. The bucket's file_size_limit, plus the project's global Storage limit
+ *      (supabase/migrations/20260829000200_remove_upload_size_limits.sql
+ *      clears the per-bucket half; the global one lives in the dashboard).
+ *      A rejection here DOES come back as a readable message — see
+ *      explainStorageFailure().
+ *
+ * The 413 branches in the admin components are deliberately kept: the
+ * platform can still answer 413 on its own, and that is worth naming.
+ */
 
 /**
  * Long-edge cap for the stored master, and the quality it is encoded at.
@@ -160,8 +185,8 @@ function explainStorageFailure(message: string, bucket: string): string {
  * converter rejects: a pooled Buffer with a non-zero byteOffset, and a
  * resizable or growable ArrayBuffer.
  *
- * Costs one copy of at most 50 MB on an upload that is already doing far more
- * work than that.
+ * Costs one extra copy of the image on an upload that is already doing far
+ * more work than that.
  */
 function toPlainBytes(input: Uint8Array): Uint8Array {
   const copy = new Uint8Array(input.byteLength);
@@ -195,9 +220,6 @@ export async function POST(request: NextRequest) {
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "No file provided." }, { status: 400 });
-  }
-  if (file.size > MAX_UPLOAD_BYTES) {
-    return NextResponse.json({ error: "That file is larger than 50 MB." }, { status: 413 });
   }
 
   // Enforce the 5-image cap here too, so the user gets a clean message instead

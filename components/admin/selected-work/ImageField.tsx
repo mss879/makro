@@ -23,7 +23,7 @@ import ImageSpecHint from "@/components/admin/ImageSpecHint";
 /** Used only when the route replies without a JSON body of its own. */
 const STATUS_FALLBACK: Record<number, string> = {
   401: "Your admin session has expired — sign in again, then retry the upload.",
-  413: "That image is larger than 50 MB.",
+  413: "That image was rejected as too large by the server.",
   415: "That file could not be read as an image.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -223,7 +223,7 @@ export default function ImageField({
 
         <p className="font-body text-xs leading-relaxed text-panel-faint">
           Uploads are converted to WebP at high quality, resized only if wider
-          than 3840px; 50 MB in, maximum. A smaller file is never enlarged, so
+          than 3840px. A smaller file is never enlarged, so
           upload the original rather than an export you have already shrunk.
         </p>
 

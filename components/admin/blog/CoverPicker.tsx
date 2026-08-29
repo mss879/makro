@@ -25,7 +25,7 @@ import ImageSpecHint from "@/components/admin/ImageSpecHint";
 const STATUS_FALLBACK: Record<number, string> = {
   400: "That upload target was rejected — reload the page and try again.",
   401: "Your admin session has expired — sign in again, then retry the upload.",
-  413: "That image is larger than 50 MB.",
+  413: "That image was rejected as too large by the server.",
   415: "That file could not be read as an image.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -130,7 +130,7 @@ export default function CoverPicker({
           />
           <ImageSpecHint spec="blogCover" className="mb-3" />
             <p className="font-body text-xs text-panel-faint">
-            Converted to WebP at high quality, resized only if wider than 3840px; 50 MB in,
+            Converted to WebP at high quality, resized only if wider than 3840px;
             maximum. Replacing a cover deletes the old file when you save.
           </p>
 

@@ -30,7 +30,7 @@ import type { ProjectImageRow } from "@/lib/supabase/types";
 const STATUS_FALLBACK: Record<number, string> = {
   401: "Your admin session has expired — sign in again, then retry the upload.",
   409: `A project can have at most ${MAX_PROJECT_IMAGES} images.`,
-  413: "That image is larger than 50 MB.",
+  413: "That image was rejected as too large by the server.",
   415: "That file could not be read as an image.",
   503: "Uploads need SUPABASE_SERVICE_ROLE_KEY in .env.local.",
 };
@@ -236,7 +236,7 @@ export default function ImageManager({
         <p className="mt-2 font-body text-xs text-panel-faint">
           {atCap
             ? `Maximum of ${MAX_PROJECT_IMAGES} images reached — delete one before uploading another.`
-            : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP at high quality and resized only if wider than 3840px; 50 MB in, maximum. A smaller file is never enlarged, so upload the original rather than an export you have already shrunk.`}
+            : `${images.length} of ${MAX_PROJECT_IMAGES} used. Uploads are converted to WebP at high quality and resized only if wider than 3840px. A smaller file is never enlarged, so upload the original rather than an export you have already shrunk.`}
         </p>
       </div>
 
