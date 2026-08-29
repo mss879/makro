@@ -91,12 +91,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${manrope.variable} h-full antialiased`}
+      className={`${marcellus.variable} ${manrope.variable} antialiased`}
     >
       {/* Document shell only — fonts, base colours and the grain overlay.
           The public site's chrome (preloader, navbar, footer, smooth scroll)
           lives in app/(site)/layout.tsx so /admin can opt out of all of it. */}
-      <body className="grain relative min-h-full bg-ink text-bone">{children}</body>
+      <body className="grain relative min-h-dvh bg-ink text-bone">{children}</body>
     </html>
   );
 }

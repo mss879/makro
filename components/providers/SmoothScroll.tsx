@@ -92,6 +92,27 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     lenis.on("scroll", ScrollTrigger.update);
 
+    // Lenis and ScrollTrigger are two independent measurement authorities and
+    // only one of them was ever told the document changed. Lenis caches the
+    // document height in Dimensions and clamps every wheel target to
+    // `scrollHeight - height`; its only invalidation paths are a window
+    // resize and a ResizeObserver on <html>. The observer watches the CONTENT
+    // BOX, so while the root element carried `h-full` (height:100%) that box
+    // was pinned to the viewport and the observer could never fire — the
+    // ceiling was frozen at whatever the document measured when Lenis was
+    // built. Because this provider lives in the persistent (site) layout, one
+    // instance spans every client-side navigation, so a visitor entering on a
+    // short route and clicking through to a taller one hit a hard wall
+    // partway down the page with no way out but a reload.
+    //
+    // `h-full` is gone from app/layout.tsx, which restores the observer. This
+    // is the belt to that pair of braces: every refresh site already in the
+    // app — the per-route pair below, the fonts.ready pass, and GSAP's own
+    // load/resize refreshes — now re-measures Lenis in the same beat, without
+    // waiting on the observer's 250ms debounce.
+    const syncLenisDimensions = () => lenis.resize();
+    ScrollTrigger.addEventListener("refresh", syncLenisDimensions);
+
     const onRaf = (time: number) => {
       lenis.raf(time * 1000);
     };
@@ -103,6 +124,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     return () => {
       cancelled = true;
+      ScrollTrigger.removeEventListener("refresh", syncLenisDimensions);
       gsap.ticker.remove(onRaf);
       lenis.destroy();
       (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
