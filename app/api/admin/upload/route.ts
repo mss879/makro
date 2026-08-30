@@ -222,7 +222,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "No file provided." }, { status: 400 });
   }
 
-  // Enforce the 5-image cap here too, so the user gets a clean message instead
+  // Enforce the per-project image cap here too, so the user gets a clean message instead
   // of the database trigger's error. Projects only — a Selected Work card and a
   // blog post each carry a single cover, so there is nothing to count.
   if (requested === "project" && projectId) {

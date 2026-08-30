@@ -16,8 +16,9 @@ import Reveal from "@/components/anim/Reveal";
  *      and bottom; the parallax layer's 1.18 zoom cropped it again on top of
  *      that. The client's brief is the opposite — show the image they uploaded.
  *   2. It rendered exactly THREE frames regardless. A project can hold five
- *      images (MAX_PROJECT_IMAGES), so images four and five were uploaded,
- *      stored, paid for in bandwidth on the admin screen — and never shown.
+ *      images at the time (MAX_PROJECT_IMAGES, now eight), so the images past
+ *      the third were uploaded, stored, paid for in bandwidth on the admin
+ *      screen — and never shown.
  *      Worse, a project with only one image had `cover` repeated into slots two
  *      and three, so the same photograph appeared three times as if it were
  *      three different views.

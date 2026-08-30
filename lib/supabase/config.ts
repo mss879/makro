@@ -34,8 +34,16 @@ export const BLOG_IMAGE_BUCKET = "blog-images";
     converted, and the bucket itself refuses anything that is not a PDF. */
 export const PROJECT_CATALOGUE_BUCKET = "project-catalogues";
 
-/** Hard cap on images per project (client comment: "up to 5 images"). */
-export const MAX_PROJECT_IMAGES = 5;
+/**
+ * Hard cap on images per project. Raised 5 -> 8 (client, Aug 2026).
+ *
+ * NOT the only place the number lives: it is also a CHECK on
+ * project_images.position and a row-count trigger in Postgres, so changing it
+ * here alone lets the UI offer a slot the database will refuse. The pair is
+ * kept in step by supabase/migrations/20260830000200_project_images_cap.sql —
+ * move both, or neither.
+ */
+export const MAX_PROJECT_IMAGES = 8;
 
 let warned = false;
 /** Logs once per process so unconfigured local runs are obvious but not noisy. */

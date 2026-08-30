@@ -161,7 +161,11 @@ function friendly(error: { code?: string | null; message: string }): string {
   if (error.code === "23505") {
     return "That slug is already used by another project — choose a different one.";
   }
-  if (error.message.includes("at most 5 images")) {
+  // Matched by SHAPE, not by the number in it. This used to test for the
+  // literal "at most 5 images", which silently stopped matching the moment the
+  // cap moved — the admin would have got the raw Postgres exception instead of
+  // this sentence, and nothing would have failed loudly enough to notice.
+  if (/at most \d+ images/.test(error.message)) {
     return `A project can have at most ${MAX_PROJECT_IMAGES} images.`;
   }
   return error.message;
