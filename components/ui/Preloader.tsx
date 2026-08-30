@@ -1,15 +1,28 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { PeakMark } from "@/components/brand/PeakMark";
 
 /**
  * Intro curtain: the twin-peak mark draws itself while a solid copy of it
  * floods up from the baseline — that rising fill is the loading indicator,
- * in place of a percentage counter. Runs on every full page load (client-side
- * navigations don't remount it), doubling as cover while the hero video
+ * in place of a percentage counter. Doubles as cover while the hero video
  * buffers.
+ *
+ * HOME PAGE ONLY (client, Aug 2026). It is a first-impression device and an
+ * eight-second gate in front of a contact form or a project page is a cost
+ * with no matching benefit — it also covered the hero video's buffering,
+ * which no other route has.
+ *
+ * Gated on the route the visitor LANDED on, not on the current one. This
+ * component sits in the persistent (site) layout and never remounts, so the
+ * first pathname it sees is the entry route — which is the question being
+ * asked. Keeping it in the layout rather than moving it into the home page is
+ * deliberate: mounted in the page it would remount on every client-side
+ * navigation back to "/", and clicking HOME from the blog would replay the
+ * whole curtain.
  *
  * THE EXIT IS A HANDOFF, not a curtain call (client, Aug 2026 — "something
  * more classy and subtle"). The mark that has just filled itself in flies up
@@ -125,11 +138,23 @@ function measureFlight(logo: HTMLElement): Flight | null {
 export default function Preloader() {
   const root = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
+  const pathname = usePathname();
+  // useState's lazy initial value, not a ref: it captures the pathname on first
+  // render and ignores every later one, which is exactly the "entry route"
+  // semantics described above — and unlike a ref it is legal to read during
+  // render, which is where the decision to render nothing has to be made.
+  const [entryPath] = useState(pathname);
+  const onHome = entryPath === "/";
 
   useGSAP(
     () => {
       const el = root.current;
-      if (!el) return;
+      // Not the home page: nothing rendered, nothing to animate, and — most
+      // importantly — the scroll lock below is never applied. components/home
+      // /Hero.tsx already handles the curtain being absent (it tests for
+      // `.pl-panel` and starts its own entrance immediately), so there is no
+      // event to fire on this path.
+      if (!el || !onHome) return;
       document.body.style.overflow = "hidden";
 
       const paths = el.querySelectorAll<SVGPathElement>(".peak-draw");
@@ -327,7 +352,7 @@ export default function Preloader() {
     { scope: root }
   );
 
-  if (done) return null;
+  if (done || !onHome) return null;
 
   return (
     <div ref={root} className="fixed inset-0 z-[10000]">
