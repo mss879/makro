@@ -82,7 +82,10 @@ export default function ProjectGallery({
               // contain, not cover. Once the frame has adopted the image's own
               // ratio the two are identical; before that, contain is what makes
               // the difference between "letterboxed for a moment" and "cropped".
-              className="img-warm object-contain"
+              /* No img-warm: the client's rule is that project imagery is
+                 shown as supplied, which rules out a colour grade as much as a
+                 crop. See ProjectHero. */
+              className="object-contain"
               sizes="(max-width: 768px) 100vw, 50vw"
               onLoad={(e) => {
                 const img = e.currentTarget;

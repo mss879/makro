@@ -65,9 +65,9 @@ export default function ProjectHero({ project }: { project: Project }) {
           full-bleed `from-ink via-ink/50 to-ink/30` gradient here, carrying the
           headline's legibility across the whole plate — which meant darkening
           the entire image to serve one corner of it. Legibility now lives in
-          the glass panel the copy sits in, so the render is shown as shot.
-          On the imageless path this leaves the section on the body's ink
-          ground, which the panel reads against just as well. */}
+          the copy's own text-shadow (see below), so the render is shown as
+          shot. On the imageless path this leaves the section on the body's
+          ink ground, which white copy reads against just as well. */}
       <div className="absolute inset-0">
         {project.heroImage && (
           <Image
@@ -84,38 +84,42 @@ export default function ProjectHero({ project }: { project: Project }) {
                1200px candidate for a slot being displayed at ~1400 device px
                and upscaling the difference. */
             sizes="120vw"
-            className="img-warm object-cover"
+            /* NO img-warm. That utility is saturate(.82) contrast(1.04)
+               brightness(.94) — a colour grade over the whole photograph, and
+               a render the client has had produced is already graded. Client
+               rule, Aug 2026: nothing added over project imagery, no overlay
+               and no filter. See app/globals.css if it is ever wanted back for
+               stock or editorial art, which is what it was written for. */
+            className="object-cover"
           />
         )}
       </div>
 
       <div className="container-edge relative w-full">
-        {/* Black glassmorphism plate — deliberately the same recipe as the
-            navbar's floating panel (components/layout/Navbar.tsx): hairline
-            white border, ink at half opacity, heavy backdrop blur, and the
-            same shadow geometry. Client direction, Aug 2026: the hero copy
-            should sit in the navbar's material rather than on a darkened
-            photograph, so the two frosted plates read as one system down the
-            page. Values are copied from the navbar's RESTING state — the
-            scrolled state is a touch more opaque, but that alpha shift exists
-            to separate the bar from content passing under it, which a static
-            panel has no need of.
+        {/* NO PLATE behind the copy either (client, Aug 2026). A black
+            glassmorphism panel used to sit here — the navbar's material,
+            borrowed so the two frosted surfaces read as one system down the
+            page. The client's objection to it is the same one that removed
+            the full-bleed gradient above: it is still an overlay on the
+            render, just confined to a rectangle instead of covering the whole
+            plate. Nothing darkens the art now, on this development or on any
+            added later — the hero is one shared component, so there is no
+            per-project setting for a future project to be missing.
 
-            w-fit, not w-full: a plate spanning the whole viewport would be a
-            scrim again by another name, and even at max-w-3xl a fixed-width
-            block left a wide band of empty glass to the right of the longest
-            line — the box was sized by its container rather than by its
-            content. Shrink-to-fit means the plate ends where the copy ends,
-            capped at max-w-3xl so a long project name wraps instead of
-            reaching for the far edge. Keeping the render in the clear is the
-            whole point of removing the gradient. */}
-        <div className="w-fit max-w-3xl border border-white/20 bg-ink/50 p-7 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)] backdrop-blur-xl md:p-9">
+            Legibility moves onto the copy itself, as a text-shadow. A halo
+            tight to the glyphs does not read as a shape over the photograph
+            the way a filled box does, and it is the only guard left for art
+            that is uploaded from the admin: a bright daytime render would
+            otherwise put white type on a pale sky with nothing behind it, and
+            nobody checks contrast at upload time. */}
+        <div className="max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
           <div className="flex flex-wrap items-center gap-3">
-            {/* No backdrop-blur on the chips any more. Nesting a backdrop
-                filter inside one makes the inner element sample its parent's
-                already-frosted result — a second blur pass for a difference
-                that is not visible against the plate behind it. A hairline
-                border and a lift in the ink is enough to separate them now. */}
+            {/* The chips keep their ink fill and hairline border — they are
+                labels rather than a panel, and at this size the fill is what
+                holds them together over an arbitrary render. Still no
+                backdrop-blur: it bought nothing against the plate that used
+                to be here, and now that the plate is gone it would cost a
+                blur pass over the photograph for the same nothing. */}
             <span className="border border-white/20 bg-ink/40 px-4 py-1.5 font-body text-xs text-bone">
               {project.type}
             </span>

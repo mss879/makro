@@ -75,25 +75,30 @@ export default function ProjectsPageHero({
               active ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
+            {/* The slide is the image alone now. It used to be a fragment of
+                image + scrim: a from-ink via-ink/30 gradient, narrowed to the
+                bottom of the frame so an image-only slide was not darkened
+                across its whole height. Both it and img-warm are gone — the
+                client's rule (Aug 2026) is that nothing is added over project
+                imagery, and a gradient confined to two thirds of the plate is
+                still a gradient over the plate, just as a colour grade is
+                still a grade. Legibility for the heading and body moved onto
+                the copy itself as a text-shadow, exactly as it did on the
+                project detail hero. */}
             {slide.image && (
-              <>
-                <Image
-                  src={slide.image}
-                  alt={slide.alt}
-                  fill
-                  // The first slide is the LCP element on this route.
-                  priority={i === 0}
-                  sizes="100vw"
-                  className="img-warm object-cover"
-                />
-                {/* Scrim only where the copy sits, so an image-only slide is
-                    not needlessly darkened across its whole height. */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
-              </>
+              <Image
+                src={slide.image}
+                alt={slide.alt}
+                fill
+                // The first slide is the LCP element on this route.
+                priority={i === 0}
+                sizes="100vw"
+                className="object-cover"
+              />
             )}
 
             {(slide.heading || slide.body) && (
-              <div className="absolute inset-x-0 bottom-0 pb-16 md:pb-20">
+              <div className="absolute inset-x-0 bottom-0 pb-16 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] md:pb-20">
                 <div className="container-edge">
                   {slide.heading && (
                     <h1 className="max-w-4xl font-display display-lg text-bone">
