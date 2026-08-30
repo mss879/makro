@@ -63,17 +63,29 @@ const PEAK = {
   inkH: 64 / 78,
 };
 
-type Flight = { dx: number; dy: number; scale: number; originY: number; strokeWidth: number };
+type Flight = {
+  dx: number;
+  dy: number;
+  scaleX: number;
+  scaleY: number;
+  originY: number;
+  strokeWidth: number;
+};
 
 /**
  * Work out the transform that puts the preloader's mark on top of the navbar's.
  *
  * Both are the same mark but not the same DRAWING: the lockup's M is a little
- * wider for its height than PeakMark is. Matching width alone lands it 14% too
- * tall, matching height alone lands it 13% too narrow, so this takes the
- * geometric mean of the two — a few per cent out on both axes instead of a
- * teenth out on one, which at a 0.2 scale factor and a 300ms cross-fade is not
- * a difference anyone can see.
+ * wider for its height than PeakMark is. This used to split the difference with
+ * one scale factor — the geometric mean of the two — which left the mark ~7%
+ * narrow and ~6% tall at the landing. Close, but the client's word was
+ * "perfectly", and close is what you notice when two copies of the same shape
+ * are meant to become one.
+ *
+ * So the axes are scaled INDEPENDENTLY and the ink boxes coincide exactly. The
+ * cost is a ~7% differential stretch, which exists only while the mark is in
+ * flight, is at its largest when the mark is at its smallest, and resolves to
+ * the correct shape at the only moment anyone is comparing the two.
  *
  * Returns null when there is no lockup on the page to fly to.
  */
@@ -91,8 +103,6 @@ function measureFlight(logo: HTMLElement): Flight | null {
   const sourceH = p.height * PEAK.inkH;
   if (!sourceW || !sourceH) return null;
 
-  const scale = Math.sqrt((targetW / sourceW) * (targetH / sourceH));
-
   // Centres of the INK, not of the boxes.
   const sourceCx = p.left + p.width * (PEAK.inkX + PEAK.inkW / 2);
   const sourceCy = p.top + p.height * (PEAK.inkY + PEAK.inkH / 2);
@@ -102,7 +112,8 @@ function measureFlight(logo: HTMLElement): Flight | null {
   return {
     dx: targetCx - sourceCx,
     dy: targetCy - sourceCy,
-    scale,
+    scaleX: targetW / sourceW,
+    scaleY: targetH / sourceH,
     originY: PEAK.inkY + PEAK.inkH / 2,
     // The lockup is drawn at n.height, so its stroke lands on screen at the
     // PNG thickness times that reduction. Clamped so a hairline never
@@ -230,50 +241,64 @@ export default function Preloader() {
         // couple of its own heights at this scale factor.
         gsap.set(logo, { transformOrigin: `50% ${flight.originY * 100}%` });
 
+        // ── 1. THE FLIGHT ────────────────────────────────────────────────
+        // Ink the whole way, over panels that are still fully opaque. That
+        // ordering is the entire fix for "it just disappears": the colour used
+        // to start turning white a third of the way through the journey, while
+        // the paper was still behind it, so the mark faded into the panels and
+        // the travel — the part the client actually wanted to see — happened
+        // invisibly. Nothing else moves during this beat.
         tl.to(
           logo,
           {
             x: flight.dx,
             y: flight.dy,
-            scale: flight.scale,
-            duration: 1.2,
+            scaleX: flight.scaleX,
+            scaleY: flight.scaleY,
+            duration: 0.95,
             // A long ease-in-out: the mark leaves slowly, covers the distance,
             // and settles. Anything with a bounce or an overshoot would be
             // reaching for personality the brand does not have.
             ease: "power3.inOut",
           },
-          "-=0.25"
+          "-=0.15"
         )
-          // The panels dissolve rather than collapse, and they start AFTER the
-          // mark is already moving — so the site appears behind a mark in
-          // flight instead of the two events competing for the same moment.
-          .to(
-            el.querySelectorAll(".pl-panel"),
-            { autoAlpha: 0, duration: 0.95, ease: "power2.inOut", stagger: 0.04 },
-            "<0.2"
-          )
-          // Ink to white on the approach: the mark is black on paper and the
-          // bar it is landing on is near-black. Timed late so the change
-          // happens while the panels still have some opacity behind it, rather
-          // than mid-flight over whatever the page happens to be.
-          .to(
-            el.querySelectorAll(".pl-fill svg"),
-            { color: "#ffffff", duration: 0.5, ease: "power2.in" },
-            "<0.35"
-          )
-          // Stroke weight to match the lockup's. PeakMark uses
-          // non-scaling-stroke, so its 4px hairline stays 4px however far the
-          // mark shrinks — which is nearly a fifth of the mark's height by the
-          // time it arrives. Without this the handoff cross-fades a fat mark
-          // into a fine one.
+          // Stroke weight thins in step with the mark. PeakMark uses
+          // non-scaling-stroke, so its 4px hairline would otherwise stay 4px
+          // however far the mark shrinks — nearly a fifth of the mark's height
+          // by the time it arrives, which is not the lockup's weight and would
+          // give the handoff away.
           .to(
             el.querySelectorAll(".pl-fill path"),
-            { attr: { "stroke-width": flight.strokeWidth }, duration: 0.6, ease: "power2.inOut" },
+            { attr: { "stroke-width": flight.strokeWidth }, duration: 0.95, ease: "power3.inOut" },
             "<"
           )
-          // The real lockup is underneath and always has been, so the last
-          // beat is a cross-fade onto it, not a disappearance.
-          .to(logo, { autoAlpha: 0, duration: 0.3, ease: "power2.out" }, "-=0.12");
+
+          // ── 2. THE LANDING ─────────────────────────────────────────────
+          // Only now does the paper go. The mark is already sitting exactly
+          // where the lockup's M is, so what the panels uncover is the mark in
+          // its final position rather than a mark still on its way.
+          .to(el.querySelectorAll(".pl-panel"), {
+            autoAlpha: 0,
+            duration: 0.65,
+            ease: "power2.inOut",
+            stagger: 0.03,
+          })
+          // Ink to white, tracking the reveal rather than leading it: it
+          // starts once the paper is thinning and finishes with it, so the
+          // mark is dark while its ground is light and light by the time the
+          // near-black bar is underneath. Going early is what made it vanish.
+          .to(
+            el.querySelectorAll(".pl-fill svg"),
+            { color: "#ffffff", duration: 0.45, ease: "power1.inOut" },
+            "<0.15"
+          )
+
+          // ── 3. THE HANDOFF ─────────────────────────────────────────────
+          // The real lockup has been underneath the whole time, and the two
+          // marks now occupy the same pixels, so this is a cross-fade between
+          // identical shapes rather than a disappearance.
+          .to(logo, { autoAlpha: 0, duration: 0.3, ease: "power2.out" }, "-=0.15");
       };
 
       const tl = gsap.timeline({
