@@ -151,18 +151,43 @@ export default function Hero() {
             className="img-warm absolute inset-0 h-full w-full object-cover"
           />
           {/* Dark gradients for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/50" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink/60 via-transparent to-transparent" />
+          {/* Two full-bleed black gradients used to sit here — one up the
+              frame, one in from the left — and both are gone with the rest of
+              the hero overlays (client, Aug 2026). The glass plate and the
+              copy's own text-shadow carry legibility now. */}
         </div>
 
         {/* Content */}
-        <div data-hero-content className="relative flex h-full flex-col justify-end">
+        <div className="relative flex h-full flex-col justify-end">
           {/* Headline block */}
           <div className="container-edge pb-12 md:pb-16">
             {/* flex-col stops the reveal-masks' negative block margins from
                 collapsing, which used to add a phantom 0.4em gap between
                 the two heading rows. */}
-            <div className="flex flex-col items-start gap-6">
+            {/* The hero plate, as on every other hero. The buttons are inside
+                it rather than below: they are part of this block, and a plate
+                that stopped at the paragraph would leave them floating under
+                a panel they plainly belong to. */}
+            {/* data-hero-content SITS ON THE PLATE ITSELF, not on a wrapper
+               around it, and that is load-bearing rather than tidy.
+
+               The scroll drift below animates this element's transform and
+               opacity. Either one on an ANCESTOR of a backdrop-filter makes
+               that ancestor a "backdrop root": the filter can then only sample
+               what is painted inside it, and the hero image is a sibling of
+               this subtree, not a child. So with the attribute one level up the
+               plate had nothing to blur — it degraded to a flat translucent box
+               at rest and got worse as the opacity fell, which is exactly what
+               the client saw on scroll.
+
+               An element's own transform and opacity are fine: they do not
+               create a backdrop root for its own backdrop-filter. Moving the
+               hook down one level keeps the drift and gives the glass the page
+               back to sample. */}
+            <div
+              data-hero-content
+              className="hero-plate flex w-fit flex-col items-start gap-6 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]"
+            >
               <h1 className="flex flex-col font-display display-fluid leading-[1.05] text-bone">
                 <span className="reveal-mask">
                   <span data-h-word className="inline-block">

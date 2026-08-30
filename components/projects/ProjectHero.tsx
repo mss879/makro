@@ -112,7 +112,7 @@ export default function ProjectHero({ project }: { project: Project }) {
             that is uploaded from the admin: a bright daytime render would
             otherwise put white type on a pale sky with nothing behind it, and
             nobody checks contrast at upload time. */}
-        <div className="max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
+        <div className="hero-plate w-fit max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
           <div className="flex flex-wrap items-center gap-3">
             {/* The chips keep their ink fill and hairline border — they are
                 labels rather than a panel, and at this size the fill is what

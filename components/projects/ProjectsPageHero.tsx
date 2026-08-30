@@ -100,16 +100,19 @@ export default function ProjectsPageHero({
             {(slide.heading || slide.body) && (
               <div className="absolute inset-x-0 bottom-0 pb-16 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] md:pb-20">
                 <div className="container-edge">
-                  {slide.heading && (
-                    <h1 className="max-w-4xl font-display display-lg text-bone">
-                      {slide.heading}
-                    </h1>
-                  )}
-                  {slide.body && (
-                    <p className="mt-6 max-w-xl font-body text-base leading-relaxed text-bone/80 sm:text-lg">
-                      {slide.body}
-                    </p>
-                  )}
+                  {/* Same plate as every other hero — see .hero-plate. */}
+                  <div className="hero-plate w-fit max-w-3xl">
+                    {slide.heading && (
+                      <h1 className="font-display display-lg text-bone">
+                        {slide.heading}
+                      </h1>
+                    )}
+                    {slide.body && (
+                      <p className="mt-6 max-w-xl font-body text-base leading-relaxed text-bone/80 sm:text-lg">
+                        {slide.body}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

@@ -57,7 +57,9 @@ export default async function ContactPage() {
           inner page uses that component, and this one cannot (it has no
           background image; the drifting peak watermark stands in for one), so
           the sizing is matched by hand instead. Keep the two in step. */}
-      <section className="relative flex flex-col justify-center overflow-hidden bg-ink pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]">
+      {/* min-h matches components/ui/PageHero exactly — see the note there for
+          why the inner-page heroes now share a height floor. */}
+      <section className="relative flex min-h-[max(32rem,60vh)] flex-col justify-center overflow-hidden bg-ink pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]">
         <JsonLd
           data={[
             webPageSchema({
@@ -77,16 +79,21 @@ export default async function ContactPage() {
         {/* w-full because the section is now a flex container — without it the
             content box shrink-wraps and container-edge stops centring. */}
         <div className="container-edge relative w-full">
-          <div className="flex items-center gap-4">
-            <span className="line-hair w-12" />
-            <span className="eyebrow text-rose">Contact Us</span>
+          {/* The same black glass plate as every other hero — this one is
+              hand-rolled rather than a PageHero, so it needs the class
+              directly. See .hero-plate in globals.css. */}
+          <div className="hero-plate w-fit max-w-3xl">
+            <div className="flex items-center gap-4">
+              <span className="line-hair w-12" />
+              <span className="eyebrow text-rose">Contact Us</span>
+            </div>
+            <Reveal delay={0.1}>
+              <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
+                Have a site, a vision or an idea worth exploring? Tell us what
+                you have in mind, and our team will be in touch.
+              </p>
+            </Reveal>
           </div>
-          <Reveal delay={0.1}>
-            <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
-              Have a site, a vision or an idea worth exploring? Tell us what
-              you have in mind, and our team will be in touch.
-            </p>
-          </Reveal>
         </div>
       </section>
 

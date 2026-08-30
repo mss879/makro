@@ -64,6 +64,18 @@
      indices and accent strokes in shared components. */
   --color-accent: #e2a388;
 
+  /* The ground behind an image, and the wash over the foot of it — both
+     self-adjusting the same way the accent does, because ParallaxImage is used
+     on dark bands (the home interlude) and light ones (about, insights, and
+     /approach since it went light) from a single component.
+
+     It used to be a hard-coded bg-ink-700 well under a from-ink/40 gradient,
+     which is right on ink and wrong on paper: a near-black box flashing behind
+     each picture while it loads, and a dark wash over its bottom edge on a
+     light page. As tokens, the call sites never change. */
+  --color-well: #12100e; /* = --color-ink-700 */
+  --color-image-scrim: rgb(5 2 3 / 0.4);
+
   /* ---------- Admin panel chrome ----------
      The /admin panel is a tool, not a page: it is stared at for hours at a
      stretch, so it gets its own dark surface ramp instead of the marketing
@@ -397,6 +409,57 @@
     background: var(--color-hair);
   }
 
+  /* The wash over the foot of a ParallaxImage. A class rather than a gradient
+     utility so the colour can come from a token and go transparent inside
+     `.section-light` — see --color-image-scrim. */
+  .image-scrim {
+    background-image: linear-gradient(
+      to top,
+      var(--color-image-scrim),
+      transparent 55%
+    );
+  }
+
+  /* ---------- Hero plate ----------
+     The black glass container the copy sits in on EVERY hero (client, Aug
+     2026 — "all the hero pages need the black glass container"). One class
+     rather than the recipe repeated in four components, because "all of them"
+     is the requirement: PageHero, ProjectHero, ProjectsPageHero and the home
+     hero must not drift apart the next time a value is tuned.
+
+     THE TINT IS ONE VARIABLE, --hero-plate-tint, and it is the dial for all
+     nine heroes at once. Tune that, not the rule.
+
+     History, because the number has moved and will move again. It started at
+     bg-ink/50 on the project hero and the client had the plate removed
+     entirely for reading as a black overlay on the render. It came back at
+     0.2 — "80% transparent", as the instruction was worded. Then every
+     full-bleed scrim came off the heroes, which left the images at full
+     brightness and the plates reading as little more than a blur and a
+     hairline, so the client asked for "a very slight black tint" on the glass.
+     Hence 0.3: enough that the panel reads as tinted glass against a bright
+     sky or a pale render, far short of the scrim that started all this.
+
+     The rest is the navbar's floating panel, deliberately: hairline white
+     border, heavy backdrop blur, and the same shadow geometry, so the bar and
+     the hero plate read as one material down the page. -webkit- prefix for
+     Safari, which still needs it. */
+  .hero-plate {
+    --hero-plate-tint: 0.3;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    background: rgb(5 2 3 / var(--hero-plate-tint));
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.35);
+    padding: 1.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .hero-plate {
+      padding: 2.25rem;
+    }
+  }
+
   /* ---------- Light section theme ----------
      Scope a section with `section-light` and the shared colour tokens
      flip for the light grey ground: hairlines and muted text darken,
@@ -412,6 +475,10 @@
     --color-mist: #5b5854; /* muted grey on paper — ~6:1 */
     --color-fog: #918d88; /* tertiary / decorative only */
     --color-accent: var(--color-rose-deep);
+    --color-well: var(--color-shell);
+    /* No wash over an image on a light ground — there is nothing for it to
+       lift the picture off, and it only ever reads as dirt on the paper. */
+    --color-image-scrim: transparent;
   }
 
   /* ---------- Deeper light ground — /projects ----------

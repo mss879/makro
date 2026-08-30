@@ -94,7 +94,25 @@ export default function PageHero({
   return (
     <section
       ref={ref}
-      className="relative flex flex-col justify-center overflow-hidden pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]"
+      /* One height for every inner-page hero (client, Aug 2026 — the blog,
+         about, contact and approach heroes "need to be the same size"). They
+         were not, because nothing set a height and the content decided it:
+         /approach and /careers pass a title and /about, /insights and /contact
+         do not, so a titled hero ran ~90px taller. Measured at 793px wide:
+         contact and insights 377, about 407, approach 467.
+
+         min-h rather than a fixed h — a floor makes them identical while the
+         copy still has somewhere to go if a title wraps to three lines on a
+         phone, where a hard height would clip it. max(32rem,60vh) so the floor
+         holds on a short window, in which 60vh alone would fall under the
+         natural content and let them drift apart again, while tall screens get
+         a hero proportional to the viewport. The section is already
+         justify-center, so the extra room is shared above and below.
+
+         The contact hero is hand-rolled (it renders its own JSON-LD and drift
+         mark) and repeats this box deliberately. Change one, change the
+         other. */
+      className="relative flex min-h-[max(32rem,60vh)] flex-col justify-center overflow-hidden pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]"
     >
       <div className="absolute inset-0">
         <Image
@@ -104,12 +122,53 @@ export default function PageHero({
           fill
           priority
           sizes="100vw"
-          className={`object-cover ${treatment === "mono" ? "img-mono" : "img-warm"} opacity-35`}
+          /* NO opacity-35 and NO gradient over it (client, Aug 2026 — "all
+             the black overlays need to be removed from all the page hero
+             sections"). Both were here and they compounded: a full-bleed
+             from-ink via-ink/55 to-ink/25 scrim, over an image already knocked
+             back to 35% on an ink ground — which is a 65% black wash by
+             another name, and is why the About hero read as a near-black
+             rectangle with a photograph somewhere inside it.
+
+             The `treatment` filter stays. img-warm and img-mono are colour
+             grades chosen per page, not black laid over the art, and the
+             client's objection was to the overlays. */
+          className={`object-cover ${treatment === "mono" ? "img-mono" : "img-warm"}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
       </div>
 
-      <div data-hero-content className="container-edge relative w-full">
+      <div className="container-edge relative w-full">
+        {/* The black glass plate, on every hero (client, Aug 2026). w-fit so
+            it ends where the copy ends — a plate spanning the viewport would
+            be a scrim by another name, which is the objection that had the
+            first version of it removed from the project hero. Capped at
+            max-w-3xl so a long title wraps instead of reaching for the far
+            edge. See .hero-plate in globals.css for the recipe and why it is
+            one class rather than four copies. */}
+          {/* data-hero-content SITS ON THE PLATE ITSELF, not on a wrapper
+              around it, and that is load-bearing rather than tidy.
+
+              The scroll drift below animates this element's transform and
+              opacity. Either one on an ANCESTOR of a backdrop-filter makes
+              that ancestor a "backdrop root": the filter can then only sample
+              what is painted inside it, and the hero image is a sibling of
+              this subtree, not a child. So with the attribute one level up the
+              plate had nothing to blur — it degraded to a flat translucent box
+              at rest and got worse as the opacity fell, which is exactly what
+              the client saw on scroll.
+
+              An element's own transform and opacity are fine: they do not
+              create a backdrop root for its own backdrop-filter. Moving the
+              hook down one level keeps the drift and gives the glass the page
+              back to sample. */}
+        {/* The text-shadow does the work the scrim used to. A halo tight to
+            the glyphs is not a shape over the photograph, and with the image
+            now at full brightness the copy needs something behind it that is
+            not a black box — same treatment as the project heroes. */}
+        <div
+          data-hero-content
+          className="hero-plate w-fit max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]"
+        >
         <div className="flex items-center gap-4">
           <span className="line-hair w-12" />
           <span className="eyebrow text-rose">{eyebrow}</span>
@@ -130,6 +189,7 @@ export default function PageHero({
             {intro}
           </p>
         )}
+        </div>
       </div>
     </section>
   );
