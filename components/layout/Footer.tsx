@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CREATOR, NAV, NAV_LEGAL, SITE, SOCIALS } from "@/lib/site";
+import { CREATOR, NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/site";
 import { PeakMark } from "@/components/brand/PeakMark";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -58,8 +58,19 @@ export default function Footer() {
 
           <div>
             <p className="eyebrow text-fog">Explore</p>
+            {/* NAV_SECONDARY as well as NAV. The client asked for the Approach
+                link here, and lib/site.ts already had it — in a constant
+                documented as "secondary pages surfaced in the footer rather
+                than the main nav" that nothing had ever rendered. Wiring it up
+                is what that comment was promising.
+
+                It brings Sustainability, FAQ and Careers with it. All three
+                are real, indexed pages that were reachable from no navigation
+                anywhere on the site, which is the more useful half of this
+                change; if the client wants only Approach, the fix is to slice
+                this list rather than to hard-code one <Link>. */}
             <ul className="mt-5 space-y-3">
-              {NAV.map((item) => (
+              {[...NAV, ...NAV_SECONDARY].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
