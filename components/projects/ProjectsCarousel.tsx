@@ -116,22 +116,27 @@ export default function ProjectsCarousel({
         aria-roledescription={projects.length > 1 ? "carousel" : undefined}
         aria-label={projects.length > 1 ? "Developments" : undefined}
       >
-        {/* Card and controls are SIBLINGS in one row (client, Aug 2026 — the
-            arrows belong beside the card, not on it). That is why the row is
-            capped and centred rather than the card being capped inside a
-            full-bleed track: the controls take their width out of the row
-            first, and the card gets what is left, so the buttons can never
-            collide with the artwork or spill past the page gutter at an
-            awkward viewport. At the cap the card lands at roughly its old
-            1024px and the arrows sit just outside its right edge.
+        {/* AN ARROW EITHER SIDE, and the card centred between them (client,
+            Aug 2026). Both arrows sat in one column to the right before, which
+            pushed the card left of centre by the width of that column —
+            noticeable on a page whose every other section is symmetrical. A
+            slot on each side, of equal width, puts the card back on the page's
+            centre line and back to its old ~1024px at the cap.
 
-            One block, not a desktop copy and a mobile copy — a second pair
-            would be a second "Next project" for a screen reader to find and
-            announce, for a control that does the same thing. Below lg the row
-            is a column, so the same buttons fall underneath the card, which is
-            where they have to go once the card is full width. */}
+            Both slots are always present. The back arrow is HIDDEN on the
+            first card rather than unmounted, so its side keeps its width and
+            the card does not shift sideways the moment you page — which would
+            undo the centring at the exact moment the client looked at it.
+
+            One pair of buttons, not a desktop set and a mobile set: a second
+            pair would be a second "Next project" for a screen reader to find
+            and announce, for a control that does the same thing. Below lg the
+            row WRAPS instead — the track is w-full so it takes a line to
+            itself and the two arrows fall underneath it, centred, which is
+            where they have to go once the card is the full width of the
+            page. */}
         <div className="container-edge">
-          <div className="mx-auto flex max-w-[72.5rem] flex-col items-center gap-8 lg:flex-row lg:gap-6">
+          <div className="mx-auto flex max-w-[72.5rem] flex-wrap items-center justify-center gap-x-4 gap-y-8 lg:flex-nowrap lg:gap-x-6">
             <div
               ref={trackRef}
               onScroll={sync}
@@ -139,7 +144,7 @@ export default function ProjectsCarousel({
                  scroll restoration and any anchor landing inside the track. The
                  arrows pass their own behaviour, which is the only case that
                  wants easing. */
-              className="no-scrollbar flex w-full min-w-0 snap-x snap-mandatory overflow-x-auto lg:flex-1"
+              className="no-scrollbar order-1 flex w-full min-w-0 snap-x snap-mandatory overflow-x-auto lg:order-2 lg:w-auto lg:flex-1"
             >
               {projects.map((project) => (
                 /* The track is a flex row, so every slide already stretches to
@@ -289,95 +294,76 @@ export default function ProjectsCarousel({
               ))}
             </div>
 
-          {projects.length > 1 && (
-            /* CONTROL FIRST, folio second.
- 
-               Three passes to get here and the reasoning is worth keeping.
-               Boxed 48px squares read as an admin widget left in the margin.
-               Replacing them with quiet glyphs under a large page number fixed
-               that but overcorrected: the numeral became the loudest thing in
-               the column and the arrows — small, and set in fog — were easy to
-               miss entirely, which is fatal for the one control that moves the
-               section.
- 
-               So the order is inverted and the weights are swapped. The arrows
-               lead: drawn as long strokes rather than typed as glyphs, set in
-               ink, at a size that carries across the gutter. The numeral drops
-               to a caption under the rule, where it labels the position
-               instead of announcing it.
- 
-               A DRAWN arrow rather than the "←" character, because a glyph is
-               sized by its font's metrics and the arrow in this body face is
-               short, light and optically small next to display type. The path
-               below is a 44px shaft with a head on it: it can be made as long
-               and as heavy as the design needs without touching type size, and
-               it is the same shape at every weight. */
-            <div className="flex w-full shrink-0 flex-col items-center gap-4 lg:w-32 lg:items-start">
-              {/* An arrow with nowhere to go is HIDDEN, not greyed (client,
-                  Aug 2026: no back arrow while there is nothing behind you).
- 
-                  Faded to opacity-0 rather than unmounted. This column is the
-                  shrink-0 half of a flex row whose other half is the card, so
-                  a control that leaves the layout narrows the column and hands
-                  those pixels to the card — which would change width every
-                  time you paged. pointer-events-none and `disabled` between
-                  them keep the invisible one unclickable in the moment before
-                  state catches up with a fast scroll. */}
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => go(-1)}
-                  aria-label="Previous project"
-                  disabled={atStart}
-                  className={`group flex h-12 w-14 items-center justify-center text-ink transition-colors duration-300 hover:text-rose-deep ${
-                    atStart ? "pointer-events-none opacity-0" : ""
-                  }`}
-                >
-                  <svg
-                    viewBox="0 0 44 12"
-                    className="h-3 w-11 transition-transform duration-500 group-hover:-translate-x-1"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M44 6H2M8 1L2 6l6 5"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                    />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => go(1)}
-                  aria-label="Next project"
-                  disabled={atEnd}
-                  className={`group flex h-12 w-14 items-center justify-center text-ink transition-colors duration-300 hover:text-rose-deep ${
-                    atEnd ? "pointer-events-none opacity-0" : ""
-                  }`}
-                >
-                  <svg
-                    viewBox="0 0 44 12"
-                    className="h-3 w-11 transition-transform duration-500 group-hover:translate-x-1"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M0 6h42M36 1l6 5-6 5"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                    />
-                  </svg>
-                </button>
-              </div>
+          {/* BACK — left of the card, and only once there is something behind
+              you. Drawn as a stroke rather than typed as the "←" glyph: a
+              glyph is sized by the body face's metrics, and the arrow in this
+              one is short and optically small. A path can be given whatever
+              length and weight the design needs and is the same shape at every
+              size. Smaller than it was (client: "a bit smaller but visible"),
+              still ink rather than fog so it cannot be missed.
 
-              {/* Position, drawn. A hairline that fills in rose as you move
-                  through the set — the same information the numeral carries,
-                  in the register the rest of the page speaks in (line-hair
-                  rules open every section on this site). Decorative rather
-                  than semantic, hence aria-hidden: the numeral below already
-                  states the position in words a screen reader can read, and
-                  announcing it twice helps nobody. */}
-              <div aria-hidden="true" className="relative h-px w-24 bg-hair-strong lg:w-full">
+              opacity-0, not unmounted — see the note on the row above for why
+              the slot has to keep its width. visibility is untouched so the
+              transition can play; pointer-events-none and `disabled` keep it
+              unclickable meanwhile. */}
+          {projects.length > 1 && (
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous project"
+              disabled={atStart}
+              className={`group order-2 flex h-11 w-11 shrink-0 items-center justify-center text-ink transition-opacity duration-300 hover:text-rose-deep lg:order-1 ${
+                atStart ? "pointer-events-none opacity-0" : ""
+              }`}
+            >
+              <svg
+                viewBox="0 0 32 12"
+                className="h-3 w-8 transition-transform duration-500 group-hover:-translate-x-1"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M32 6H2M8 1L2 6l6 5" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </button>
+          )}
+
+          {/* FORWARD — right of the card, and the mirror of the one above in
+              every respect including when it disappears: on the last card
+              there is nothing ahead, so it goes and its slot stays. */}
+          {projects.length > 1 && (
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next project"
+              disabled={atEnd}
+              className={`group order-3 flex h-11 w-11 shrink-0 items-center justify-center text-ink transition-opacity duration-300 hover:text-rose-deep ${
+                atEnd ? "pointer-events-none opacity-0" : ""
+              }`}
+            >
+              <svg
+                viewBox="0 0 32 12"
+                className="h-3 w-8 transition-transform duration-500 group-hover:translate-x-1"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M0 6h30M24 1l6 5-6 5" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </button>
+          )}
+          </div>
+
+          {/* The folio, under the card and on the same centre line. It used to
+              sit in the right-hand column with the arrows; that column is gone
+              now that they flank the card, and centring it here keeps the
+              section symmetrical rather than hanging the position marker off
+              one side.
+
+              The rule is decorative and aria-hidden — the numerals under it
+              already state the position in something a screen reader can
+              read, and saying it twice helps nobody. */}
+          {projects.length > 1 && (
+            <div className="mx-auto mt-10 flex w-24 flex-col items-center gap-3">
+              <div aria-hidden="true" className="relative h-px w-full bg-hair-strong">
                 <span
                   className="absolute inset-y-0 left-0 bg-rose-deep transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   style={{
@@ -385,10 +371,6 @@ export default function ProjectsCarousel({
                   }}
                 />
               </div>
-
-              {/* A caption, not a headline. The set total is set smaller again
-                  so the pair reads as one folio mark rather than two numbers
-                  of equal weight. */}
               <p className="flex items-baseline gap-1 font-body text-xs tabular-nums text-fog">
                 <span className="text-ink">
                   {String(Math.min(index + 1, projects.length)).padStart(2, "0")}
@@ -397,7 +379,6 @@ export default function ProjectsCarousel({
               </p>
             </div>
           )}
-          </div>
         </div>
       </div>
     </section>
