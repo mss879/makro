@@ -146,7 +146,10 @@ export default function ParallaxImage({
     treatment === "warm" ? "img-warm" : treatment === "mono" ? "img-mono" : "";
 
   return (
-    <div ref={wrap} className={`relative overflow-hidden bg-ink-700 ${className ?? ""}`}>
+    /* bg-well, not bg-ink-700: this component is used on dark bands and light
+       ones, and a near-black well flashes behind every picture on a light page
+       while it loads. The token resolves per section — see globals.css. */
+    <div ref={wrap} className={`relative overflow-hidden bg-well ${className ?? ""}`}>
       <div ref={inner} className="absolute inset-0">
         <Image
           src={unsplash(id, width)}
@@ -157,7 +160,10 @@ export default function ParallaxImage({
           className={`object-cover ${treatClass} ${imgClassName ?? ""}`}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
+      {/* Token-driven, and transparent inside a light section: a dark wash
+          over the bottom of a picture lifts it off an ink ground and dirties a
+          paper one. */}
+      <div className="image-scrim pointer-events-none absolute inset-0" />
     </div>
   );
 }

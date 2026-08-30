@@ -28,6 +28,17 @@ export const metadata = pageMetadata({
  * ahead of Build, and Build was rewritten around programme control. Bodies
  * are an array because every stage now runs to several paragraphs — the home
  * page's ApproachPreview still carries the one-line version of each.
+ *
+ * BUNDLED, NOT ADMIN-EDITABLE. This page was briefly wired to a pair of
+ * approach_page_* tables so the client could edit all of it; they changed
+ * their mind the same day and it was taken back out. If it is ever wanted
+ * again the shape that worked was a settings singleton for the hero plus the
+ * process heading, and one reorderable row per stage carrying step_no, title,
+ * lead, a jsonb paragraphs[], image and treatment.
+ *
+ * Every treatment is `warm`. Three of these were `mono` while this section was
+ * an ink band; greyscale is a dark-section device in this brand, so it went
+ * off-brand the moment the section became paper (see below).
  */
 const STEPS = [
   {
@@ -39,7 +50,7 @@ const STEPS = [
       "We consider not simply what can be built, but what should be built to create lasting value.",
     ],
     image: IMG.concreteLines,
-    treatment: "mono" as const,
+    treatment: "warm" as const,
   },
   {
     n: "02",
@@ -62,7 +73,7 @@ const STEPS = [
       "Compliance protects completion. Proper completion protects value.",
     ],
     image: IMG.angularGlass,
-    treatment: "mono" as const,
+    treatment: "warm" as const,
   },
   {
     n: "04",
@@ -87,7 +98,7 @@ const STEPS = [
       "Because lasting value is not defined at completion. It is proven over time.",
     ],
     image: IMG.towersUp,
-    treatment: "mono" as const,
+    treatment: "warm" as const,
   },
 ];
 
@@ -112,17 +123,33 @@ export default function ApproachPage() {
         treatment="warm"
       />
 
-      {/* Process — alternating rows */}
-      <section className="relative bg-ink py-20 md:py-28">
+      {/* Process — alternating rows.
+
+          A LIGHT section (client, Aug 2026 — "the approach page needs to
+          change to the light theme, it's still in the dark theme"). It was the
+          last `bg-ink` band left on the marketing site outside the heroes.
+
+          `section-light` rather than a bg utility: the class remaps
+          --color-hair, --color-mist, --color-fog, --color-accent and
+          --color-well along with the ground, so line-hair, the muted body
+          copy, the eyebrow and the image wells all resolve correctly without
+          per-element overrides. Only the explicit text-bone / text-rose usages
+          had to be swapped by hand, which is exactly what globals.css says to
+          expect.
+
+          The stage images went with it. Three of the five were `mono`, and
+          greyscale is a black-section device in this brand — correct while
+          this band was ink, off-brand the moment it became paper. */}
+      <section className="section-light relative py-20 md:py-28">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
-            <span className="eyebrow text-rose">The Process</span>
+            <span className="eyebrow text-rose-deep">The Process</span>
           </div>
           <TextReveal
             as="h2"
             text="Five disciplines. One standard."
-            className="mt-6 max-w-3xl font-display display-md text-bone"
+            className="mt-6 max-w-3xl font-display display-md text-ink"
           />
 
           <div className="mt-16 flex flex-col gap-20 md:gap-28">
@@ -142,14 +169,14 @@ export default function ApproachPage() {
                 />
                 <div className={i % 2 === 1 ? "lg:pr-10" : "lg:pl-10"}>
                   <div className="flex items-center gap-4">
-                    <span className="font-display text-5xl text-rose/70">{s.n}</span>
+                    <span className="font-display text-5xl text-rose-deep/70">{s.n}</span>
                     <span className="line-hair w-16" />
                   </div>
-                  <h3 className="mt-5 font-display text-5xl text-bone">{s.title}</h3>
-                  <p className="mt-5 max-w-md font-body text-xl leading-snug text-rose-soft">
+                  <h3 className="mt-5 font-display text-5xl text-ink">{s.title}</h3>
+                  <p className="mt-5 max-w-md font-body text-xl leading-snug text-rose-deep">
                     {s.lead}
                   </p>
-                  {/* Each stage now runs to several paragraphs, so they are
+                  {/* Each stage runs to several paragraphs, so they are
                       revealed as one block with a single delay rather than a
                       per-paragraph stagger — four staggered fades in a column
                       this tall reads as the page loading, not as a reveal. */}
