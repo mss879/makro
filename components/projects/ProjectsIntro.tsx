@@ -60,7 +60,14 @@ export default function ProjectsIntro({
   if (!body.length && !eyebrow) return null;
 
   return (
-    <section className="section-light relative py-24 md:py-32">
+    /* Asymmetric padding, not py-*. The space under the hero is doing real
+       work — it is what makes the intro read as a pause after a full-screen
+       image — but the space BELOW it was the same 128px, and stacked against
+       the carousel's own 112px top it left a 240px void between two sections
+       that belong together (client, Aug 2026: "reduce the padding between
+       these 2 sections"). Halved on the bottom edge only; the carousel takes
+       the other half off its top. */
+    <section className="section-light relative pb-12 pt-24 md:pb-16 md:pt-32">
       <div ref={ref} className="container-edge text-center">
         {eyebrow && (
           <div className="intro-reveal flex items-center justify-center gap-4">

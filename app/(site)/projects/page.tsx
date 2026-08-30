@@ -7,8 +7,6 @@ import JsonLd from "@/components/seo/JsonLd";
 import ProjectsPageHero from "@/components/projects/ProjectsPageHero";
 import ProjectsIntro from "@/components/projects/ProjectsIntro";
 import ProjectsCarousel from "@/components/projects/ProjectsCarousel";
-import ProjectsIndex from "@/components/projects/ProjectsIndex";
-import HashScroll from "@/components/projects/HashScroll";
 import Faq from "@/components/projects/Faq";
 import Reveal from "@/components/anim/Reveal";
 
@@ -62,11 +60,31 @@ export default async function ProjectsPage() {
           breadcrumbSchema([{ name: "Projects", path: "/projects" }]),
         ]}
       />
-      {/* The three admin-controlled sections, in the order the client asked
-          for: full-screen hero, scroll-revealed intro, curated carousel — then
-          the portfolio index that was already here. Each renders only when its
-          own switch is on and it has something to show, so turning one off in
-          the admin closes the gap rather than leaving an empty band. */}
+      {/* The page, in the order the client asked for (Aug 2026): full-screen
+          hero, scroll-revealed intro, the carousel — then straight to the FAQ.
+          Each admin section renders only when its own switch is on and it has
+          something to show, so turning one off closes the gap rather than
+          leaving an empty band.
+
+          THE STATUS-GROUPED PORTFOLIO INDEX THAT USED TO SIT BETWEEN THE
+          CAROUSEL AND THE FAQ IS GONE (client, Aug 2026). It was the long
+          "Upcoming / On-going / Delivered" listing, with its type filters and
+          jump-to dropdown, and it showed the same developments the carousel
+          had just shown — the page said the portfolio twice and the second
+          telling was the longer one.
+
+          Consequences worth knowing, because they are not local to this file:
+
+          - The carousel is now the ONLY list of developments on /projects. It
+            is admin-curated, so a project that is published but never added
+            under Projects → Carousel is no longer reachable from this page,
+            and emptying that curation empties the portfolio.
+          - The navbar's Projects dropdown pointed at #upcoming, #on-going and
+            #delivered, which were ids inside the index. Those anchors left
+            with it, so the dropdown went too — see components/layout/Navbar.tsx.
+          - ProjectsIndex, SectionJump and HashScroll are still in the tree,
+            unimported. Restoring the section is putting three lines back, not
+            rebuilding it. */}
       {page.hero.enabled && (
         <ProjectsPageHero
           slides={page.hero.slides}
@@ -86,14 +104,25 @@ export default async function ProjectsPage() {
         />
       )}
 
-      {/* Lands /projects#upcoming, #on-going and #delivered arriving from the
-          navbar dropdown on another route. */}
-      <HashScroll />
-      <ProjectsIndex projects={projects} />
       {/* Lives here rather than on the home page — the questions people ask
           are almost always about the developments. The canonical FAQPage
-          schema stays on /faq; duplicating it here would conflict. */}
-      <Faq />
+          schema stays on /faq; duplicating it here would conflict.
+
+          Every string is admin-controlled now (Projects → FAQ, added in
+          20260830000100), which is why the whole section sits behind its own
+          switch like the three above it. */}
+      {page.faq.enabled && (
+        <Faq
+          eyebrow={page.faq.eyebrow}
+          heading={page.faq.heading}
+          body={page.faq.body}
+          primaryLabel={page.faq.primaryLabel}
+          primaryHref={page.faq.primaryHref}
+          secondaryLabel={page.faq.secondaryLabel}
+          secondaryHref={page.faq.secondaryHref}
+          items={page.faq.items}
+        />
+      )}
 
       {/* Cross-links — the portfolio is the proof; point to the process and the guides */}
       <section className="relative border-t border-hair bg-carbon">

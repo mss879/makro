@@ -6,8 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { gsap, useGSAP, ScrollTrigger } from "@/lib/gsap";
 import { NAV, SITE } from "@/lib/site";
-import { GROUP_ORDER, GROUP_SLUG } from "@/lib/projects";
-import ProjectsMenu from "@/components/layout/ProjectsMenu";
 
 /**
  * Cream navbar — logo left, links right, Contact as an outlined button.
@@ -133,6 +131,12 @@ export default function Navbar() {
               className="shrink-0 transition-opacity hover:opacity-75"
             >
               <Image
+                // The preloader's mark flies to THIS element and lands on the
+                // twin-peak M inside it — see components/ui/Preloader.tsx,
+                // which measures this rect at exit time. Renaming or removing
+                // the hook does not break the intro; it falls back to a plain
+                // fade. It just stops being the good version.
+                data-nav-logo
                 src="/logo-black.png"
                 alt={SITE.name}
                 width={192}
@@ -159,17 +163,14 @@ export default function Navbar() {
               {NAV.map((item) => {
                 const active = isActive(item.href);
 
-                if (item.href === "/projects") {
-                  return (
-                    <ProjectsMenu
-                      key={item.href}
-                      href={item.href}
-                      label={item.label}
-                      active={active}
-                      overlay={true}
-                    />
-                  );
-                }
+                /* Projects is an ordinary link again. It used to be a
+                   ProjectsMenu — a dropdown to Upcoming / On-going /
+                   Delivered — and every one of those entries was a hash into
+                   the status-grouped index on /projects. That index was
+                   removed (client, Aug 2026), taking the three ids with it,
+                   so the dropdown was three ways to scroll to nothing.
+                   ProjectsMenu is still in components/layout if the stages
+                   ever get somewhere to point again. */
 
                 // Contact is the bar's one action, carrying a sharp-edged outline.
                 if (item.href === "/contact") {
@@ -254,25 +255,10 @@ export default function Navbar() {
                 {item.label}
               </Link>
 
-              {/* The portfolio's two stages, indented under Projects. No
-                  dropdown on mobile — the overlay is already a full-screen
-                  menu, so nesting a second one inside it would be a menu in a
-                  menu for two entries. */}
-              {item.href === "/projects" && (
-                <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 pl-9">
-                  {GROUP_ORDER.map((group) => (
-                    <Link
-                      key={group}
-                      href={`${item.href}#${GROUP_SLUG[group]}`}
-                      scroll={false}
-                      onClick={() => setOpen(false)}
-                      className="font-body text-xs uppercase tracking-[0.18em] text-mist transition-colors hover:text-rose-deep"
-                    >
-                      {group}
-                    </Link>
-                  ))}
-                </div>
-              )}
+              {/* The stage links that were indented under Projects here are
+                  gone with the desktop dropdown above, and for the same
+                  reason: #upcoming, #on-going and #delivered were ids in the
+                  removed portfolio index. */}
             </div>
           ))}
         </nav>
