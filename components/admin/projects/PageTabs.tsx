@@ -6,10 +6,11 @@ import { usePathname } from "next/navigation";
 /**
  * Tabs across the Projects admin.
  *
- * "Projects" is the portfolio itself (public.projects); the other three are the
- * sections of the /projects page around it, added in 20260803000900. They share
- * a menu item because that is how the client thinks about them — everything to
- * do with projects lives under Projects — but they write different tables.
+ * "Projects" is the portfolio itself (public.projects); the other four are the
+ * sections of the /projects page around it — three from 20260803000900 and the
+ * FAQ from 20260830000100. They share a menu item because that is how the
+ * client thinks about them — everything to do with projects lives under
+ * Projects — but they write different tables.
  *
  * Static segments beat the [id] route in the App Router, so /admin/projects/hero
  * resolves here and not to the project editor. Any future tab must therefore
@@ -20,6 +21,8 @@ const TABS = [
   { href: "/admin/projects/hero", label: "Page hero" },
   { href: "/admin/projects/intro", label: "Intro text" },
   { href: "/admin/projects/carousel", label: "Carousel" },
+  // Last, because it is last on the page.
+  { href: "/admin/projects/faq", label: "FAQ" },
 ];
 
 export default function PageTabs() {

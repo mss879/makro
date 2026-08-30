@@ -217,6 +217,18 @@ export type ProjectsPageSettingsRow = {
   carousel_enabled: boolean;
   carousel_eyebrow: string;
   carousel_heading: string;
+  /* FAQ — added in 20260830000100. The two links are label + href pairs, not
+     booleans over hard-coded routes: the client asked for the whole section to
+     be editable, and a label they can change pointing at a destination they
+     cannot is a half measure. */
+  faq_enabled: boolean;
+  faq_eyebrow: string;
+  faq_heading: string;
+  faq_body: string;
+  faq_primary_label: string;
+  faq_primary_href: string;
+  faq_secondary_label: string;
+  faq_secondary_href: string;
   created_at: string;
   updated_at: string;
 }
@@ -247,6 +259,25 @@ export type ProjectsPageHeroSlideRow = {
 export type ProjectsPageCarouselItemRow = {
   id: string;
   project_id: string;
+  published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * One question in the /projects FAQ accordion.
+ *
+ * `answer` may be empty while `question` may not: writing the question first
+ * and the answer later is a normal way to work, and a row with nothing under it
+ * is visibly unfinished — whereas an entry with no question renders as an empty
+ * accordion trigger the admin cannot see in order to delete it. That asymmetry
+ * is the CHECK in 20260830000100.
+ */
+export type ProjectsPageFaqItemRow = {
+  id: string;
+  question: string;
+  answer: string;
   published: boolean;
   sort_order: number;
   created_at: string;
@@ -369,6 +400,7 @@ export interface Database {
           },
         ]
       >;
+      projects_page_faq_items: Table<ProjectsPageFaqItemRow>;
       selected_work_settings: Table<SelectedWorkSettingsRow>;
       selected_work_cards: Table<SelectedWorkCardRow>;
       blog_posts: Table<BlogPostRow>;

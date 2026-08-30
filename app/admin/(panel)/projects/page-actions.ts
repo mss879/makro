@@ -25,7 +25,7 @@ const NOT_CONFIGURED =
   "Supabase is not connected — add the keys to .env.local and restart the dev server.";
 
 const MISSING_TABLES =
-  "The projects-page tables are not in the database yet. Apply supabase/migrations/20260803000900_projects_page.sql, then reload.";
+  "The projects-page tables are not in the database yet. Apply supabase/migrations/20260803000900_projects_page.sql (and 20260830000100_projects_page_faq.sql for the FAQ tab), then reload.";
 
 export type ProjectsPageFormState = { ok: boolean; message: string };
 
@@ -50,8 +50,9 @@ function friendly(error: { code?: string | null; message: string }): string {
     return MISSING_TABLES;
   }
   if (error.code === "23514") {
-    // The only CHECKs reachable from these forms.
-    return "A slide needs at least one of image, heading or body — an entirely empty slide would render as a blank full-screen panel. The autoplay interval must be between 2 and 30 seconds.";
+    // The CHECKs reachable from these forms: the slide shape rule, the
+    // autoplay bounds, and the FAQ's non-empty question.
+    return "A slide needs at least one of image, heading or body — an entirely empty slide would render as a blank full-screen panel. A FAQ entry needs a question. The autoplay interval must be between 2 and 30 seconds.";
   }
   if (error.code === "23505") {
     return "That project is already in the carousel.";
@@ -64,6 +65,7 @@ function done(message: string): ProjectsPageFormState {
   revalidatePath("/admin/projects/hero");
   revalidatePath("/admin/projects/intro");
   revalidatePath("/admin/projects/carousel");
+  revalidatePath("/admin/projects/faq");
   return { ok: true, message };
 }
 
@@ -291,4 +293,108 @@ export async function saveCarouselSelection(
   }
 
   return done(chosen.length ? "Carousel saved." : "Carousel cleared.");
+}
+
+// ---------------------------------------------------------------------------
+// FAQ
+//
+// Added in 20260830000100. Two halves, mirroring the hero above: the section's
+// copy lives on the settings singleton, the questions in their own table.
+// ---------------------------------------------------------------------------
+
+export async function saveFaqSettings(
+  _prev: ProjectsPageFormState,
+  formData: FormData
+): Promise<ProjectsPageFormState> {
+  await requireUser();
+  const supabase = await createServerSupabase();
+  if (!supabase) return { ok: false, message: NOT_CONFIGURED };
+
+  return writeSettings(supabase, {
+    faq_enabled: checkbox(formData, "faq_enabled"),
+    faq_eyebrow: text(formData, "faq_eyebrow"),
+    faq_heading: text(formData, "faq_heading"),
+    faq_body: text(formData, "faq_body"),
+    faq_primary_label: text(formData, "faq_primary_label"),
+    faq_primary_href: text(formData, "faq_primary_href"),
+    faq_secondary_label: text(formData, "faq_secondary_label"),
+    faq_secondary_href: text(formData, "faq_secondary_href"),
+  });
+}
+
+export async function saveFaqItem(
+  _prev: ProjectsPageFormState,
+  formData: FormData
+): Promise<ProjectsPageFormState> {
+  await requireUser();
+  const supabase = await createServerSupabase();
+  if (!supabase) return { ok: false, message: NOT_CONFIGURED };
+
+  const id = text(formData, "id");
+  const question = text(formData, "question");
+
+  // Checked here as well as by the CHECK constraint so the admin reads this
+  // sentence instead of a constraint name. The ANSWER is deliberately not
+  // required — writing the question first is a normal way to work.
+  if (!question) {
+    return {
+      ok: false,
+      message: "Add the question. An entry without one renders as an accordion row with nothing to click.",
+    };
+  }
+
+  const payload = {
+    question,
+    answer: text(formData, "answer"),
+    published: checkbox(formData, "published"),
+  };
+
+  const { error } = id
+    ? await supabase.from("projects_page_faq_items").update(payload).eq("id", id)
+    : await supabase.from("projects_page_faq_items").insert({
+        ...payload,
+        sort_order: Number(text(formData, "sort_order")) || 0,
+      });
+
+  if (error) return { ok: false, message: friendly(error) };
+  return done(id ? "Question updated." : "Question added.");
+}
+
+export async function deleteFaqItem(
+  _prev: ProjectsPageFormState,
+  formData: FormData
+): Promise<ProjectsPageFormState> {
+  await requireUser();
+  const supabase = await createServerSupabase();
+  if (!supabase) return { ok: false, message: NOT_CONFIGURED };
+
+  const id = text(formData, "id");
+  if (!id) return { ok: false, message: "That question no longer exists." };
+
+  const { error } = await supabase.from("projects_page_faq_items").delete().eq("id", id);
+  if (error) return { ok: false, message: friendly(error) };
+  return done("Question deleted.");
+}
+
+/** Reorder by rewriting the whole list — see reorderSlides for why that is safe here. */
+export async function reorderFaqItems(
+  _prev: ProjectsPageFormState,
+  formData: FormData
+): Promise<ProjectsPageFormState> {
+  await requireUser();
+  const supabase = await createServerSupabase();
+  if (!supabase) return { ok: false, message: NOT_CONFIGURED };
+
+  const ids = String(formData.get("ids") ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (!ids.length) return { ok: false, message: "Nothing to reorder." };
+
+  const { error } = await supabase
+    .from("projects_page_faq_items")
+    .upsert(ids.map((id, i) => ({ id, sort_order: i })));
+
+  if (error) return { ok: false, message: friendly(error) };
+  return done("Order saved.");
 }
