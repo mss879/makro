@@ -156,7 +156,9 @@ export default function ProjectsCarousel({
                    centres its contents, so a shorter card reads as more generously
                    set rather than as one with a gap at the bottom. */
                 <div key={project.slug} className="w-full shrink-0 snap-center">
-                  <article className="mx-auto grid h-full max-w-lg grid-cols-1 border border-hair bg-paper lg:max-w-none lg:grid-cols-2">
+                  {/* `relative` is load-bearing: it is what the stretched link
+                    at the bottom of the copy column anchors to. */}
+                <article className="relative mx-auto grid h-full max-w-lg grid-cols-1 border border-hair bg-paper lg:max-w-none lg:grid-cols-2">
                     {/* PORTRAIT frame, left. ONE fixed 3/4 for every card, and
                         the crop taken off the BOTTOM.
 
@@ -279,9 +281,27 @@ export default function ProjectsCarousel({
                         </dl>
                       )}
 
+                      {/* THE WHOLE CARD IS THE LINK (client, Aug 2026 —
+                          having to find "View project" was a needless step
+                          when the entire card plainly means "this
+                          development").
+
+                          Done by stretching this one anchor over the card with
+                          an empty ::after, rather than by wrapping the article
+                          in a <Link>. Wrapping would put the image, the status
+                          chip, the name and all four spec rows inside the
+                          anchor's accessible name, so a screen reader would
+                          announce the whole card as the link text, and
+                          selecting any of that copy would start a drag
+                          instead. This way there is still exactly one link,
+                          reading "View project", whose hit area happens to be
+                          the card.
+
+                          The card holds no other interactive element, so there
+                          is nothing for the pseudo-element to swallow. */}
                       <Link
                         href={`/projects/${project.slug}`}
-                        className="group mt-8 inline-flex items-center gap-3 self-start font-body text-sm text-ink transition-colors hover:text-rose-deep"
+                        className="group mt-8 inline-flex items-center gap-3 self-start font-body text-sm text-ink transition-colors after:absolute after:inset-0 after:content-[''] hover:text-rose-deep"
                       >
                         View project
                         <span className="transition-transform duration-500 group-hover:translate-x-1">
