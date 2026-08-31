@@ -372,8 +372,56 @@
     mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
   }
 
+  /* ---------- Reveals ----------
+     CSS transitions driven by an IntersectionObserver. There is no GSAP and no
+     ScrollTrigger in either reveal component any more, and that is the point.
+
+     WHY IT MOVED OFF GSAP. A tween needs requestAnimationFrame to advance. When
+     rAF is stalled — a backgrounded tab during load, a throttled renderer, a
+     device under load — a GSAP reveal parks its element with inline styles and
+     then never runs, and the content is invisible with nothing on the page to
+     say so. That is the missing-headings bug, and it is not hypothetical: it is
+     reproducible by loading a page in a tab that is not painting. A CSS
+     transition reaches its end state regardless; it cannot leave content parked
+     because it never owns the "before" state in the first place.
+
+     THE PARKING IS IN THE SERVER-RENDERED MARKUP, behind `.anim`, which an
+     inline script in app/layout.tsx adds before the body is painted. It has to
+     be in the HTML: park in an effect instead and the browser paints the seated
+     content first, so the reader sees it and then watches it animate — the
+     client's exact complaint. And it has to be behind a gate that only exists
+     when JavaScript is running, or a script that never loads leaves the page
+     blank.
+
+     Both selectors are DESCENDANT and keyed on the CONTAINER, which is the
+     mistake called out in the intro-reveal note below: the revealed class lands
+     on the container, so a rule written against the word itself would never
+     match and an entire heading would stay hidden while still occupying its
+     height. */
   .will-reveal {
+    transition:
+      opacity 900ms var(--ease-out-expo),
+      transform 900ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .anim .will-reveal:not(.is-revealed) {
     opacity: 0;
+    transform: translateY(var(--reveal-y, 2.5rem));
+  }
+
+  /* One word of a TextReveal, rising out of its overflow-hidden mask. The
+     stagger is per-word transition-delay rather than a timeline, so the whole
+     effect is three declarations and no JavaScript at all once the container
+     has been marked revealed. */
+  .reveal-word {
+    display: inline-block;
+    transition: transform 900ms var(--ease-out-expo);
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--reveal-i, 0) * 55ms);
+  }
+
+  .anim .reveal-words:not(.is-revealed) .reveal-word {
+    transform: translateY(120%);
   }
 
   /* Projects-page intro reveal.
@@ -446,18 +494,51 @@
      Safari, which still needs it. */
   .hero-plate {
     --hero-plate-tint: 0.3;
+    /* Padding was 1.75/2.25rem and the client's read was that the containers
+       "feel too big". The plate should frame the copy, not seat it in a room
+       of its own. */
     border: 1px solid rgb(255 255 255 / 0.2);
     background: rgb(5 2 3 / var(--hero-plate-tint));
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
     box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.35);
-    padding: 1.75rem;
+    padding: 1.25rem;
   }
 
   @media (min-width: 768px) {
     .hero-plate {
-      padding: 2.25rem;
+      padding: 1.5rem;
     }
+  }
+
+  /* ---------- Hero plate position ----------
+     Bottom-LEFT of the hero, 4px off both edges (client, Aug 2026 — "as close
+     as possible to the edges"). One class so the five heroes cannot drift:
+     PageHero, the contact hero, the home hero, the project detail hero and the
+     /projects slideshow all hang their plate off this.
+
+     7px is deliberately not the page gutter. Everything else on the site is
+     inset by container-edge — clamp(1.25rem, 5vw, 6.5rem) — and the whole
+     point of this is that the hero plate is NOT on that grid: it sits in the
+     corner of the frame like a plate on a photograph rather than a block in
+     the page's column. Applied as padding on the positioning wrapper rather
+     than as a margin on the plate, so the plate itself stays a plain box and
+     w-fit still shrink-wraps it to the copy.
+
+     It started at 4px, which the client took as flush and then asked to ease
+     off slightly — "add about 3px from the edges as well" — so the default is
+     7px. Still corner-anchored, still nothing like the 20-104px gutter the
+     rest of the page sits on.
+
+     The inset is a variable because the HOME hero overrides it (client, Aug
+     2026 — 4px was "way too close to the edge" there specifically). That hero
+     is the one that is already a framed object: its section carries
+     p-[var(--hero-inset)] around the video, so the plate reads as sitting
+     inside a frame rather than against the page, and it wants real room to do
+     that. Every other hero runs full-bleed to the viewport, where a few pixels
+     is the whole idea. */
+  .hero-plate-anchor {
+    padding: var(--hero-plate-inset, 7px);
   }
 
   /* ---------- Light section theme ----------
@@ -559,11 +640,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .will-reveal {
+  .will-reveal,
+  .reveal-word {
     opacity: 1 !important;
     transform: none !important;
-    /* The reveals animate autoAlpha, which writes inline visibility:hidden
-       alongside opacity 0 — opacity alone cannot undo that. */
+    transition: none !important;
     visibility: visible !important;
   }
 }

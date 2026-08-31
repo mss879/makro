@@ -93,6 +93,26 @@ export default function RootLayout({
       lang="en"
       className={`${marcellus.variable} ${manrope.variable} antialiased`}
     >
+      <head>
+        {/* Arms the reveal animations' "before" state — see the Reveal parking
+            block in globals.css. Inline and in the head so it runs before the
+            body is painted: the parking has to be in effect for the very first
+            frame or the reader sees the seated content and then watches it
+            animate.
+
+            It is a <script> rather than a plain class on <html> for one
+            reason: the parked state must only ever exist when there is
+            JavaScript running to undo it. No script, no class, nothing hidden
+            — so a page whose bundle never arrives renders complete rather than
+            blank. Revealing needs nothing beyond an IntersectionObserver and a
+            CSS transition, neither of which can leave content stranded, so
+            there is no timed release to go with it. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('anim')",
+          }}
+        />
+      </head>
       {/* Document shell only — fonts, base colours and the grain overlay.
           The public site's chrome (preloader, navbar, footer, smooth scroll)
           lives in app/(site)/layout.tsx so /admin can opt out of all of it. */}
