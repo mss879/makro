@@ -112,7 +112,10 @@ export default function PageHero({
          The contact hero is hand-rolled (it renders its own JSON-LD and drift
          mark) and repeats this box deliberately. Change one, change the
          other. */
-      className="relative flex min-h-[max(32rem,60vh)] flex-col justify-center overflow-hidden pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]"
+      /* justify-end, not justify-center: the plate is anchored to the bottom
+         of the frame now. The top padding stays so the min-height still
+         reserves room under the floating navbar. */
+      className="relative flex min-h-[max(32rem,60vh)] flex-col justify-end overflow-hidden pt-[calc(var(--nav-h)+3rem)] md:pt-[calc(var(--nav-h)+4rem)]"
     >
       <div className="absolute inset-0">
         <Image
@@ -137,7 +140,7 @@ export default function PageHero({
         />
       </div>
 
-      <div className="container-edge relative w-full">
+      <div className="hero-plate-anchor relative w-full">
         {/* The black glass plate, on every hero (client, Aug 2026). w-fit so
             it ends where the copy ends — a plate spanning the viewport would
             be a scrim by another name, which is the objection that had the

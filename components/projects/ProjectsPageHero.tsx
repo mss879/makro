@@ -98,8 +98,8 @@ export default function ProjectsPageHero({
             )}
 
             {(slide.heading || slide.body) && (
-              <div className="absolute inset-x-0 bottom-0 pb-16 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] md:pb-20">
-                <div className="container-edge">
+              <div className="absolute inset-x-0 bottom-0 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
+                <div className="hero-plate-anchor">
                   {/* Same plate as every other hero — see .hero-plate. */}
                   <div className="hero-plate w-fit max-w-3xl">
                     {slide.heading && (

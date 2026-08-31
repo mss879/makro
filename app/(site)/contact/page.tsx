@@ -59,7 +59,7 @@ export default async function ContactPage() {
           the sizing is matched by hand instead. Keep the two in step. */}
       {/* min-h matches components/ui/PageHero exactly — see the note there for
           why the inner-page heroes now share a height floor. */}
-      <section className="relative flex min-h-[max(32rem,60vh)] flex-col justify-center overflow-hidden bg-ink pb-14 pt-[calc(var(--nav-h)+3rem)] md:pb-16 md:pt-[calc(var(--nav-h)+4rem)]">
+      <section className="relative flex min-h-[max(32rem,60vh)] flex-col justify-end overflow-hidden bg-ink pt-[calc(var(--nav-h)+3rem)] md:pt-[calc(var(--nav-h)+4rem)]">
         <JsonLd
           data={[
             webPageSchema({
@@ -78,7 +78,7 @@ export default async function ContactPage() {
 
         {/* w-full because the section is now a flex container — without it the
             content box shrink-wraps and container-edge stops centring. */}
-        <div className="container-edge relative w-full">
+        <div className="hero-plate-anchor relative w-full">
           {/* The same black glass plate as every other hero — this one is
               hand-rolled rather than a PageHero, so it needs the class
               directly. See .hero-plate in globals.css. */}

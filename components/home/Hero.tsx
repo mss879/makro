@@ -160,7 +160,11 @@ export default function Hero() {
         {/* Content */}
         <div className="relative flex h-full flex-col justify-end">
           {/* Headline block */}
-          <div className="container-edge pb-12 md:pb-16">
+          {/* More room than the 4px every other hero uses (client, Aug 2026).
+              This is the only hero whose art is already an inset frame, so the
+              plate sits inside it rather than against the viewport edge — see
+              the note on .hero-plate-anchor. */}
+          <div className="hero-plate-anchor [--hero-plate-inset:1.5rem] md:[--hero-plate-inset:2rem]">
             {/* flex-col stops the reveal-masks' negative block margins from
                 collapsing, which used to add a phantom 0.4em gap between
                 the two heading rows. */}
@@ -188,7 +192,11 @@ export default function Hero() {
               data-hero-content
               className="hero-plate flex w-fit flex-col items-start gap-6 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]"
             >
-              <h1 className="flex flex-col font-display display-fluid leading-[1.05] text-bone">
+              {/* A step down from display-fluid's clamp(2.35rem,8vw,4.6rem)
+                  (client, Aug 2026 — "reduce the heading font a bit"). Set
+                  here rather than on the utility: display-fluid is shared with
+                  the project detail hero, which was not part of the ask. */}
+              <h1 className="flex flex-col font-display text-[clamp(2rem,6.4vw,3.8rem)] leading-[1.05] text-bone">
                 <span className="reveal-mask">
                   <span data-h-word className="inline-block">
                     The Future,
