@@ -297,6 +297,37 @@ export type BlogSection = {
   points?: string[];
 }
 
+/**
+ * Singleton row — the public site's on/off switch and the "Coming soon" gate
+ * it is replaced by.
+ *
+ * TWO OF THESE COLUMNS ARE SECRETS. `access_code` and `token_salt` are readable
+ * by `authenticated` (the admin screen edits them) and by service_role (the
+ * proxy checks the unlock cookie against them) — and by nobody else. The anon
+ * role holds a COLUMN-LEVEL grant covering the copy columns only, so an anon
+ * `select("*")` on this table is a permission error rather than a leak. Keep it
+ * that way: see the security note at the top of
+ * supabase/migrations/20260831000100_site_lock.sql before adding a column here.
+ */
+export type SiteLockSettingsRow = {
+  id: string;
+  /** True replaces every public page with the gate. /admin is never gated. */
+  enabled: boolean;
+  /** Secret. Empty means no code exists, so nothing gets past the gate. */
+  access_code: string;
+  /** Secret. Mixed into the unlock cookie's hash; rotating it revokes every cookie. */
+  token_salt: string;
+  eyebrow: string;
+  heading: string;
+  body: string;
+  /** Empty hides the access-code field on the gate entirely. */
+  note: string;
+  /** Whether the gate prints the contact details from lib/site.ts. */
+  show_contact: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export type BlogPostRow = {
   id: string;
   slug: string;
@@ -403,6 +434,7 @@ export interface Database {
       projects_page_faq_items: Table<ProjectsPageFaqItemRow>;
       selected_work_settings: Table<SelectedWorkSettingsRow>;
       selected_work_cards: Table<SelectedWorkCardRow>;
+      site_lock_settings: Table<SiteLockSettingsRow>;
       blog_posts: Table<BlogPostRow>;
     };
     Views: Record<string, never>;

@@ -99,6 +99,7 @@ audited and reasoned about in a single file.
 | `20260828000300_project_hero_image.sql` | 6. Projects | `projects.hero_image` — a hero image set independently of the gallery. |
 | `20260828000400_project_status_values.sql` | 6. Projects | **Data migration.** Narrows the four project statuses to Upcoming / On-going / Delivered and rewrites existing rows. |
 | `20260828000500_project_catalogue.sql` | 6. Projects + 7. Email List | `projects.catalogue_url` / `.catalogue_name`, `newsletter_subscribers.source`, and the `project-catalogues` bucket — the email-gated catalogue download. |
+| `20260831000100_site_lock.sql` | 9. Settings | `site_lock_settings` (singleton: the site-wide lock, the access code, and the Coming soon page's copy). The only table in the schema with **column-level grants** — see §5. |
 
 `20260828000400_project_status_values.sql` is a DATA migration, not a schema
 one, and its three statements must stay in their written order: drop the old
@@ -200,6 +201,37 @@ deleting a project cannot empty the home page. A card links via an explicit
 `href`, or failing that via `project_slug` (`/projects/<slug>`); with both
 empty it renders as an unlinked panel.
 
+### The site lock
+`site_lock_settings.enabled` takes the **entire public website** down behind a
+Coming soon page. Every URL — home, projects, blog, contact — serves the gate
+instead, at the address the visitor asked for, with `X-Robots-Tag: noindex`.
+`/admin` is never gated, which is what makes the switch safe to throw: the
+screen that undoes it is always reachable.
+
+It is enforced in `proxy.ts`, not in the pages, so nothing of the real site is
+rendered or shipped to a gated visitor. The proxy reads the lock with the
+**service-role key** and caches it for ~15 seconds per instance, so a toggle
+takes about that long to reach the live site and costs no round trip on the
+requests in between.
+
+**Without `SUPABASE_SERVICE_ROLE_KEY` the lock is not enforced and the site
+stays public.** It fails open on purpose — a missing environment variable
+should not be able to serve a holding page over a live site — and
+`/admin/settings` says so in red whenever the lock is on and the key is absent.
+
+Getting past the gate is a shared **access code**. What the visitor's browser
+then carries is not a flag but a hash of `(token_salt + code)` in an httpOnly
+cookie, which buys two things: it cannot be forged from devtools, and access is
+revocable without a session table — change the code, or press **Sign everyone
+out** (which rotates the salt and keeps the code), and every cookie already
+issued stops matching on the next request. An empty code means nobody gets
+through at all; **Let this browser in** on the admin screen is the authenticated
+way past that, and the only way past it.
+
+The copy is editable while the site is open — writing the holding page is
+something you do *before* locking — and **Preview the gate** shows the real page
+to a signed-in admin either way.
+
 ### Blog sections
 An article's body is a list of sections, each a heading plus paragraphs and an
 optional bullet list. Two rules the form enforces and the database cannot:
@@ -294,6 +326,17 @@ change revalidates `/` — so changes appear without a redeploy.
   subscriber list, and every unpublished draft — requires an authenticated
   admin session. The three public write paths are write-only: nobody can read
   other people's inquiries, the page-view table, or the mailing list back out.
+
+- **`site_lock_settings` goes one step further, to column grants.** The table
+  holds the access code and the salt the unlock cookie is hashed from, next to
+  ordinary marketing copy that the gate page has to read with the anon key. So
+  `anon` is granted `SELECT` on the copy columns *by name* and holds no
+  privilege at all on `access_code` / `token_salt` — an anon `select("*")` on
+  that table is a permission error, not a leak. Hashing the code instead would
+  not have worked: these are short, human, shareable codes, and a published hash
+  of one falls to a wordlist. Only `authenticated` (the admin screen, which has
+  to show the client the code they chose) and `service_role` (the proxy, which
+  checks the cookie) can read them.
 
 - **The migrations revoke rather than rely on RLS alone.** Supabase's base image
   ships `alter default privileges … grant all on tables to anon`, so `anon`

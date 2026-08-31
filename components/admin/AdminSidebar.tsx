@@ -21,6 +21,10 @@ const NAV = [
   { href: "/admin/blog", label: "Blogs" },
   { href: "/admin/projects", label: "Projects" },
   { href: "/admin/email-list", label: "Email List" },
+  // Last because it is the only item that is not content: it holds the switch
+  // that takes the public site down, and that belongs away from the things
+  // clicked every day.
+  { href: "/admin/settings", label: "Settings" },
 ];
 
 export default function AdminSidebar() {
