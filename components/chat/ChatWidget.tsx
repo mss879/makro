@@ -60,6 +60,21 @@ function writeStored(value: Stored) {
   }
 }
 
+/**
+ * True when the launcher should be out of the way: a phone-width viewport,
+ * still inside the first screenful.
+ *
+ * 768px is Tailwind's `md`, the same breakpoint the button's own bottom/right
+ * offsets switch at. 60% of a viewport height rather than the whole of one, so
+ * the button is already arriving as the hero leaves rather than appearing from
+ * nowhere once it has gone.
+ */
+function isStowedNow(): boolean {
+  if (typeof window === "undefined") return false;
+  if (!window.matchMedia("(max-width: 767px)").matches) return false;
+  return window.scrollY < window.innerHeight * 0.6;
+}
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Turn[]>([OPENER]);
@@ -255,6 +270,57 @@ export default function ChatWidget() {
     }
   }, [input, sending, absorb]);
 
+  /**
+   * KEEP THE LAUNCHER OFF THE HERO ON A PHONE (client, Aug 2026 — "as the user
+   * enters hide the chat icon so it's not messy").
+   *
+   * Every hero on this site seats its glass plate in the BOTTOM-left corner,
+   * and this button is fixed to the bottom-right. On a desktop those are two
+   * ends of a wide frame and they never meet. On a 375px screen the plate is
+   * most of the width, so the bubble lands on the corner of it — the first
+   * thing a visitor sees is a hero with something stuck to it.
+   *
+   * So on mobile it waits until the first screenful has been scrolled past.
+   * Nothing is removed: by the time anyone is reading the page the button is
+   * there, and it is there immediately for a visitor who arrives deep-linked
+   * part-way down. Desktop is untouched.
+   *
+   * Applied on EVERY route rather than only the home page. The brief named the
+   * home page, but the collision is the shared hero geometry, not that hero —
+   * and a launcher that vanishes on one route and not the others reads as a
+   * bug rather than as restraint.
+   *
+   * The initial value is computed rather than defaulted to false: this widget
+   * is mounted with ssr:false, so there is no hydration to match, and starting
+   * at false would flash the bubble over the hero for one frame on exactly the
+   * screens this exists to keep it off.
+   */
+  const [stowed, setStowed] = useState(isStowedNow);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    // Cheap enough to run unthrottled: scrollY does not force layout, and
+    // React bails out of the re-render when the boolean has not changed, so a
+    // scroll through the hero costs one render, not one per event.
+    const check = () => setStowed(isStowedNow());
+
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    // Rotating a phone, or crossing the breakpoint on a resized desktop
+    // window, changes the answer without any scrolling.
+    window.addEventListener("resize", check);
+    mq.addEventListener("change", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+      mq.removeEventListener("change", check);
+    };
+  }, []);
+
+  // Never stowed while the panel is open — the button is the close control at
+  // that point, and hiding it would trap the conversation on screen.
+  const hidden = stowed && !open;
+
   return (
     <>
       {/* Launcher */}
@@ -264,7 +330,16 @@ export default function ChatWidget() {
         aria-expanded={open}
         aria-controls="makro-chat-panel"
         aria-label={open ? "Close the Makro Assistant" : "Chat with the Makro Assistant"}
+        // Hidden from the accessibility tree and taken out of the tab order
+        // while it is stowed, not merely faded: a control nobody can see is
+        // one a keyboard visitor should not land on and a screen reader should
+        // not offer. transition-all is already on the element, so it fades
+        // and rises into place rather than appearing.
+        aria-hidden={hidden}
+        tabIndex={hidden ? -1 : undefined}
         className={`fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full shadow-[0_18px_40px_-12px_rgba(5,2,3,0.7)] transition-all duration-300 md:bottom-7 md:right-7 ${
+          hidden ? "pointer-events-none translate-y-3 opacity-0" : "translate-y-0 opacity-100"
+        } ${
           open
             ? "bg-bone text-ink hover:bg-rose-soft"
             : "bg-rose text-ink hover:bg-rose-soft"

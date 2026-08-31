@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SITE } from "@/lib/site";
+import { BRAND } from "@/lib/images";
 import { absoluteUrl } from "@/lib/seo";
 
 // BRAND PRIMARY DISPLAY FONT — Marcellus (OFL, self-hosted). A classical,
@@ -70,7 +71,13 @@ export const metadata: Metadata = {
     url: SITE.url,
     // Default card image — any page without its own og image (including the
     // 404 fallback) inherits this; Twitter inherits openGraph images too.
-    images: [{ url: absoluteUrl("/brand/texture-ascent.jpg") }],
+    //
+    // Makro Heights rather than the old copper texture: this is the picture
+    // attached to a bare link to this site, and a property developer whose
+    // link preview is an abstract pattern is a property developer showing
+    // nobody a property. Dimensions are declared because the file is committed
+    // at exactly this size — see hasCardDimensions() in lib/seo.ts.
+    images: [{ url: absoluteUrl(BRAND.ogCard), width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",

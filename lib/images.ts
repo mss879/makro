@@ -66,6 +66,31 @@ export const BRAND = {
   swRooftop: "/brand/sw-rooftop.jpg", // AI-generated (Higgsfield) dusk rooftop amenity deck — Selected Work panel
   swBalcony: "/brand/sw-balcony.jpg", // AI-generated (Higgsfield) golden-hour private balcony — Selected Work panel
   whyCourtyard: "/brand/why-courtyard.jpg", // AI-generated (Higgsfield) terracotta courtyard — Why Makro still image
+  /**
+   * THE SHARE CARD. What WhatsApp, LinkedIn, Facebook, Slack and Google render
+   * beside a link to this site — for most people the first Makro image they
+   * ever see, before they have decided whether to click.
+   *
+   * It used to be textureAscent: abstract copper folds, beautiful in place on a
+   * concept page and completely mute as a link preview. Somebody forwarding a
+   * development to a buyer was sending them a picture of nothing. This is Makro
+   * Heights, the flagship, with its own signage in frame — a property developer
+   * should lead with a property.
+   *
+   * Cut from hero-architectural-poster.webp, which is frame 0 of the home hero
+   * video, so the card and the page a visitor lands on are the same building at
+   * the same hour.
+   *
+   * Deliberately 1200x630 and JPEG, neither of which is an accident:
+   *   - 1.91:1 is the ratio every one of those scrapers crops to, so supplying
+   *     it exactly means none of them chooses the crop for us.
+   *   - JPEG, not the WebP the poster ships as. WhatsApp is how property links
+   *     are actually passed around here, and its preview fetcher has never been
+   *     reliable on WebP.
+   *   - Cropped from the BOTTOM (podium and forecourt), never the top, which
+   *     is the site's standing rule for cropping a building.
+   */
+  ogCard: "/brand/og-makro-heights.jpg", // 1200x630 — Makro Heights, the default share card
 } as const;
 
 export const IMG = {

@@ -16,11 +16,20 @@ export function absoluteUrl(path = "/"): string {
 }
 
 /**
- * ogImage() only crops raw Unsplash ids to exactly 1200×630 — resolved paths
- * ("/brand/…", uploaded asset URLs) pass through at their native size, so
- * card dimensions are only declared when the crop guarantees them.
+ * Whether this id is known to resolve to exactly 1200×630.
+ *
+ * Two ways it can be. A raw Unsplash id, because ogImage() asks for that crop
+ * explicitly. Or BRAND.ogCard, which was cut to those pixels and committed at
+ * that size — everything else under "/brand/…", and every uploaded asset URL,
+ * passes through at whatever shape it happens to be.
+ *
+ * It matters because declaring og:image:width / :height lets a scraper lay the
+ * card out from the tags alone; declaring them for an image that is NOT that
+ * size is worse than declaring nothing, because the preview is then built
+ * around a lie and the picture arrives letterboxed inside it.
  */
-function isCropped(id: string): boolean {
+function hasCardDimensions(id: string): boolean {
+  if (id === BRAND.ogCard) return true;
   return !id.startsWith("/") && !id.startsWith("http");
 }
 
@@ -52,10 +61,13 @@ export function pageMetadata({
 }): Metadata {
   const url = absoluteUrl(path);
   // Every page ships a card image — pages without their own art fall back to
-  // the brand texture so link previews never render blank.
-  const id = imageId ?? BRAND.textureAscent;
+  // the Makro Heights card so link previews never render blank, and never
+  // render an abstraction either.
+  const id = imageId ?? BRAND.ogCard;
   const image = ogImage(id);
-  const images = [isCropped(id) ? { url: image, width: 1200, height: 630 } : { url: image }];
+  const images = [
+    hasCardDimensions(id) ? { url: image, width: 1200, height: 630 } : { url: image },
+  ];
   return {
     title,
     description,
@@ -273,8 +285,8 @@ export function projectSchema(project: Project) {
     url,
     // Same empty-string trap as the page's openGraph image: a project with no
     // art must not advertise the shared placeholder as its own photograph in
-    // structured data. Falls back to the brand texture.
-    image: absoluteOgImage(project.cover || BRAND.textureAscent),
+    // structured data. Falls back to the site's share card.
+    image: absoluteOgImage(project.cover || BRAND.ogCard),
     datePosted: `${project.year}-01-01`,
     provider: { "@id": ORG_ID },
     about: {

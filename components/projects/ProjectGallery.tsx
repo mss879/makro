@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import GalleryLightbox from "./GalleryLightbox";
 
 /**
  * The project gallery — a slideshow of every uploaded image, with a filmstrip
@@ -46,6 +47,13 @@ import Image from "next/image";
  * one and invisible on the other. Square rather than round: nothing in this
  * brand is round.
  *
+ * CLICKING THE PICTURE OPENS IT FULL SCREEN (client, Aug 2026 — "so they can
+ * see it bigger"). The stage caps at 640px tall and has to seat portrait and
+ * landscape in the same frame, so a tall image renders at a fraction of the
+ * screen; GalleryLightbox is where a buyer actually looks at it. It shares this
+ * component's `index` rather than keeping one of its own, so paging inside it
+ * and closing leaves the strip on the image last looked at.
+ *
  * The strip beneath is the same rule at a smaller size: each preview is the
  * height of the row and as wide as its own image wants to be, so the strip is
  * a row of true shapes rather than uniform tiles with the pictures cropped
@@ -67,6 +75,7 @@ export default function ProjectGallery({
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [ratios, setRatios] = useState<Record<string, number>>({});
+  const [zoomed, setZoomed] = useState(false);
 
   const count = images.length;
 
@@ -80,13 +89,20 @@ export default function ProjectGallery({
 
   useEffect(() => {
     // Nothing to advance to, or the visitor is reading a particular image and
-    // has the pointer on it, or they have asked for reduced motion — in which
-    // case the arrows are the only way it moves.
-    if (count < 2 || paused) return;
+    // has the pointer on it, or the full-screen preview is open over it, or
+    // they have asked for reduced motion — in which case the arrows are the
+    // only way it moves.
+    //
+    // `zoomed` is in here rather than folded into `paused` because the two are
+    // released by different things: `paused` is a pointer leaving the section,
+    // which never fires while a full-screen dialog is covering it. Left out,
+    // the timer would page the lightbox every three seconds under the
+    // visitor's hands.
+    if (count < 2 || paused || zoomed) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = window.setInterval(() => setIndex((i) => (i + 1) % count), 3000);
     return () => window.clearInterval(id);
-  }, [count, paused]);
+  }, [count, paused, zoomed]);
 
   if (count === 0) return null;
 
@@ -152,9 +168,12 @@ export default function ProjectGallery({
               // utility could not override it. Autoplay is already off for
               // these visitors; this stops the manual arrows from sliding a
               // picture across the stage as well.
-              className={`pointer-events-none absolute inset-0 motion-reduce:!transition-none ${
-                centre ? "opacity-100" : peek ? "opacity-30" : "opacity-0"
-              }`}
+              // Only the CENTRE slide takes pointer events, so the zoom
+              // button below cannot be triggered through a faded neighbour
+              // that happens to be passing under the cursor.
+              className={`absolute inset-0 motion-reduce:!transition-none ${
+                centre ? "pointer-events-auto opacity-100" : "pointer-events-none"
+              } ${centre ? "" : peek ? "opacity-30" : "opacity-0"}`}
               style={{
                 // 42% of the stage, not of the image: the images have
                 // different widths, so anything measured off the picture would
@@ -192,6 +211,26 @@ export default function ProjectGallery({
                 priority={i === 0}
                 onLoad={measure(src)}
               />
+
+              {/* The click target for the full-screen preview. A transparent
+                  button over the whole stage rather than one sized to the
+                  picture: the image is object-contain inside a fixed-height
+                  frame, so its real box is not known here, and a target that
+                  only covered part of what looks like the photograph would
+                  read as broken. The arrows sit at z-30, above this, so they
+                  keep their own clicks.
+
+                  Deliberately a <button> and not an onClick on the image:
+                  this has to be reachable and operable from the keyboard, and
+                  it is what carries the label a screen reader announces. */}
+              {centre && (
+                <button
+                  type="button"
+                  onClick={() => setZoomed(true)}
+                  aria-label={`View image ${i + 1} of ${count} full screen`}
+                  className="absolute inset-0 cursor-zoom-in"
+                />
+              )}
             </div>
           );
         })}
@@ -280,6 +319,16 @@ export default function ProjectGallery({
             );
           })}
         </ul>
+      )}
+
+      {zoomed && (
+        <GalleryLightbox
+          images={images}
+          name={name}
+          index={index}
+          onIndex={setIndex}
+          onClose={() => setZoomed(false)}
+        />
       )}
     </div>
   );

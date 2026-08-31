@@ -34,19 +34,19 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — Property Developer in Colombo, Sri Lanka` },
   description:
-    "Makro Developers builds premium residential and commercial properties in Colombo, Sri Lanka. The Wheels Lanka Group company behind Makro Heights in Dehiwala.",
+    "Makro Developers plans and builds residential and commercial properties in Colombo, Sri Lanka — built for lasting value. The Wheels Lanka Group company behind Makro Heights in Dehiwala.",
   alternates: { canonical: SITE.url },
   // A page-level openGraph replaces the root's wholesale, so the shared
   // fields (siteName, locale) must be restated here, not just the overrides.
   openGraph: {
     title: `${SITE.name} — ${SITE.tagline}`,
     description:
-      "Premium residential and commercial property developments in Colombo and across Sri Lanka, backed by the Wheels Lanka Group.",
+      "Thoughtfully planned residential and commercial developments in Colombo and across Sri Lanka, built for lasting value. Backed by the Wheels Lanka Group.",
     url: SITE.url,
     type: "website",
     siteName: SITE.name,
     locale: "en_LK",
-    images: [{ url: ogImage(BRAND.textureAscent), width: 2200, height: 1259 }],
+    images: [{ url: ogImage(BRAND.ogCard), width: 1200, height: 630 }],
   },
 };
 

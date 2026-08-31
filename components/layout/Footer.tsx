@@ -134,7 +134,11 @@ export default function Footer() {
                 {item.label}
               </Link>
             ))}
-            <p>The future built well.</p>
+            {/* Read from SITE, never retyped. This line sat here as a string
+                literal and went stale the moment the hero was rewritten, which
+                is how the footer ended up quoting one strapline while the top
+                of the same page said another. */}
+            <p>{SITE.tagline}</p>
           </div>
         </div>
 

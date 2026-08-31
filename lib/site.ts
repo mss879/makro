@@ -31,9 +31,28 @@ export const SITE = {
   name: "Makro Developers",
   legal: "Makro Developers (Pvt) Ltd",
   parent: "Wheels Lanka Group",
-  tagline: "The future built well.",
+  /**
+   * The line the home page hero actually says. It is NOT decoration: it is the
+   * Open Graph title on every share of this site, the Organization `slogan` in
+   * structured data, and what the chat agent is told the company stands for.
+   *
+   * It read "The future built well." for a month after the hero had already
+   * been rewritten to "The Future, Built to Endure." — so every link anyone
+   * shared, and every card Google or WhatsApp rendered, quoted a strapline that
+   * appeared nowhere on the site. Changing the hero means changing this, and
+   * the footer reads it from here rather than repeating it for exactly that
+   * reason.
+   */
+  tagline: "The Future, Built to Endure.",
+  /**
+   * ≤160 characters, because this is the meta description on every page that
+   * does not write its own. Carries the hero's promise ("thoughtfully planned",
+   * "lasting value") rather than a separate sentence written months apart from
+   * it, plus the two things that have to be in it for search: where, and who
+   * owns them.
+   */
   description:
-    "Makro Developers is a Sri Lankan property developer delivering premium residential and commercial developments, backed by the Wheels Lanka Group.",
+    "Thoughtfully planned residential and commercial developments in Colombo and across Sri Lanka, built for lasting value. A Wheels Lanka Group company.",
   email: "info@makrodevelopers.com",
   phone: "+94 707 21 21 21",
   address: "10, Esther Avenue, Park Road, Colombo 05",

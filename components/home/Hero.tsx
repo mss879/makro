@@ -164,7 +164,13 @@ export default function Hero() {
               This is the only hero whose art is already an inset frame, so the
               plate sits inside it rather than against the viewport edge — see
               the note on .hero-plate-anchor. */}
-          <div className="hero-plate-anchor [--hero-plate-inset:1.5rem] md:[--hero-plate-inset:2rem]">
+          {/* 1rem on a phone, where the 1.5rem this used to start at was 24px
+              of the ~375px the plate has to live in and the client's read was
+              that the container "takes up all the space". The frame's own
+              --hero-inset still separates it from the viewport edge, so it is
+              still a plate sitting inside a frame — just not one holding the
+              frame at arm's length on the screen with the least room. */}
+          <div className="hero-plate-anchor [--hero-plate-inset:1rem] sm:[--hero-plate-inset:1.5rem] md:[--hero-plate-inset:2rem]">
             {/* flex-col stops the reveal-masks' negative block margins from
                 collapsing, which used to add a phantom 0.4em gap between
                 the two heading rows. */}
@@ -190,13 +196,17 @@ export default function Hero() {
                back to sample. */}
             <div
               data-hero-content
-              className="hero-plate flex w-fit flex-col items-start gap-6 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]"
+              className="hero-plate flex w-fit flex-col items-start gap-4 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] sm:gap-6"
             >
               {/* A step down from display-fluid's clamp(2.35rem,8vw,4.6rem)
                   (client, Aug 2026 — "reduce the heading font a bit"). Set
                   here rather than on the utility: display-fluid is shared with
                   the project detail hero, which was not part of the ask. */}
-              <h1 className="flex flex-col font-display text-[clamp(2rem,6.4vw,3.8rem)] leading-[1.05] text-bone">
+              {/* The clamp's MIN moves 2rem -> 1.75rem; its max and its vw
+                  slope are untouched, so nothing above ~430px wide changes at
+                  all. That is the whole edit: the plate was overwhelming a
+                  phone, and the heading is the tallest thing in it. */}
+              <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-bone">
                 <span className="reveal-mask">
                   <span data-h-word className="inline-block">
                     The Future,
@@ -209,26 +219,60 @@ export default function Hero() {
                 </span>
               </h1>
 
-              <p data-h-fade className="max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg">
+              <p data-h-fade className="max-w-md font-body text-sm leading-relaxed text-bone/85 sm:text-base md:text-lg">
                 Thoughtfully planned residential and commercial developments,
                 built for lasting value.
               </p>
 
               {/* No magnetic hover on these two (client direction, Aug 2026):
-                  the buttons hold their position and answer with colour only. */}
-              <div data-h-fade className="flex flex-wrap items-center gap-3">
+                  the buttons hold their position and answer with colour only.
+
+                  SIDE BY SIDE ON A PHONE (client, Aug 2026 — "smaller on
+                  mobile and placed next to each other"). They were
+                  flex-wrap at px-7 py-4, which needs ~400px of row and had
+                  about 280px, so they stacked — two full-width slabs that were
+                  most of the plate's height on the screen where the plate was
+                  already too tall.
+
+                  whitespace-nowrap on the labels is what keeps the single row
+                  honest: without it the ROW obeys and the WORDS wrap instead,
+                  trading two short buttons for two tall ones and losing on
+                  both counts.
+
+                  THE BREAKPOINT IS 360px, NOT sm. Measured, not guessed: the
+                  pair needs ~270px, and the plate offers viewport - 8px frame
+                  - 32px plate inset - 40px plate padding. That is 280px on a
+                  360px Android and 295px on a 390px iPhone, but only 240px on
+                  a 320px iPhone SE, where two buttons on one line cannot fit at
+                  any type size these labels survive. So below 360px they wrap
+                  as they always did, and at 360px and up they sit side by side.
+                  A hard flex-nowrap would have looked right on the phone it was
+                  checked on and pushed the second button off the plate on the
+                  narrow ones.
+
+                  If a label ever gets longer than "Book a Consultation", raise
+                  that 360 rather than shrinking the type — 0.78rem on a 44px
+                  target is already the floor. */}
+              <div
+                data-h-fade
+                className="flex flex-wrap items-center gap-2 min-[360px]:flex-nowrap sm:gap-3"
+              >
                 <Link
                   href="/projects"
-                  className="group inline-flex items-center gap-3 bg-rose px-7 py-4 font-body text-ink transition-colors hover:bg-rose-soft"
+                  className="group inline-flex items-center gap-2 whitespace-nowrap bg-rose px-3 py-3 font-body text-[0.78rem] text-ink transition-colors hover:bg-rose-soft sm:gap-3 sm:px-7 sm:py-4 sm:text-base"
                 >
                   Explore Projects
-                  <span className="transition-transform duration-500 group-hover:translate-x-1">
+                  {/* The arrow is the first thing to go: it is decoration
+                      beside a label that already says where the link leads,
+                      and on this row it is the ~20px that decides whether the
+                      two buttons fit on one line. */}
+                  <span className="hidden transition-transform duration-500 group-hover:translate-x-1 sm:inline-block">
                     →
                   </span>
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-3 border border-bone/40 px-7 py-4 font-body text-bone transition-colors hover:border-rose hover:text-rose"
+                  className="inline-flex items-center gap-2 whitespace-nowrap border border-bone/40 px-3 py-3 font-body text-[0.78rem] text-bone transition-colors hover:border-rose hover:text-rose sm:gap-3 sm:px-7 sm:py-4 sm:text-base"
                 >
                   Book a Consultation
                 </Link>
