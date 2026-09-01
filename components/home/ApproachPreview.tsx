@@ -70,12 +70,11 @@ export default function ApproachPreview() {
 
       const q = gsap.utils.selector(el);
       const grid = el.querySelector<HTMLElement>("[data-grid]");
-      const rail = el.querySelector<HTMLElement>("[data-rail]");
       const head = el.querySelector<HTMLElement>("[data-head]");
       const markSvg = el.querySelector<SVGSVGElement>("[data-peak]");
       const cells = Array.from(el.querySelectorAll<HTMLElement>("[data-step]"));
       const peaks = el.querySelectorAll<SVGPathElement>("[data-peak] .peak-draw");
-      if (!grid || !rail || cells.length === 0) return;
+      if (!grid || cells.length === 0) return;
 
       const treads = q("[data-tread]");
       const risers = q("[data-riser]");
@@ -339,59 +338,29 @@ export default function ApproachPreview() {
       // scroll direction performs the ascent the stair performs on desktop.
       // The plumb falls back to a 48px drop from just above the cell's own
       // top border into the numeral.
-      mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
-        prime();
-
-        // Below lg the full-width rail is the grid's datum, drawn once. It is
-        // primed here rather than in prime() because above lg it is hidden and
-        // must be left alone.
-        gsap.set(rail, { scaleX: 0 });
-        gsap.fromTo(
-          rail,
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            duration: 1.0,
-            ease: "power2.inOut",
-            force3D: true,
-            scrollTrigger: { trigger: grid, start: "top 85%" },
-          }
-        );
-
-        // One trigger per cell rather than a batch off the grid: stacked,
-        // the grid is tall enough that a single trigger would fire storeys
-        // that are still a full screen below the fold. The stagger is done
-        // by the scroll itself, which is more honest than a faked one.
-        cells.forEach((cell) => {
-          const qc = gsap.utils.selector(cell);
-          const t = gsap.timeline({
-            scrollTrigger: { trigger: cell, start: "top 82%", toggleActions: "play none none none" },
-          });
-          // Same grammar as desktop — plumb, pour, numeral, title, body —
-          // but unscrubbed, so the more extreme expo.out is free. The slab
-          // is what carries the idea here; without it the mobile branch
-          // would be one 48px hairline and a lot of nothing.
-          t.fromTo(qc("[data-plumb-mask]"), { yPercent: -100 }, { yPercent: 0, duration: 0.34, ease: "power2.in", force3D: true }, 0)
-            .fromTo(qc("[data-plumb]"), { yPercent: 100 }, { yPercent: 0, duration: 0.34, ease: "power2.in", force3D: true }, 0)
-            .fromTo(qc("[data-fill]"), { yPercent: 100 }, { yPercent: 0, duration: 0.85, ease: "power2.out" }, 0.06)
-            .fromTo(qc("[data-num]"), { yPercent: 100 }, { yPercent: 0, duration: 0.62, ease: "expo.out" }, 0.14)
-            .fromTo(qc("[data-title]"), { yPercent: 115 }, { yPercent: 0, duration: 0.58, ease: "expo.out" }, 0.26)
-            .fromTo(qc("[data-body-win]"), { y: 14 }, { y: 0, duration: 0.62, ease: "power2.out", force3D: true }, 0.36)
-            .fromTo(qc("[data-body]"), { yPercent: -100 }, { yPercent: 0, duration: 0.62, ease: "power2.out", force3D: true }, 0.36)
-            .fromTo(qc("[data-body-inner]"), { yPercent: 100 }, { yPercent: 0, duration: 0.62, ease: "power2.out", force3D: true }, 0.36);
-        });
-
-        // Hung off the LAST cell so the mark still closes the sequence
-        // instead of firing early at the top of a tall stack.
-        gsap.to(peaks, {
-          strokeDashoffset: 0,
-          duration: 0.55,
-          stagger: 0.18,
-          delay: 0.5,
-          ease: "power2.out",
-          scrollTrigger: { trigger: cells[cells.length - 1], start: "top 82%" },
-        });
-      });
+      // ── Below lg — NO GSAP AT ALL ───────────────────────────────────────
+      // There used to be a second motion branch here: the same five storeys,
+      // unscrubbed, seven chained tweens per cell driven by one ScrollTrigger
+      // each. It is gone, and so is the markup it drove — below lg the
+      // staircase grid is `display: none` and the steps render as a plain
+      // list (see the <ol> in the markup) revealed by the site's own
+      // IntersectionObserver, like every other section.
+      //
+      // It was removed because it FAILED INVISIBLE, which is the one outcome
+      // this file's own prime() docblock is written to prevent. prime() hid
+      // all five cells, and the per-cell triggers then did not fire — every
+      // numeral parked at yPercent 100 inside its mask, every title at 115,
+      // every body clipped out of its counter-translated window, and every
+      // slab of material still below the fold of its own cell. Five empty
+      // boxes, which is what the client saw and called messy.
+      //
+      // The grid-level triggers on the same page DID fire, so the fault was
+      // never "GSAP did not boot" — which is exactly why this is not worth
+      // patching. A design whose content is invisible unless seven chained
+      // tweens per cell all land has no business being the mobile fallback
+      // for a decorative staircase that is not even drawn at that width.
+      // Below lg there is now nothing to prime, so there is nothing to
+      // strand.
 
       // ── Reduced motion — the finished drawing, no ScrollTriggers ────────
       // Not just compliance: this is the frame stakeholders screenshot, so
@@ -406,7 +375,6 @@ export default function ApproachPreview() {
       mm.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(treads, { scaleX: 1 });
         gsap.set(risers, { scaleY: 1 });
-        gsap.set(rail, { scaleX: 1 });
         gsap.set([...plumbMasks, ...plumbs], { yPercent: 0 });
         gsap.set(fills, { yPercent: 0 });
         gsap.set(nums, { yPercent: 0 });
@@ -424,7 +392,7 @@ export default function ApproachPreview() {
   );
 
   return (
-    <section ref={root} className="section-light relative py-24 md:py-32 lg:py-28">
+    <section ref={root} className="section-light relative section-y md:py-32 lg:py-28">
       <div className="container-edge">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           {/* data-head, not the h2 — TextReveal owns the transforms on that
@@ -452,28 +420,91 @@ export default function ApproachPreview() {
           </Reveal>
         </div>
 
-        {/* The mobile rail and the logomark both sit above the grid's top
-            edge, so they live in a wrapper around the grid rather than
-            inside it — an absolute child of a grid container is a fragile
-            place to put them.
+        {/* ---------- Below lg: the five storeys as a plain list ----------
+            Client, Sep 2026: the Our Approach section "looks messy on
+            mobile". It did, and it was worse than messy — see the note in
+            the GSAP block above. Five bordered cards, each 206px tall, each
+            holding a numeral, a title and a body that were all invisible
+            because the per-cell timelines that were supposed to reveal them
+            did not run.
+
+            This is not the staircase shrunk down; it is the same idea stated
+            the way a phone can state it. The desktop section is a building
+            drawn in elevation, climbing left to right across five columns.
+            A phone has no width to climb across — but a building section on
+            a phone-shaped canvas is the ONE case where the metaphor gets
+            easier, not harder: it reads straight down. So the datum turns
+            vertical, and each storey lands on it with its own short tread.
+            Same two rose hairlines, same 01→05 ascent, a third of the
+            height, and — because it is ordinary markup revealed by the
+            site's own IntersectionObserver — it cannot fail invisible.
+
+            An <ol> rather than divs: these are five ordered stages, and the
+            numerals are content, not decoration. */}
+        <ol className="mt-12 lg:hidden">
+          {STEPS.map((s, i) => (
+            <Reveal
+              as="li"
+              key={s.n}
+              delay={i * 0.05}
+              className="relative pb-9 pl-9 [--tread-y:0.7rem] last:pb-0"
+            >
+              {/* The tread this storey lands on, and the datum running down
+                  to the next one.
+
+                  ONE VARIABLE FEEDS BOTH, and it has to. --tread-y is 11.2px,
+                  which is the midline of the title's cap band: the h3 is
+                  24px on leading-none, its glyphs run 2.7→20.4 from the
+                  item's top edge, so the line meets the type at its optical
+                  centre rather than at the top of a box that is mostly
+                  leading. The datum then overshoots the item by exactly the
+                  SAME amount, which is what keeps it continuous — the next
+                  tread sits that far below the next item's top edge, so the
+                  segments meet instead of leaving a nick at every junction.
+                  Move one of these and the other follows, hence the variable.
+
+                  No datum on the last storey: it connects landings, and
+                  there is nothing below 05 to connect to. */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute left-0 top-[var(--tread-y)] h-px w-5 bg-rose-deep"
+              />
+              {i < STEPS.length - 1 && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute bottom-[calc(var(--tread-y)*-1)] left-0 top-[var(--tread-y)] w-px bg-rose-deep/30"
+                />
+              )}
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-sm leading-none text-rose-deep">
+                  {s.n}
+                </span>
+                <h3 className="font-display text-2xl leading-none text-ink">
+                  {s.title}
+                </h3>
+              </div>
+              <p className="mt-3 font-body text-sm leading-relaxed text-mist">
+                {s.body}
+              </p>
+            </Reveal>
+          ))}
+        </ol>
+
+        {/* The logomark sits above the grid's top edge, so it lives in a
+            wrapper around the grid rather than inside it — an absolute child
+            of a grid container is a fragile place to put it.
 
             lg:pt-[124px] reserves the band the staircase climbs through:
             92px of maximum stair + 24px of logomark + 8px of air. It is
             static layout applied once; the treads, risers and plumbs are all
-            absolutely positioned, so nothing in the band ever reflows. The
-            drawn band now supplies the breathing room the old mt-16 did,
-            hence lg:mt-8. */}
-        <div data-grid className="relative mt-16 lg:mt-8 lg:pt-[124px]">
-          {/* Mobile datum only — above lg the five treads replace it.
-              No `scale-x-0` here or on any data-hooked element below:
-              Tailwind v4 writes the discrete CSS `scale` property, which
-              composes with — and permanently flattens — the `transform` GSAP
-              owns. A stray transform utility looks like a broken trigger, not
-              a CSS bug. The from-state is applied in JS instead (see prime). */}
-          <span
-            data-rail
-            className="pointer-events-none absolute -top-px left-0 h-px w-full origin-left bg-rose-deep lg:hidden"
-          />
+            absolutely positioned, so nothing in the band ever reflows.
+
+            `hidden lg:block` is load-bearing, not tidiness: the GSAP above
+            still primes every cell in here to its from-state, and the whole
+            staircase — treads, risers, plumbs, the stair offsets — is drawn
+            only from lg up. Below that it is a decoration with no geometry,
+            which is what it was rendering as. */}
+        <div data-grid className="relative hidden lg:mt-8 lg:block lg:pt-[124px]">
           {/* Rests on the end of the summit tread. At lg the band is 124px,
               the top tread sits 92px above the grid, the mark is 24px tall,
               so 124 − 92 − 24 − 2 = 6px leaves its foot 2px clear of the
