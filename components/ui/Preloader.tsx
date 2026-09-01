@@ -11,10 +11,11 @@ import { PeakMark } from "@/components/brand/PeakMark";
  * in place of a percentage counter. Doubles as cover while the hero video
  * buffers.
  *
- * HOME PAGE ONLY (client, Aug 2026). It is a first-impression device and an
- * eight-second gate in front of a contact form or a project page is a cost
- * with no matching benefit — it also covered the hero video's buffering,
- * which no other route has.
+ * THREE ROUTES ONLY — see CURTAIN_ROUTES. It is a first-impression device,
+ * and a gate in front of a contact form or a deep-linked project page is a
+ * cost with no matching benefit. On home it also covers the hero video's
+ * buffering; the other two have no video, so `heroVideoReady()` resolves
+ * null straight away and the curtain is only as long as its own animation.
  *
  * Gated on the route the visitor LANDED on, not on the current one. This
  * component sits in the persistent (site) layout and never remounts, so the
@@ -135,6 +136,22 @@ function measureFlight(logo: HTMLElement): Flight | null {
   };
 }
 
+/**
+ * The routes that get the curtain, as EXACT entry paths.
+ *
+ * Home was the only one (client, Aug 2026 — an eight-second gate in front of
+ * a contact form is a cost with no matching benefit). About and Projects were
+ * added Sep 2026 at the client's request: "the client wants the preloader
+ * transition for the about page and project page just those 2."
+ *
+ * "/projects" is the index only, deliberately. Exact matching rather than a
+ * prefix test is the whole point — a visitor landing on /projects/some-
+ * development came from a search result or a shared link and wants the
+ * development, not a curtain. Adding a route here is one line; making this a
+ * startsWith() would quietly enrol every child route the CMS ever creates.
+ */
+const CURTAIN_ROUTES = new Set(["/", "/about", "/projects"]);
+
 export default function Preloader() {
   const root = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
@@ -144,7 +161,7 @@ export default function Preloader() {
   // semantics described above — and unlike a ref it is legal to read during
   // render, which is where the decision to render nothing has to be made.
   const [entryPath] = useState(pathname);
-  const onHome = entryPath === "/";
+  const showCurtain = CURTAIN_ROUTES.has(entryPath);
 
   useGSAP(
     () => {
@@ -154,7 +171,7 @@ export default function Preloader() {
       // /Hero.tsx already handles the curtain being absent (it tests for
       // `.pl-panel` and starts its own entrance immediately), so there is no
       // event to fire on this path.
-      if (!el || !onHome) return;
+      if (!el || !showCurtain) return;
       document.body.style.overflow = "hidden";
 
       const paths = el.querySelectorAll<SVGPathElement>(".peak-draw");
@@ -352,7 +369,7 @@ export default function Preloader() {
     { scope: root }
   );
 
-  if (done || !onHome) return null;
+  if (done || !showCurtain) return null;
 
   return (
     <div ref={root} className="fixed inset-0 z-[10000]">
