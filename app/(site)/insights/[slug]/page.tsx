@@ -89,7 +89,7 @@ export default async function InsightPage({
       />
 
       {/* Article hero */}
-      <section className="relative bg-ink pb-16 pt-24">
+      <section className="relative bg-ink pb-12 pt-24 md:pb-16">
         <div className="container-edge">
           <div className="flex flex-wrap items-center gap-4">
             <Link
@@ -107,11 +107,11 @@ export default async function InsightPage({
           <TextReveal
             as="h1"
             text={insight.displayTitle}
-            className="mt-8 max-w-4xl font-display display-lg text-bone"
+            className="mt-6 max-w-4xl font-display display-lg text-bone"
             delay={0.1}
           />
           <Reveal delay={0.2}>
-            <p className="mt-8 max-w-2xl font-body text-xl leading-relaxed text-mist">
+            <p className="mt-6 max-w-2xl font-body text-xl leading-relaxed text-mist">
               {insight.intro}
             </p>
           </Reveal>
@@ -128,7 +128,7 @@ export default async function InsightPage({
       </section>
 
       {/* Body */}
-      <section className="relative bg-ink pb-24 md:pb-32">
+      <section className="relative bg-ink pb-12 md:pb-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <article className="lg:col-span-7 lg:col-start-3">
             {insight.sections.map((section, si) => (
@@ -137,7 +137,7 @@ export default async function InsightPage({
                   <span className="font-body text-xs text-rose">0{si + 1}</span>
                   <span className="line-hair w-10" />
                 </div>
-                <h2 className="mt-4 font-display text-3xl leading-tight text-bone md:text-4xl">
+                <h2 className="mt-6 font-display text-3xl leading-tight text-bone md:text-4xl">
                   {section.heading}
                 </h2>
                 <div className="mt-6 space-y-5">
@@ -169,7 +169,7 @@ export default async function InsightPage({
                 <PeakMark className="h-5 w-auto text-rose" strokeWidth={10} />
                 <span className="eyebrow text-fog">Talk it through</span>
               </div>
-              <p className="mt-5 font-display text-2xl leading-snug text-bone md:text-3xl">
+              <p className="mt-6 font-display text-2xl leading-snug text-bone md:text-3xl">
                 Questions about buying or investing? We&rsquo;re here to help
                 you make an informed decision.
               </p>
@@ -213,7 +213,7 @@ export default async function InsightPage({
       </section>
 
       {/* Related reading */}
-      <section className="relative border-t border-hair bg-carbon py-20 md:py-24">
+      <section className="relative border-t border-hair bg-carbon section-y md:py-24">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />

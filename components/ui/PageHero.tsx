@@ -187,7 +187,7 @@ export default function PageHero({
         {intro && (
           <p
             data-hero-intro
-            className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist"
+            className="mt-6 max-w-xl font-body text-lg leading-relaxed text-mist"
           >
             {intro}
           </p>

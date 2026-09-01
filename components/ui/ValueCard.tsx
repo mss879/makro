@@ -28,7 +28,7 @@ export default function ValueCard({
       <h3 className="mt-6 font-display text-xl tracking-[0.05em] text-ink md:text-2xl">
         {title}
       </h3>
-      <p className="mt-4 font-body text-sm leading-relaxed text-mist">{body}</p>
+      <p className="mt-3 font-body text-sm leading-relaxed text-mist">{body}</p>
     </Reveal>
   );
 }

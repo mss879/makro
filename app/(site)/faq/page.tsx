@@ -44,7 +44,7 @@ export default function FaqPage() {
         treatment="warm"
       />
 
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y section-y-open-t md:py-32">
         <div className="container-edge flex flex-col gap-20">
           {FAQ_GROUPS.map((group, gi) => (
             <div key={group.group} className="grid grid-cols-1 gap-10 lg:grid-cols-12">
@@ -58,7 +58,7 @@ export default function FaqPage() {
                   <TextReveal
                     as="h2"
                     text={group.group}
-                    className="mt-5 font-display display-md text-ink"
+                    className="mt-6 font-display display-md text-ink"
                   />
                 </div>
               </div>
@@ -81,7 +81,7 @@ export default function FaqPage() {
       </section>
 
       {/* Cross-links */}
-      <section className="section-light relative overflow-hidden border-t border-hair py-20 md:py-24">
+      <section className="section-light relative overflow-hidden border-t border-hair section-y md:py-24">
         <div className="pointer-events-none absolute -right-16 bottom-0 opacity-[0.05]">
           <PeakMark className="h-[26rem] w-auto text-rose-deep" strokeWidth={2} />
         </div>
@@ -89,7 +89,7 @@ export default function FaqPage() {
           <Reveal className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
             <div>
               <p className="eyebrow text-rose-deep">Still deciding?</p>
-              <h2 className="mt-4 max-w-xl font-display display-md text-ink">
+              <h2 className="mt-6 max-w-xl font-display display-md text-ink">
                 The answers live in the work.
               </h2>
             </div>

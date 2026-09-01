@@ -65,7 +65,7 @@ export default function CareersPage() {
       />
 
       {/* Why Makro */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="relative bg-ink section-y section-y-open-t md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-4">
@@ -111,7 +111,7 @@ export default function CareersPage() {
       </section>
 
       {/* Disciplines */}
-      <section className="relative bg-carbon py-24 md:py-32">
+      <section className="relative bg-carbon section-y md:py-32">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
@@ -141,7 +141,7 @@ export default function CareersPage() {
       </section>
 
       {/* Open application */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="relative bg-ink section-y md:py-32">
         <div className="container-edge mx-auto max-w-4xl text-center">
           <PeakMark className="mx-auto h-10 w-auto text-rose" strokeWidth={7} />
           <TextReveal

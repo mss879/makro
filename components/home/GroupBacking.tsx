@@ -49,7 +49,7 @@ export default function GroupBacking() {
   );
 
   return (
-    <section ref={ref} className="relative overflow-hidden py-16 md:py-24">
+    <section ref={ref} className="relative overflow-hidden section-y md:py-24">
       <div className="absolute inset-0">
         <Image
           data-bg
@@ -81,11 +81,11 @@ export default function GroupBacking() {
           <TextReveal
             as="h2"
             text="Group stability. Specialist focus."
-            className="mt-4 font-display text-2xl leading-tight text-bone sm:text-3xl md:text-4xl"
+            className="mt-6 font-display text-2xl leading-tight text-bone sm:text-3xl md:text-4xl"
           />
 
           <Reveal delay={0.1}>
-            <p className="mt-5 max-w-xl font-body text-base leading-relaxed text-mist">
+            <p className="mt-6 max-w-xl font-body text-base leading-relaxed text-mist">
               As a wholly owned subsidiary of the Wheels Lanka Group, Makro
               combines the strength, governance and long-term stability of an
               established and diversified Sri Lankan business group with a

@@ -147,10 +147,10 @@ export default function FeaturedProjects({
                       <p className="font-body text-xs uppercase tracking-[0.25em] text-rose">
                         {card.kicker}
                       </p>
-                      <h3 className="mt-2 font-display text-3xl text-bone">
+                      <h3 className="mt-3 font-display text-3xl text-bone">
                         {card.title}
                       </h3>
-                      <p className="mt-2 max-w-xs font-body text-sm leading-relaxed text-mist opacity-0 transition-all duration-500 group-hover:opacity-100">
+                      <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-mist opacity-0 transition-all duration-500 group-hover:opacity-100">
                         {card.caption}
                       </p>
                     </div>

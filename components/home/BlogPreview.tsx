@@ -19,7 +19,7 @@ export default async function BlogPreview() {
   const posts = (await getInsights()).slice(0, 3);
 
   return (
-    <section className="section-light relative border-t border-hair py-16 md:py-24">
+    <section className="section-light relative border-t border-hair section-y md:py-24">
       <div className="container-edge">
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-xl">
@@ -30,7 +30,7 @@ export default async function BlogPreview() {
             <TextReveal
               as="h2"
               text="Insights behind informed decision making"
-              className="mt-4 font-display text-2xl leading-tight text-ink sm:text-3xl md:text-4xl"
+              className="mt-6 font-display text-2xl leading-tight text-ink sm:text-3xl md:text-4xl"
             />
           </div>
           <Reveal>
@@ -60,10 +60,10 @@ export default async function BlogPreview() {
                 <p className="mt-4 font-body text-[0.7rem] uppercase tracking-[0.2em] text-fog">
                   {post.category} · {post.readTime}
                 </p>
-                <h3 className="mt-2 font-display text-xl leading-snug text-ink transition-colors group-hover:text-rose-deep md:text-2xl">
+                <h3 className="mt-3 font-display text-xl leading-snug text-ink transition-colors group-hover:text-rose-deep md:text-2xl">
                   {post.displayTitle}
                 </h3>
-                <p className="mt-2 line-clamp-2 font-body text-sm leading-relaxed text-mist">
+                <p className="mt-3 line-clamp-2 font-body text-sm leading-relaxed text-mist">
                   {post.excerpt}
                 </p>
                 <span className="mt-4 inline-flex items-center gap-2 font-body text-xs font-medium text-ink transition-colors group-hover:text-rose-deep">

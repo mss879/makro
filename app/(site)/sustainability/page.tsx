@@ -75,7 +75,7 @@ export default function SustainabilityPage() {
       />
 
       {/* Commitment */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="relative bg-ink section-y section-y-open-t md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-4">
@@ -108,7 +108,7 @@ export default function SustainabilityPage() {
       </section>
 
       {/* Pillars */}
-      <section className="relative bg-carbon py-24 md:py-32">
+      <section className="relative bg-carbon section-y md:py-32">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
@@ -129,7 +129,7 @@ export default function SustainabilityPage() {
                 <span className="font-body text-xs text-fog">0{i + 1}</span>
                 <div>
                   <h3 className="font-display text-3xl text-bone">{p.title}</h3>
-                  <p className="mt-4 font-body text-sm leading-relaxed text-mist">
+                  <p className="mt-3 font-body text-sm leading-relaxed text-mist">
                     {p.body}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default function SustainabilityPage() {
       </section>
 
       {/* Practices */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="relative bg-ink section-y md:py-32">
         <div className="container-edge grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
           <ParallaxImage
             id={BRAND.lifestyleSuite}

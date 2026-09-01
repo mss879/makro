@@ -49,7 +49,7 @@ export default function Faq({
   // list above it — so only the accordion column is conditional.
 
   return (
-    <section className="section-light relative overflow-hidden py-24 md:py-32">
+    <section className="section-light relative overflow-hidden section-y md:py-32">
       <div className="pointer-events-none absolute -left-20 bottom-0 opacity-[0.06]">
         <PeakMark className="h-[34rem] w-auto text-rose-deep" strokeWidth={2} />
       </div>

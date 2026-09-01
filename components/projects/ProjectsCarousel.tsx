@@ -96,7 +96,7 @@ export default function ProjectsCarousel({
   return (
     /* Tighter on top than underneath — the intro above is part of the same
        thought and was sitting 240px away. See ProjectsIntro. */
-    <section className="section-light relative pb-20 pt-10 md:pb-28 md:pt-14">
+    <section className="section-light relative section-y md:pb-28 md:pt-14">
       <div className="container-edge">
         {eyebrow && (
           <div className="flex items-center gap-4">
@@ -260,7 +260,7 @@ export default function ProjectsCarousel({
                       <h3 className="mt-6 font-display text-4xl leading-[1.05] text-ink md:text-5xl">
                         {project.name}
                       </h3>
-                      <p className="mt-5 font-body text-base leading-relaxed text-mist">
+                      <p className="mt-6 font-body text-base leading-relaxed text-mist">
                         {project.summary}
                       </p>
 

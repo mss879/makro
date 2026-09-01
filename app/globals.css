@@ -118,6 +118,24 @@
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
+/* ---------- Mobile section rhythm: the dial ----------
+   The two numbers behind `.section-y` and its open-edge modifiers. See the
+   block above `.section-y` in @layer utilities for why the GAP, not the
+   padding, is the unit here. --section-y is half a gap; --section-y-open is
+   a whole one, for an edge with no neighbour to meet it. Phone only:
+   neither is read at or above `md`.
+
+   Plain `:root`, deliberately NOT `@theme`. Tailwind v4 only emits the
+   theme variables it can see a use for, and it looks for utility class
+   names in the templates — not for `var()` calls in this file. A
+   `--section-y` in @theme matches no utility namespace, so nothing would
+   ever reference it by name and it would be tree-shaken out from under the
+   rules that need it. */
+:root {
+  --section-y: 3rem; /* 48px — one section's share of a 96px gap */
+  --section-y-open: 6rem; /* 96px — the whole gap, carried alone */
+}
+
 /* ---------- Admin panel: light mode ----------
    The panel defaults to dark (client, Aug 2026 — the cream panel was "hard on
    the eyes"), and this is the opt-out. Every value below overrides a
@@ -628,6 +646,95 @@
 
   .container-edge {
     padding-inline: clamp(1.25rem, 5vw, 6.5rem);
+  }
+
+  /* ---------- Heading rhythm: the rule, not a utility ----------
+     Client direction, Sep 2026, alongside the section-gap work below: "the
+     gap between heading and body is consistent and perfect."
+
+     It was not. The same three-part block — label, heading, body — was set
+     with mt-4, mt-5, mt-6, mt-7 and mt-8 depending on which file it lived
+     in, which is what made two sections doing the same job look like two
+     different designs. Normalised to TWO tiers, applied as Tailwind classes
+     at the call sites rather than as a class here, because these are
+     margins on ordinary type and a `.section-head` utility would only be a
+     third way of saying `mt-6`:
+
+       SECTION  (display-md / display-lg / display-fluid / text-4xl+)
+         eyebrow or label  ->  heading   mt-6
+         heading           ->  body      mt-6
+
+       CARD     (text-xl / text-2xl / text-3xl inside a tile or grid cell)
+         label or meta     ->  title     mt-3
+         title             ->  body      mt-3
+
+     Three deliberate exemptions, so the next person does not "fix" them:
+
+       1. Blocks led by an ICON rather than a text label — ValueCard's peak
+          mark, the careers sign-off, the contact form's success panel. A
+          40-64px mark needs different optical clearance than a 12px
+          eyebrow. (A small mark sitting INLINE with an eyebrow, as in the
+          in-article CTA, is a label row and does take mt-6.)
+       2. LABEL/VALUE data tiles — the contact details, the project spec
+          <dl>, the article sidebar's related-project links. A term and its
+          value are one unit, not a heading and its body, and they are set
+          tight on purpose.
+       3. Image captions (the home interlude) stay tight because they are
+          set over artwork rather than on the page grid.
+
+     The staircase in ApproachPreview is exempt for a fourth reason: its
+     internal margins are part of a DRAWN geometry — the plumb line lands on
+     the numeral's left edge, the material pours from the cell's own tread —
+     so its mt-7 is a measurement, not a rhythm choice. It is also desktop
+     only; the phone renders the same five steps as a plain list, which does
+     follow the card tier. */
+
+  /* ---------- Mobile section rhythm ----------
+     Client direction, Sep 2026: "the spacing between sections is not
+     consistent on mobile, and some of it is way too big."
+
+     Both halves of that were true, and they had the same cause. Every
+     section owned its own symmetric `py-*`, so the space a visitor
+     actually SEES between two sections was the sum of two independent
+     numbers — and the site used four of them (py-24, py-20, py-16, py-14).
+     On a phone that produced 192px between two 96px sections, 160px where
+     a 96 met a 64, 128px between two 64s, and 96px wherever a padded
+     section met a full-bleed one that had no padding at all. Five
+     different gaps down one page, the largest of them nearly half the
+     screen width.
+
+     THE UNIT HERE IS THE GAP, NOT THE PADDING. The client picked the
+     target from a screenshot of the Services → Interlude boundary: 96px,
+     which is what a 96px section edge gives when the section under it
+     contributes nothing. So a normal section edge carries HALF of that —
+     48px — and two of them stacking add back up to the 96px that was
+     approved. An edge that meets a full-bleed neighbour (a hero, the
+     interlude, the side-scroll rail) has no other half coming, so it
+     carries the whole 96px itself: `section-y-open-t` / `-open-b`.
+
+     Result: every section boundary on a phone is 96px, whatever is on
+     either side of it. Tune --section-y and the whole site moves together;
+     that is the entire point of doing it here rather than in 30 files.
+
+     DELIBERATELY CAPPED BELOW `md`. The desktop rhythm was not part of the
+     ask and is still each section's own `md:py-*`. These rules stop at
+     47.99rem and Tailwind's md: starts at 48rem, so the two never meet and
+     neither can win an ordering fight with the other. A section using this
+     must therefore keep a `md:py-*` (or `md:pt-*`/`md:pb-*`) — dropping the
+     mobile `py-24` without one leaves the desktop edge at zero. */
+  @media (width < 48rem) {
+    .section-y {
+      padding-block: var(--section-y);
+    }
+    /* After .section-y, and that ordering is load-bearing: same
+       specificity, so the later rule is the one that wins on a section
+       carrying both. */
+    .section-y-open-t {
+      padding-top: var(--section-y-open);
+    }
+    .section-y-open-b {
+      padding-bottom: var(--section-y-open);
+    }
   }
 
   .no-scrollbar {

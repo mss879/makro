@@ -140,7 +140,7 @@ export default function ApproachPage() {
           The stage images went with it. Three of the five were `mono`, and
           greyscale is a black-section device in this brand — correct while
           this band was ink, off-brand the moment it became paper. */}
-      <section className="section-light relative py-20 md:py-28">
+      <section className="section-light relative section-y section-y-open-t md:py-28">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
@@ -172,8 +172,8 @@ export default function ApproachPage() {
                     <span className="font-display text-5xl text-rose-deep/70">{s.n}</span>
                     <span className="line-hair w-16" />
                   </div>
-                  <h3 className="mt-5 font-display text-5xl text-ink">{s.title}</h3>
-                  <p className="mt-5 max-w-md font-body text-xl leading-snug text-rose-deep">
+                  <h3 className="mt-6 font-display text-5xl text-ink">{s.title}</h3>
+                  <p className="mt-6 max-w-md font-body text-xl leading-snug text-rose-deep">
                     {s.lead}
                   </p>
                   {/* Each stage runs to several paragraphs, so they are

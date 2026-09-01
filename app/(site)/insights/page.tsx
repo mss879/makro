@@ -61,7 +61,7 @@ export default async function InsightsPage() {
         treatment="warm"
       />
 
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y section-y-open-t md:py-32">
         <div className="container-edge">
           <div className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-2">
             {insights.map((insight, i) => (
@@ -82,10 +82,10 @@ export default async function InsightsPage() {
                     <span className="line-hair w-8" />
                     <span className="font-body text-xs text-fog">{insight.readTime}</span>
                   </div>
-                  <h2 className="mt-4 max-w-lg font-display text-3xl leading-tight text-ink transition-colors group-hover:text-rose-deep md:text-4xl">
+                  <h2 className="mt-3 max-w-lg font-display text-3xl leading-tight text-ink transition-colors group-hover:text-rose-deep md:text-4xl">
                     {insight.displayTitle}
                   </h2>
-                  <p className="mt-4 max-w-lg font-body text-base leading-relaxed text-mist">
+                  <p className="mt-3 max-w-lg font-body text-base leading-relaxed text-mist">
                     {insight.excerpt}
                   </p>
                   <span className="group mt-5 inline-flex items-center gap-3 font-body text-sm text-ink transition-colors group-hover:text-rose-deep">

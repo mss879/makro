@@ -127,9 +127,9 @@ export default async function ProjectsPage() {
       {/* Cross-links — the portfolio is the proof; point to the process and the guides */}
       <section className="relative border-t border-hair bg-carbon">
         <div className="container-edge grid grid-cols-1 md:grid-cols-2">
-          <Reveal className="border-b border-hair py-14 md:border-b-0 md:border-r md:py-16 md:pr-14">
+          <Reveal className="border-b border-hair py-12 md:border-b-0 md:border-r md:py-16 md:pr-14">
             <p className="eyebrow text-fog">Behind every project</p>
-            <h3 className="mt-4 font-display text-3xl text-bone">
+            <h3 className="mt-3 font-display text-3xl text-bone">
               The process that delivers them.
             </h3>
             <Link
@@ -140,9 +140,9 @@ export default async function ProjectsPage() {
               <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
             </Link>
           </Reveal>
-          <Reveal delay={0.1} className="py-14 md:py-16 md:pl-14">
+          <Reveal delay={0.1} className="py-12 md:py-16 md:pl-14">
             <p className="eyebrow text-fog">Before you buy</p>
-            <h3 className="mt-4 font-display text-3xl text-bone">
+            <h3 className="mt-3 font-display text-3xl text-bone">
               Buying an apartment in Colombo?
             </h3>
             <Link

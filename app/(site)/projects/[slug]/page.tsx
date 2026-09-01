@@ -122,7 +122,7 @@ export default async function ProjectDetailPage({
       <ProjectHero project={project} />
 
       {/* Overview + specs */}
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y section-y-open-t md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <div className="flex items-center gap-4">
@@ -204,7 +204,7 @@ export default async function ProjectDetailPage({
           back to null. Both leave gallery empty, so the whole section is
           conditional: rendering it would pass undefined down to next/image. */}
       {project.gallery.length > 0 && (
-      <section className="section-light relative bg-shell py-16 md:py-24">
+      <section className="section-light relative bg-shell section-y md:py-24">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
@@ -220,7 +220,7 @@ export default async function ProjectDetailPage({
       )}
 
       {/* Features */}
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <div className="flex items-center gap-4">
@@ -254,13 +254,13 @@ export default async function ProjectDetailPage({
       {next && (
         <section className="section-light relative overflow-hidden border-t border-hair bg-shell">
           <Link href={`/projects/${next.slug}`} className="group block">
-            <div className="container-edge flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
+            <div className="container-edge flex flex-col items-start justify-between gap-6 py-12 md:flex-row md:py-16 md:items-center">
               <div>
                 <span className="eyebrow text-fog">Next project</span>
                 <h3 className="mt-3 font-display text-4xl text-ink transition-colors group-hover:text-rose-deep md:text-6xl">
                   {next.name}
                 </h3>
-                <p className="mt-2 font-body text-sm text-mist">
+                <p className="mt-3 font-body text-sm text-mist">
                   {next.type} · {next.location}
                 </p>
               </div>

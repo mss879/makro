@@ -14,7 +14,7 @@ const PRINCIPLES = [
 
 export default function BrandStatement() {
   return (
-    <section className="section-light relative py-24 md:py-36">
+    <section className="section-light relative section-y section-y-open-t md:py-36">
       <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
         {/* Left — image + floating credential */}
         <div className="relative lg:col-span-5">
@@ -45,11 +45,11 @@ export default function BrandStatement() {
           <TextReveal
             as="h2"
             text="Where thoughtful development creates lasting value"
-            className="mt-7 font-display display-md text-ink"
+            className="mt-6 font-display display-md text-ink"
           />
 
           <Reveal delay={0.1}>
-            <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
+            <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-mist">
               At Makro, every development is a long-term commitment, not a
               single transaction. We plan with discipline, build with precision
               and think beyond completion — considering how each development

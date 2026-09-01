@@ -88,7 +88,7 @@ export default async function ContactPage() {
               <span className="eyebrow text-rose">Contact Us</span>
             </div>
             <Reveal delay={0.1}>
-              <p className="mt-8 max-w-xl font-body text-lg leading-relaxed text-mist">
+              <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-mist">
                 Have a site, a vision or an idea worth exploring? Tell us what
                 you have in mind, and our team will be in touch.
               </p>
@@ -97,7 +97,7 @@ export default async function ContactPage() {
         </div>
       </section>
 
-      <section className="section-light pb-24 pt-16 md:pb-32 md:pt-20">
+      <section className="section-light section-y section-y-open-t md:pb-32 md:pt-20">
         <div className="container-edge">
           <div className="grid grid-cols-1 gap-14 lg:grid-cols-12">
             {/* Details */}

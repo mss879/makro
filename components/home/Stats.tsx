@@ -19,7 +19,7 @@ export default function Stats() {
           <Reveal
             key={s.label}
             delay={i * 0.08}
-            className={`flex flex-col justify-center gap-4 py-14 md:py-20 ${
+            className={`flex flex-col justify-center gap-4 py-12 md:py-20 ${
               i !== 0 ? "lg:border-l lg:border-hair" : ""
             } ${i % 2 !== 0 ? "border-l border-hair lg:border-l" : ""} ${
               i >= 2 ? "border-t border-hair lg:border-t-0" : ""

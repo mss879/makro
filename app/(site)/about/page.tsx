@@ -99,7 +99,7 @@ export default function AboutPage() {
       />
 
       {/* Story */}
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y section-y-open-t md:py-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-4">
@@ -160,7 +160,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values / personality */}
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y md:py-32">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
@@ -188,7 +188,7 @@ export default function AboutPage() {
       </section>
 
       {/* Wheels Lanka Group */}
-      <section className="relative bg-ink py-24 md:py-32">
+      <section className="relative bg-ink section-y md:py-32">
         <div className="container-edge grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
           <ParallaxImage
             id={BRAND.aboutFoundation}
@@ -208,7 +208,7 @@ export default function AboutPage() {
               className="mt-6 font-display display-md text-bone"
             />
             <Reveal delay={0.1}>
-              <p className="mt-8 font-body text-lg leading-relaxed text-mist">
+              <p className="mt-6 font-body text-lg leading-relaxed text-mist">
                 As a wholly owned subsidiary of the Wheels Lanka Group, Makro
                 combines specialist property development expertise with the
                 financial strength, governance and stability of an established
@@ -238,7 +238,7 @@ export default function AboutPage() {
 
       {/* Why Makro — the full-length reasons; the home page carries only
           one-line versions of these (client direction, July 2026) */}
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y md:py-32">
         <div className="container-edge">
           {/* No heading under this label any more (client, Aug 2026 — the
               section headline was cut). The eyebrow is set at display scale
@@ -290,7 +290,7 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline */}
-      <section className="section-light relative py-24 md:py-32">
+      <section className="section-light relative section-y md:py-32">
         <div className="container-edge">
           {SHOW_TIMELINE && (
             <>

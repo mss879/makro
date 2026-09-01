@@ -66,8 +66,13 @@ export default function ProjectsIntro({
        the carousel's own 112px top it left a 240px void between two sections
        that belong together (client, Aug 2026: "reduce the padding between
        these 2 sections"). Halved on the bottom edge only; the carousel takes
-       the other half off its top. */
-    <section className="section-light relative pb-12 pt-24 md:pb-16 md:pt-32">
+       the other half off its top.
+
+       That fix is the whole site's rule now, on mobile at least: this is
+       what `.section-y` + `section-y-open-t` mean, so the phone case is a
+       class rather than a pair of numbers this one component happened to
+       get right first. The md:* values are still this section's own. */
+    <section className="section-light relative section-y section-y-open-t md:pb-16 md:pt-32">
       <div ref={ref} className="container-edge text-center">
         {eyebrow && (
           <div className="intro-reveal flex items-center justify-center gap-4">

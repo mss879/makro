@@ -30,7 +30,7 @@ const SERVICES = [
 
 export default function Services() {
   return (
-    <section className="section-light relative py-24 md:py-32">
+    <section className="section-light relative section-y section-y-open-b md:py-32">
       <div className="container-edge">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-2xl">

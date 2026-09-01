@@ -31,7 +31,7 @@ const REASONS = [
 
 export default function WhyMakro() {
   return (
-    <section className="section-light relative py-24 md:py-36">
+    <section className="section-light relative section-y section-y-open-t md:py-36">
       <div className="container-edge">
         {/* Section label — the only thing above the fold of this block now
             that the statement is gone. */}
