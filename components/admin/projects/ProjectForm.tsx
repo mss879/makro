@@ -66,6 +66,7 @@ export default function ProjectForm({
 
   const [name, setName] = useState(project?.name ?? "");
   const [heroImage, setHeroImage] = useState(project?.hero_image ?? "");
+  const [heroImageMobile, setHeroImageMobile] = useState(project?.hero_image_mobile ?? "");
   const [catalogue, setCatalogue] = useState({
     url: project?.catalogue_url ?? "",
     name: project?.catalogue_name ?? "",
@@ -364,15 +365,50 @@ export default function ProjectForm({
           </p>
         </div>
 
-        {/* Submitted with the rest of the form, so the hero saves on "Save
-            changes" like every other field rather than needing its own button. */}
-        <input type="hidden" name="hero_image" value={heroImage} />
-        <ImageField
-          target="project"
-          cardId={project?.slug}
-          value={heroImage}
-          onChange={setHeroImage}
-        />
+        {/* TWO UPLOADS, ONE SLOT (client, Sep 2026). The hero fills the whole
+            screen, so a landscape file on a phone is cropped to about a third
+            of its width — the composition is gone, not merely tightened. The
+            portrait upload is a different photograph for the same slot, and
+            it is optional: leave it empty and phones crop the landscape one
+            exactly as they did before.
+
+            Both fields submit through ImageField's own text input (its
+            <details> stays mounted while collapsed), which is why each is
+            given an explicit `name` — two controls called "image" in one form
+            would silently collide. */}
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <p className="font-body text-xs uppercase tracking-[0.18em] text-panel-faint">
+              Desktop — landscape
+            </p>
+            <ImageField
+              target="project"
+              name="hero_image"
+              cardId={project?.slug}
+              value={heroImage}
+              onChange={setHeroImage}
+            />
+          </div>
+
+          <div className="space-y-3 border-t border-panel-line pt-6">
+            <div>
+              <p className="font-body text-xs uppercase tracking-[0.18em] text-panel-faint">
+                Mobile — portrait
+              </p>
+              <p className="mt-1 max-w-2xl font-body text-xs leading-relaxed text-panel-faint">
+                Optional. Shown instead of the landscape image on phones.
+              </p>
+            </div>
+            <ImageField
+              target="project"
+              variant="mobile"
+              name="hero_image_mobile"
+              cardId={project?.slug}
+              value={heroImageMobile}
+              onChange={setHeroImageMobile}
+            />
+          </div>
+        </div>
       </Card>
 
       {/* ------------------------------------------------------------- */}

@@ -28,7 +28,14 @@ export type ProjectsPageFaqItem = {
 
 export type ProjectsPageHeroSlide = {
   id: string;
+  /** Landscape art. Null falls back to `imageMobile`. */
   image: string | null;
+  /**
+   * Portrait art for phones (client direction, Sep 2026). Null falls back to
+   * `image`, and the fallback runs both ways — see ArtDirectedImage for why a
+   * slide carrying only one of the two still renders at every width.
+   */
+  imageMobile: string | null;
   alt: string;
   heading: string;
   body: string;
@@ -140,6 +147,9 @@ export const DEFAULT_PROJECTS_PAGE: Omit<ProjectsPageContent, "carousel" | "faq"
         // was being upscaled ~1.8x and cropped to a band across this
         // full-screen panel, which read as an empty grey slab.
         image: "/brand/hero-architectural-poster.webp",
+        // No bundled portrait render to point at, and reusing the landscape
+        // one here would only be the fallback written out longhand.
+        imageMobile: null,
         alt: "A Makro development at dusk",
         heading: "Developments built to last.",
         body: "Residential and commercial projects across Sri Lanka — each delivered to a standard you can feel.",
@@ -187,6 +197,7 @@ function toSlide(row: ProjectsPageHeroSlideRow): ProjectsPageHeroSlide {
     // both "column is null" and "column is an empty string left by a cleared
     // upload field".
     image: row.image && row.image.trim() ? row.image : null,
+    imageMobile: row.image_mobile && row.image_mobile.trim() ? row.image_mobile : null,
     alt: row.alt,
     heading: row.heading,
     body: row.body,

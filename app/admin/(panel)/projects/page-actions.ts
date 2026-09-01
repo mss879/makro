@@ -131,16 +131,21 @@ export async function saveSlide(
 
   const id = text(formData, "id");
   const image = text(formData, "image");
+  const imageMobile = text(formData, "image_mobile");
   const heading = text(formData, "heading");
   const body = text(formData, "body");
 
   // Checked here as well as by the CHECK constraint so the admin gets this
   // sentence rather than a constraint name.
-  if (!image && !heading && !body) {
+  // The portrait upload counts, same as the CHECK in
+  // 20260901000100_hero_mobile_images.sql: a slide carrying only a portrait
+  // file is not blank — it renders on phones, and on desktop too, because
+  // ArtDirectedImage falls back the other way.
+  if (!image && !imageMobile && !heading && !body) {
     return {
       ok: false,
       message:
-        "Add an image, a heading or some body copy — a slide with none of the three would render as a blank full-screen panel.",
+        "Add an image, a heading or some body copy — a slide with none of them would render as a blank full-screen panel.",
     };
   }
 
@@ -148,6 +153,7 @@ export async function saveSlide(
     // Empty string normalised to null so the renderer's single `image ?` branch
     // covers a cleared field as well as a never-set one.
     image: image || null,
+    image_mobile: imageMobile || null,
     alt: text(formData, "alt"),
     heading,
     body,

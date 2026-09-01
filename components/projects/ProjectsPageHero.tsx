@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import ArtDirectedImage from "@/components/ui/ArtDirectedImage";
 import type { ProjectsPageHeroSlide } from "@/lib/projects-page-data";
 
 /**
@@ -85,11 +85,15 @@ export default function ProjectsPageHero({
                 still a grade. Legibility for the heading and body moved onto
                 the copy itself as a text-shadow, exactly as it did on the
                 project detail hero. */}
-            {slide.image && (
-              <Image
-                src={slide.image}
+            {(slide.image || slide.imageMobile) && (
+              <ArtDirectedImage
+                desktop={slide.image}
+                // Portrait file for phones, uploaded per slide in the admin
+                // (client, Sep 2026). Either one alone is a complete slide —
+                // the fallback runs both ways, which is why the guard above
+                // tests for both rather than for `slide.image`.
+                mobile={slide.imageMobile}
                 alt={slide.alt}
-                fill
                 // The first slide is the LCP element on this route.
                 priority={i === 0}
                 sizes="100vw"

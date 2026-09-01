@@ -20,6 +20,13 @@ export interface Project {
    * that works behind a headline is rarely the one that works as a card.
    */
   heroImage: string;
+  /**
+   * Portrait art for the same hero on phones (client direction, Sep 2026). A
+   * full-screen 16:9 master is cropped to about a third of its width on a
+   * 390px phone, which is a different photograph rather than the same one
+   * shifted — hence a second file. "" falls back to `heroImage`.
+   */
+  heroImageMobile: string;
   /** Catalogue PDF URL, or "" when the project has none. Empty hides the download. */
   catalogueUrl: string;
   /** Filename offered to the visitor. Empty falls back to a name built from the project. */
@@ -48,6 +55,9 @@ export const PROJECTS: Project[] = [
     year: "2026",
     cover: BRAND.towersRender,
     heroImage: BRAND.towersRender,
+    // No bundled portrait render exists, and inventing one by pointing at a
+    // landscape asset would defeat the point. "" is the correct empty state.
+    heroImageMobile: "",
     catalogueUrl: "",
     catalogueName: "",
     gallery: [BRAND.towersRender, BRAND.monoCorner, BRAND.lifestyleSuite],

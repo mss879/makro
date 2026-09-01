@@ -34,6 +34,12 @@ function toProject(row: ProjectRow, gallery: string[]): Project {
     // project that predates the split — or one where the client has simply not
     // set a hero yet — renders exactly as it did before.
     heroImage: row.hero_image ?? row.cover ?? gallery[0] ?? "",
+    // Deliberately does NOT fall through to cover or the gallery: those are
+    // landscape by contract, and serving one here would hand the phone a wide
+    // crop while claiming it is the portrait variant. Empty means "no portrait
+    // file", and ArtDirectedImage then uses the landscape hero — which is the
+    // same thing, minus the lie.
+    heroImageMobile: row.hero_image_mobile ?? "",
     catalogueUrl: row.catalogue_url ?? "",
     catalogueName: row.catalogue_name ?? "",
     gallery: gallery.length ? gallery : row.cover ? [row.cover] : [],

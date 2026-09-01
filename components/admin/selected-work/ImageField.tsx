@@ -5,6 +5,7 @@ import Image from "next/image";
 import { unsplash } from "@/lib/images";
 import { Field, inputClass } from "@/components/admin/ui";
 import ImageSpecHint from "@/components/admin/ImageSpecHint";
+import { IMAGE_SPECS, type ImageSpecKey } from "@/lib/image-specs";
 
 /**
  * The one image a Selected Work panel carries.
@@ -40,6 +41,8 @@ export default function ImageField({
   value,
   onChange,
   target = "selected-work",
+  variant = "desktop",
+  name = "image",
 }: {
   /**
    * The folder segment uploads land in — a card id for Selected Work, a project
@@ -54,9 +57,46 @@ export default function ImageField({
    * "project" so its art sits in the same bucket as that project's gallery.
    */
   target?: "selected-work" | "projects-page" | "project";
+  /**
+   * Which half of a hero pair this field is (client, Sep 2026 — the two
+   * full-screen heroes take a landscape file for desktop and a portrait one
+   * for phones). It changes only the guidance and the preview crop; the
+   * bucket, the upload route and the stored value are identical, because the
+   * two files are the same kind of asset for the same slot.
+   *
+   * Ignored for `selected-work`, which is a fixed 4:5 panel at every width and
+   * has nothing to art-direct.
+   */
+  variant?: "desktop" | "mobile";
+  /**
+   * The form field name the text input submits under.
+   *
+   * It HAS to be settable now. Both hero screens render two of these in one
+   * <form>, and the input below is a real submitted control — <details> keeps
+   * its children mounted while collapsed, which is what lets the Selected Work
+   * dialog submit through it. Two fields called "image" in one form means
+   * `formData.get("image")` silently returns whichever the browser serialised
+   * first, so the portrait upload would overwrite the landscape one or vanish,
+   * depending on DOM order.
+   */
+  name?: string;
   value: string;
   onChange: (next: string) => void;
 }) {
+  // Resolved once: it picks the guidance panel AND labels the file input, and
+  // "Upload a panel image" on all four of them told a screen-reader user
+  // nothing about which of the two heroes they had landed on.
+  const spec: ImageSpecKey =
+    target === "selected-work"
+      ? "selectedWork"
+      : target === "projects-page"
+        ? variant === "mobile"
+          ? "projectsPageHeroMobile"
+          : "projectsPageHero"
+        : variant === "mobile"
+          ? "projectHeroMobile"
+          : "projectHero";
+
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -120,7 +160,11 @@ export default function ImageField({
           here is worse than showing none — it is a promise about the crop. */}
       <div
         className={`group relative w-full overflow-hidden border border-panel-line bg-panel-high ${
-          target === "selected-work" ? "aspect-[4/5]" : "aspect-[16/10]"
+          target === "selected-work"
+            ? "aspect-[4/5]"
+            : variant === "mobile"
+              ? "aspect-[9/16]"
+              : "aspect-[16/10]"
         }`}
       >
         {value ? (
@@ -168,7 +212,7 @@ export default function ImageField({
           accept="image/*"
           onChange={onFile}
           disabled={busy}
-          aria-label="Upload a panel image"
+          aria-label={`Upload the ${IMAGE_SPECS[spec].label.toLowerCase()} image`}
           className="block w-full cursor-pointer border border-dashed border-panel-line-strong bg-panel-raised p-3 font-body text-xs text-panel-muted transition-colors file:mr-3 file:cursor-pointer file:border file:border-panel-line file:bg-panel file:px-3 file:py-1.5 file:font-body file:text-xs file:text-panel-text hover:border-panel-line-strong disabled:cursor-not-allowed disabled:opacity-50"
         />
 
@@ -196,7 +240,7 @@ export default function ImageField({
             >
               <input
                 type="text"
-                name="image"
+                name={name}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 placeholder="/brand/sw-tower.jpg"
@@ -211,15 +255,7 @@ export default function ImageField({
             shapes, so the guidance is keyed off the same `target` that decides
             the bucket rather than written as one sentence that fits none of
             them. */}
-        <ImageSpecHint
-          spec={
-            target === "selected-work"
-              ? "selectedWork"
-              : target === "projects-page"
-                ? "projectsPageHero"
-                : "projectHero"
-          }
-        />
+        <ImageSpecHint spec={spec} />
 
         <p className="font-body text-xs leading-relaxed text-panel-faint">
           Uploads are converted to WebP at high quality, resized only if wider

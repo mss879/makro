@@ -67,6 +67,42 @@ export const IMAGE_SPECS = {
     renderedBy: "components/projects/ProjectsPageHero.tsx",
   },
 
+  /* ---------------------------------------------------------------------
+     The two PORTRAIT slots (client, Sep 2026). Same components as the two
+     landscape heroes above, served below 768px via <picture> — see
+     components/ui/ArtDirectedImage.tsx.
+
+     THE NUMBERS ARE SMALLER, AND THAT IS NOT A COMPROMISE. `recommended` is
+     still the widest candidate the browser can ask for, and a phone is a
+     narrow viewport: 1440 covers a 480px CSS width at 3x, which is above
+     every mainstream device. Asking for 3840 on a file that is only ever
+     shown on a phone costs the visitor bytes and buys nothing.
+
+     9:16, not 4:5. These are the only full-viewport slots on the site, and a
+     phone viewport is taller than 4:5 — a 4:5 file would still be cropped
+     top and bottom, which is the problem the second upload exists to solve.
+     --------------------------------------------------------------------- */
+
+  projectHeroMobile: {
+    label: "Project page hero — mobile",
+    recommended: "1440 × 2560",
+    minimum: "1080 × 1920",
+    aspect: "9:16 portrait",
+    crops:
+      "Shown full screen on phones instead of the landscape hero above. Keep the subject central and leave the bottom third quiet — the project name, status and location sit there. Leave this empty and the landscape image is used on phones too, cropped to the narrow screen.",
+    renderedBy: "components/projects/ProjectHero.tsx",
+  },
+
+  projectsPageHeroMobile: {
+    label: "Projects page hero slide — mobile",
+    recommended: "1440 × 2560",
+    minimum: "1080 × 1920",
+    aspect: "9:16 portrait",
+    crops:
+      "Shown full screen on phones instead of the landscape slide above. Keep the subject central; if the slide carries a heading, leave the bottom third quiet. Leave this empty and the landscape image is used on phones too.",
+    renderedBy: "components/projects/ProjectsPageHero.tsx",
+  },
+
   /**
    * FeaturedProjects panel — aspect-[4/5], object-cover,
    * sizes="(max-width: 1024px) 80vw, 30vw". 80vw of a 1024 viewport at 3x is

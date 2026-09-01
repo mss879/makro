@@ -26,29 +26,76 @@ function Result({ state }: { state: ProjectsPageFormState }) {
 }
 
 /** A slide's shape is inferred from its fields, not stored — mirror that here. */
-function shapeOf(slide: { image: string | null; heading: string; body: string }): string {
+function shapeOf(slide: {
+  image: string | null;
+  image_mobile: string | null;
+  heading: string;
+  body: string;
+}): string {
+  // Either upload counts as "has an image": the renderer falls back both ways,
+  // so a slide holding only the portrait file is an image slide at every
+  // width, and labelling it "Text only" in this list would be a lie the client
+  // then acts on.
+  const hasImage = Boolean(slide.image || slide.image_mobile);
   const hasText = Boolean(slide.heading || slide.body);
-  if (slide.image && hasText) return "Image + text";
-  if (slide.image) return "Image only";
+  const suffix = slide.image && slide.image_mobile ? " · desktop + mobile" : "";
+  if (hasImage && hasText) return `Image + text${suffix}`;
+  if (hasImage) return `Image only${suffix}`;
   return "Text only";
 }
 
 function SlideEditor({ slide }: { slide?: ProjectsPageHeroSlideRow }) {
   const [state, action, pending] = useActionState(saveSlide, IDLE);
   const [image, setImage] = useState(slide?.image ?? "");
+  const [imageMobile, setImageMobile] = useState(slide?.image_mobile ?? "");
   const isNew = !slide;
 
   return (
     <form action={action} className="space-y-4">
       {slide && <input type="hidden" name="id" value={slide.id} />}
 
-      <ImageField
-        cardId={slide?.id}
-        value={image}
-        onChange={setImage}
-        target="projects-page"
-      />
-      <input type="hidden" name="image" value={image} />
+      {/* TWO UPLOADS PER SLIDE (client, Sep 2026). The slide is the full
+          viewport, so a landscape file on a phone is cropped to a narrow band
+          of itself. The portrait upload is optional and per slide, not per
+          slideshow — a deck where slide 1 has one and slide 2 does not is a
+          normal half-finished state and renders correctly.
+
+          Each ImageField submits through its own text input, so both carry an
+          explicit `name`: two controls called "image" in one form would
+          collide on formData.get(). */}
+      <div className="space-y-6">
+        <div className="space-y-3">
+          <p className="font-body text-xs uppercase tracking-[0.18em] text-panel-faint">
+            Desktop — landscape
+          </p>
+          <ImageField
+            cardId={slide?.id}
+            value={image}
+            onChange={setImage}
+            target="projects-page"
+            name="image"
+          />
+        </div>
+
+        <div className="space-y-3 border-t border-panel-line pt-6">
+          <div>
+            <p className="font-body text-xs uppercase tracking-[0.18em] text-panel-faint">
+              Mobile — portrait
+            </p>
+            <p className="mt-1 max-w-2xl font-body text-xs leading-relaxed text-panel-faint">
+              Optional. Shown instead of the landscape image on phones.
+            </p>
+          </div>
+          <ImageField
+            cardId={slide?.id}
+            value={imageMobile}
+            onChange={setImageMobile}
+            target="projects-page"
+            variant="mobile"
+            name="image_mobile"
+          />
+        </div>
+      </div>
 
       <Field label="Alt text" hint="Describes the image for screen readers. Leave blank if the image is purely decorative.">
         <input name="alt" defaultValue={slide?.alt ?? ""} className={inputClass} />
@@ -183,10 +230,10 @@ export default function HeroManager({
         <Card key={slide.id}>
           <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              {slide.image && (
+              {(slide.image || slide.image_mobile) && (
                 <div className="relative h-14 w-20 shrink-0 overflow-hidden bg-panel-high">
                   <Image
-                    src={unsplash(slide.image, 200)}
+                    src={unsplash(slide.image ?? slide.image_mobile, 200)}
                     alt=""
                     fill
                     sizes="80px"

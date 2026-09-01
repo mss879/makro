@@ -62,6 +62,7 @@ type ProjectInput = {
   specs_note: string | null;
   features: string[];
   hero_image: string | null;
+  hero_image_mobile: string | null;
   catalogue_url: string | null;
   catalogue_name: string | null;
   published: boolean;
@@ -148,6 +149,11 @@ function readProject(formData: FormData): { error: string } | { payload: Project
       // cover, so clearing the field restores the previous behaviour rather
       // than blanking the hero.
       hero_image: text(formData, "hero_image") || null,
+      // The portrait variant for phones. Empty means "no portrait file", and
+      // the renderer then crops the landscape hero as it always did — which is
+      // why this needs no validation of its own and no pairing rule with the
+      // field above.
+      hero_image_mobile: text(formData, "hero_image_mobile") || null,
       catalogue_url: text(formData, "catalogue_url") || null,
       catalogue_name: text(formData, "catalogue_name") || null,
       published: formData.get("published") === "on",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import ArtDirectedImage from "@/components/ui/ArtDirectedImage";
 import { gsap, useGSAP } from "@/lib/gsap";
 import TextReveal from "@/components/anim/TextReveal";
 import type { Project } from "@/lib/projects";
@@ -70,11 +70,14 @@ export default function ProjectHero({ project }: { project: Project }) {
           ink ground, which white copy reads against just as well. */}
       <div className="absolute inset-0">
         {project.heroImage && (
-          <Image
+          <ArtDirectedImage
             data-img
-            src={project.heroImage}
+            desktop={project.heroImage}
+            // Portrait file for phones, uploaded separately in the admin
+            // (client, Sep 2026). Empty falls back to the landscape hero, so
+            // every project that predates this renders exactly as it did.
+            mobile={project.heroImageMobile}
             alt={project.name}
-            fill
             priority
             /* 120vw, not 100vw. The cover is set to scale 1.2 and scrubs back
                to 1 as you scroll, so at the moment it is first seen — the LCP

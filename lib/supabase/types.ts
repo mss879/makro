@@ -136,6 +136,12 @@ export type ProjectRow = {
   cover: string | null;
   /** Full-bleed hero art, independent of the gallery. Null falls back to cover. */
   hero_image: string | null;
+  /**
+   * Portrait hero art for phones (below 768px). Null falls back to hero_image
+   * — see 20260901000100_hero_mobile_images.sql for why a second file rather
+   * than a focal point.
+   */
+  hero_image_mobile: string | null;
   /** Public URL of the catalogue PDF, or null. Gates on an email — see /api/catalogue. */
   catalogue_url: string | null;
   /** The name the visitor's browser saves it as; the storage key is a uuid. */
@@ -243,6 +249,8 @@ export type ProjectsPageHeroSlideRow = {
   id: string;
   /** Full public URL, never a bare storage key — same contract as project_images.path. */
   image: string | null;
+  /** Portrait variant for phones. Null falls back to `image`. */
+  image_mobile: string | null;
   alt: string;
   heading: string;
   body: string;
