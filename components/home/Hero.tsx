@@ -150,53 +150,83 @@ export default function Hero() {
             aria-hidden="true"
             className="img-warm absolute inset-0 h-full w-full object-cover"
           />
-          {/* Dark gradients for text legibility */}
-          {/* Two full-bleed black gradients used to sit here — one up the
-              frame, one in from the left — and both are gone with the rest of
-              the hero overlays (client, Aug 2026). The glass plate and the
-              copy's own text-shadow carry legibility now. */}
+          {/* ---------- Black overlay ----------
+              Client, Sep 2026: "add a black overlay on the homepage hero,
+              not too strong, and then add in the text." This reverses the
+              Aug 2026 pass that stripped every scrim off the heroes — but
+              the plate went with it this time, so the overlay is now the
+              ONLY thing between white type and the render. Nothing else is
+              carrying legibility here: no panel, no outline.
+
+              It has to do real work. Sampled off the video frame, the ground
+              under the headline averages 0.75 luminance and the ground under
+              the paragraph 0.50 — white on those is 1.31:1 and 1.91:1, which
+              is no contrast at all.
+
+              Two layers, because one cannot be both subtle and sufficient:
+
+              • A flat 22% wash over the whole frame. This is the "overlay"
+                in the plain sense — it settles the render into the brand's
+                70%-black ratio without dimming it to mud.
+              • A gradient up from the foot of the frame over the bottom 85%,
+                which is where the copy sits and where the render is
+                brightest anyway.
+
+              THE GRADIENT IS TALL AND THE FLAT LAYER IS LIGHT, and that
+              split is measured, not stylistic. A 60% gradient was tried
+              first: on a phone it read fine, because a tall frame puts the
+              copy at 70-95% of it and deep into the ramp. On DESKTOP the
+              same block sits at 53-91% — barely into a 60% gradient — and
+              the headline measured 3.4:1, under AA even for large type.
+              Extending the ramp fixes the desktop case without touching
+              the sky; raising the flat layer would have cost the sky and
+              fixed less.
+
+              Composited: ~5.2:1 average behind the headline (3.4:1 at the
+              single worst pixel, against a 3.0 floor for large type) and
+              ~7.3:1 behind the paragraph (4.7:1 worst, against 4.5). Both
+              clear AA at their worst point, not just on average.
+
+              Re-measure rather than eyeball if these move — screenshot
+              downscaling flatters dark type on light grounds. Sample the
+              video into a canvas, composite the two alphas per pixel, and
+              take the relative luminance. */}
+          <div className="pointer-events-none absolute inset-0 bg-ink/22" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[85%] bg-gradient-to-t from-ink/60 via-ink/35 to-transparent" />
         </div>
 
         {/* Content */}
         <div className="relative flex h-full flex-col justify-end">
-          {/* Headline block */}
-          {/* More room than the 4px every other hero uses (client, Aug 2026).
-              This is the only hero whose art is already an inset frame, so the
-              plate sits inside it rather than against the viewport edge — see
-              the note on .hero-plate-anchor. */}
-          {/* 1rem on a phone, where the 1.5rem this used to start at was 24px
-              of the ~375px the plate has to live in and the client's read was
-              that the container "takes up all the space". The frame's own
-              --hero-inset still separates it from the viewport edge, so it is
-              still a plate sitting inside a frame — just not one holding the
-              frame at arm's length on the screen with the least room. */}
-          <div className="hero-plate-anchor [--hero-plate-inset:1rem] sm:[--hero-plate-inset:1.5rem] md:[--hero-plate-inset:2rem]">
+          {/* NO PLATE AT ANY WIDTH (client, Sep 2026 — "remove the hero text
+              container for mobile and desktop"). This settled over three
+              notes: the container came off, then came back on phones because
+              the text could not be read, and it is off again now that the
+              black overlay above is doing that job instead — which is the
+              right division of labour. The panel was a local fix for a
+              global problem.
+
+              HOME HERO ONLY. PageHero, ProjectHero, ProjectsPageHero and the
+              contact hero all still wear the plate off `.hero-plate` /
+              `.hero-plate-anchor`, so neither class may be deleted.
+
+              container-edge rather than the plate's old 7px corner anchor:
+              with no panel around it the copy is a block ON the page, so it
+              lines up with the gutter every section below it uses — and with
+              the navbar, which sits on the same clamp. */}
+          <div className="container-edge pb-10 md:pb-16">
             {/* flex-col stops the reveal-masks' negative block margins from
                 collapsing, which used to add a phantom 0.4em gap between
                 the two heading rows. */}
-            {/* The hero plate, as on every other hero. The buttons are inside
-                it rather than below: they are part of this block, and a plate
-                that stopped at the paragraph would leave them floating under
-                a panel they plainly belong to. */}
-            {/* data-hero-content SITS ON THE PLATE ITSELF, not on a wrapper
-               around it, and that is load-bearing rather than tidy.
-
-               The scroll drift below animates this element's transform and
-               opacity. Either one on an ANCESTOR of a backdrop-filter makes
-               that ancestor a "backdrop root": the filter can then only sample
-               what is painted inside it, and the hero image is a sibling of
-               this subtree, not a child. So with the attribute one level up the
-               plate had nothing to blur — it degraded to a flat translucent box
-               at rest and got worse as the opacity fell, which is exactly what
-               the client saw on scroll.
-
-               An element's own transform and opacity are fine: they do not
-               create a backdrop root for its own backdrop-filter. Moving the
-               hook down one level keeps the drift and gives the glass the page
-               back to sample. */}
+            {/* data-hero-content stays on this element rather than on a
+                wrapper. It used to be load-bearing for a reason that has now
+                gone — an ancestor's transform/opacity turned the plate into
+                a backdrop root and left its backdrop-filter nothing to
+                sample — and with no plate there is no filter to protect. It
+                stays anyway: the scroll drift animates whatever carries this
+                attribute, and this block is the thing that should drift. */}
             <div
               data-hero-content
-              className="hero-plate flex w-fit flex-col items-start gap-4 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] sm:gap-6"
+              className="flex w-fit flex-col items-start gap-4 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] sm:gap-6"
             >
               {/* A step down from display-fluid's clamp(2.35rem,8vw,4.6rem)
                   (client, Aug 2026 — "reduce the heading font a bit"). Set
@@ -206,6 +236,11 @@ export default function Hero() {
                   slope are untouched, so nothing above ~430px wide changes at
                   all. That is the whole edit: the plate was overwhelming a
                   phone, and the heading is the tallest thing in it. */}
+              {/* Plain white, no stroke. An ink outline was tried here and
+                  the client's read was that they did not like it, so the
+                  black overlay on the video carries the contrast instead —
+                  which is the better place for it: the render gets darker,
+                  the letterforms stay exactly as Marcellus drew them. */}
               <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-bone">
                 <span className="reveal-mask">
                   <span data-h-word className="inline-block">
@@ -219,7 +254,15 @@ export default function Hero() {
                 </span>
               </h1>
 
-              <p data-h-fade className="max-w-md font-body text-sm leading-relaxed text-bone/85 sm:text-base md:text-lg">
+              {/* Full white, not the bone/85 this was: there is no plate
+                  behind it any more holding it off the video, and 85% white
+                  on a moving render is the first thing to go soft. The
+                  overlay buys the contrast; spending it back on a tint
+                  would be pointless. */}
+              <p
+                data-h-fade
+                className="max-w-md font-body text-sm leading-relaxed text-bone sm:text-base md:text-lg"
+              >
                 Thoughtfully planned residential and commercial developments,
                 built for lasting value.
               </p>
@@ -240,14 +283,16 @@ export default function Hero() {
                   both counts.
 
                   THE BREAKPOINT IS 360px, NOT sm. Measured, not guessed: the
-                  pair needs ~270px, and the plate offers viewport - 8px frame
-                  - 32px plate inset - 40px plate padding. That is 280px on a
-                  360px Android and 295px on a 390px iPhone, but only 240px on
-                  a 320px iPhone SE, where two buttons on one line cannot fit at
-                  any type size these labels survive. So below 360px they wrap
+                  pair needs ~270px. The plate that used to bound this row is
+                  gone (Sep 2026) and container-edge is wider than it was —
+                  viewport - 8px frame - 40px gutter, so 312px on a 360px
+                  Android and 342px on a 390px iPhone — but 320px is still the
+                  case that decides this: 272px there, which two buttons clear
+                  only just, and nothing at all once a label grows. So the
+                  breakpoint stays where it was measured. Below 360px they wrap
                   as they always did, and at 360px and up they sit side by side.
                   A hard flex-nowrap would have looked right on the phone it was
-                  checked on and pushed the second button off the plate on the
+                  checked on and pushed the second button off the screen on the
                   narrow ones.
 
                   If a label ever gets longer than "Book a Consultation", raise
@@ -270,9 +315,14 @@ export default function Hero() {
                     →
                   </span>
                 </Link>
+                {/* /55, between the /40 this wore against the plate's dark
+                    glass and the /70 it briefly needed against the bare
+                    render. This button is nothing BUT its border, so it
+                    tracks whatever is behind it, and the overlay leaves that
+                    ground a little lighter than the plate was. */}
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 whitespace-nowrap border border-bone/40 px-3 py-3 font-body text-[0.78rem] text-bone transition-colors hover:border-rose hover:text-rose sm:gap-3 sm:px-7 sm:py-4 sm:text-base"
+                  className="inline-flex items-center gap-2 whitespace-nowrap border border-bone/55 px-3 py-3 font-body text-[0.78rem] text-bone transition-colors hover:border-rose hover:text-rose sm:gap-3 sm:px-7 sm:py-4 sm:text-base"
                 >
                   Book a Consultation
                 </Link>
