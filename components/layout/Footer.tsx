@@ -27,7 +27,7 @@ export default function Footer() {
             <TextReveal
               as="h2"
               text="Have a site, a vision or an idea?"
-              className="mt-5 font-display text-2xl leading-tight text-bone md:text-3xl lg:text-4xl"
+              className="mt-6 font-display text-2xl leading-tight text-bone md:text-3xl lg:text-4xl"
             />
           </div>
           <Link
@@ -40,8 +40,25 @@ export default function Footer() {
         </div>
 
         {/* Columns */}
-        <Reveal className="grid grid-cols-1 gap-12 py-10 sm:grid-cols-2 md:py-12 lg:grid-cols-4">
-          <div className="space-y-5 sm:col-span-2 lg:col-span-1">
+        {/* TWO COLUMNS ON A PHONE, not one (client, Sep 2026 — "in the
+            footer, Explore and Connect, can we [put them] side by side so it
+            takes less scroll for mobile view").
+
+            Explore is eight links and Connect is three, so stacked they were
+            eleven rows of the same 14px type — most of the footer's height
+            spent on two lists that are each narrow enough for half a screen.
+            Side by side they cost the height of the longer one alone.
+
+            The other two blocks stay full width and are not negotiable at
+            this size: the newsletter block has an input and a button on one
+            row, and Visit holds an email address, a phone number and a
+            postal address, none of which survive a 160px column. So the
+            grid is 2-up throughout with those two spanning it — which is
+            also why the spans say `col-span-2 lg:col-span-1` rather than
+            `sm:`: the sm breakpoint is no longer where the column count
+            changes. */}
+        <Reveal className="grid grid-cols-2 gap-x-6 gap-y-12 py-10 md:py-12 lg:grid-cols-4">
+          <div className="col-span-2 space-y-5 lg:col-span-1">
             {/* Width/height at 2× the rendered h-8, not the asset's native
                 900×244 — same srcset discipline as the navbar lockup. */}
             <Image
@@ -99,7 +116,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <p className="eyebrow text-fog">Visit</p>
             <address className="mt-5 space-y-3 not-italic">
               <a
