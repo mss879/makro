@@ -13,8 +13,20 @@ const PRINCIPLES = [
 ];
 
 export default function BrandStatement() {
+  /*
+   * `section-y`, NOT `section-y-open-t`, and that is the rhythm rule applied
+   * rather than an exception to it. The open-edge modifier exists for an edge
+   * meeting a neighbour that contributes nothing — which the home hero was,
+   * while its bottom edge was full-bleed video. Since Sep 2026 the hero ends
+   * on a phone with its own copy block and its own 48px of padding beneath
+   * it, so this section carries the other half like any normal neighbour.
+   *
+   * Mobile-only on both sides: md:py-36 is untouched, and above md the hero
+   * is full-bleed again — which is harmless, because the whole rhythm system
+   * stops at 47.99rem.
+   */
   return (
-    <section className="section-light relative section-y section-y-open-t md:py-36">
+    <section className="section-light relative section-y md:py-36">
       <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
         {/* Left — image + floating credential */}
         <div className="relative lg:col-span-5">

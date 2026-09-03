@@ -648,6 +648,97 @@
     padding-inline: clamp(1.25rem, 5vw, 6.5rem);
   }
 
+  /* ---------- Hero glass ----------
+     The home hero's copy sits on a pane of glass (client, Sep 2026: "the
+     client wants the glassmorphism container for the text area instead, with
+     minimal padding and also transparent — I want it as minimal as possible
+     where the text is visible and not too dark").
+
+     WHY A SEPARATE CLASS FROM `.hero-plate`. That is the shared recipe for
+     the other four heroes, and its whole documented point is that one tint
+     governs all of them at once. This pane is built differently — see below —
+     and dropping its values into `.hero-plate` would re-tune every hero on
+     the site to answer a note about one of them.
+
+     THE PANE DIMS WHAT IS BEHIND IT INSTEAD OF COVERING IT, and that is the
+     entire trick that makes "transparent" and "legible" compatible.
+
+     A black plane at some alpha is the obvious build and it cannot win here.
+     Measured on the real frame: this copy sits over bright sky at 0.744
+     relative luminance, and white on that needs about 0.44 of flat black
+     before the paragraph reaches AA — which is a black box, and is precisely
+     the "too dark" the client is ruling out. Worse, BLUR DOES NOT HELP THAT
+     NUMBER AT ALL: measured, 2.71:1 unblurred against 2.72:1 through a 30px
+     blur. Blur removes DETAIL from behind the letters, which is real and
+     worth having, but it averages the backdrop rather than darkening it, so
+     it moves perceived readability and not contrast.
+
+     `backdrop-filter: brightness()` moves the contrast instead. It scales the
+     backdrop's own pixels rather than laying a sheet over them, so the render
+     keeps its hue and its texture — you are looking THROUGH tinted glass at
+     the building rather than at a black rectangle with a building faintly
+     behind it. At 0.55 the copy measures 5.4:1 and 5.0:1, clear of AA at the
+     worst pixel, with only 6% of actual black in the pane. The same reading
+     from a flat tint would have needed seven times that.
+
+     The 6% that remains is not doing contrast work. It is there so the pane
+     still has a body on a frame that is already dark, where brightness() has
+     little left to scale and the glass would otherwise vanish mid-loop.
+
+     MINIMAL PADDING, also asked for by name. 0.7rem/0.85rem against
+     `.hero-plate`'s 1.25rem: enough that the glyphs are not touching the
+     hairline, and no more. A pane this tight reads as a lens over the copy
+     rather than as a panel the copy has been placed inside — which is the
+     objection that removed the old plate in the first place. The hairline is
+     /14 rather than the plate's /20 for the same reason: at this
+     transparency the edge is the only part that announces itself. */
+  /* MD AND UP ONLY. Below that the hero is a different composition
+     entirely — the whole video in a 16:9 band with the copy on ink beneath
+     it (client, Sep 2026) — and copy on the brand's own ink is 21:1 without
+     any pane at all. A glass panel there would be a container around text
+     that has nothing behind it to be lifted off, which is the definition of
+     decoration.
+
+     Written as a media query around the rule rather than a `md:` variant at
+     the call site, because Tailwind variants do not apply to hand-written
+     classes: `md:hero-glass` silently does nothing. */
+  @media (min-width: 768px) {
+    .hero-glass {
+      /* THREE DIALS, AND ONLY TWO OF THEM COST ANYTHING. Tuned down over three
+         client notes in Sep 2026 — 0.55/0.06/28px, then "slightly more
+         transparent, less blurry", then "a bit more transparent and reduce the
+         tint, the tint is too strong".
+
+         --hero-glass-blur is free: see the note above on the measurement that
+         showed blur moves perceived detail, not contrast. Move it for looks.
+
+         --hero-glass-dim and --hero-glass-tint are the ones that carry the
+         type, and at these values the pane is BELOW AA. Measured on the real
+         frame: the headline is 3.20:1 average and 2.88:1 at its worst pixel,
+         against a 3.0 floor for display type; the paragraph is 2.95:1 average
+         against a 4.5 floor. That is a deliberate client call in favour of
+         seeing the render through the glass, taken over three rounds of
+         "more transparent" — not an oversight, and recorded here so nobody
+         quietly "fixes" it and hands the client back the panel they asked to
+         lighten.
+
+         The dial back, if it is ever wanted: --hero-glass-dim 0.55 restores
+         5.4:1 and 5.0:1, both clear at the worst pixel, and it is one line. */
+      --hero-glass-dim: 0.7;
+      --hero-glass-tint: 0.03;
+      --hero-glass-blur: 16px;
+      border: 1px solid rgb(255 255 255 / 0.14);
+      background: rgb(5 2 3 / var(--hero-glass-tint));
+      /* saturate() puts back the warmth brightness() takes out of the render;
+         -webkit- prefix for Safari, which still needs it. */
+      -webkit-backdrop-filter: blur(var(--hero-glass-blur))
+        brightness(var(--hero-glass-dim)) saturate(1.15);
+      backdrop-filter: blur(var(--hero-glass-blur))
+        brightness(var(--hero-glass-dim)) saturate(1.15);
+      padding: 0.9rem 1.1rem;
+    }
+  }
+
   /* ---------- Heading rhythm: the rule, not a utility ----------
      Client direction, Sep 2026, alongside the section-gap work below: "the
      gap between heading and body is consistent and perfect."
