@@ -17,7 +17,7 @@ export default async function ProjectsFaqPage() {
   const heading = (
     <PageHeading
       title="Projects — FAQ"
-      subtitle="The question block that closes /projects. The heading, the standfirst, both links and every question are editable here."
+      subtitle="The question block that closes /projects. The heading, the standfirst, the link and every question are editable here."
       action={
         <Link href="/projects" target="_blank" rel="noreferrer" className={buttonClass("secondary")}>
           View projects page ↗
@@ -84,8 +84,6 @@ export default async function ProjectsFaqPage() {
         body={settings?.faq_body ?? defaults.body}
         primaryLabel={settings?.faq_primary_label ?? defaults.primaryLabel}
         primaryHref={settings?.faq_primary_href ?? defaults.primaryHref}
-        secondaryLabel={settings?.faq_secondary_label ?? defaults.secondaryLabel}
-        secondaryHref={settings?.faq_secondary_href ?? defaults.secondaryHref}
         // Drafts included: this is where they are staged, unlike the public
         // page, which reads published rows only.
         items={(itemsRes.data ?? []) as ProjectsPageFaqItemRow[]}

@@ -64,8 +64,9 @@ export type ProjectsPageContent = {
   /**
    * The question-and-answer block that closes /projects. Every string here was
    * a literal in components/projects/Faq.tsx until 20260830000100 — including
-   * the eyebrow, the heading and both link labels, which is what the client
-   * meant by "the headings to everything".
+   * the eyebrow, the heading and the link label, which is what the client
+   * meant by "the headings to everything". (A second link, to the retired /faq
+   * page, was dropped in 20260910000100.)
    */
   faq: {
     enabled: boolean;
@@ -74,8 +75,6 @@ export type ProjectsPageContent = {
     body: string;
     primaryLabel: string;
     primaryHref: string;
-    secondaryLabel: string;
-    secondaryHref: string;
     /** Already ordered and filtered to published entries. */
     items: ProjectsPageFaqItem[];
   };
@@ -175,18 +174,18 @@ export const DEFAULT_PROJECTS_PAGE: Omit<ProjectsPageContent, "carousel" | "faq"
     heading: "Our Projects",
   },
   // The copy the section shipped with as literals in Faq.tsx, and the same
-  // strings the migration writes as column defaults — so an unconfigured
+  // strings the migrations write as column defaults — so an unconfigured
   // install, a freshly migrated one and a build predating either all render
-  // the identical block.
+  // the identical block. The standfirst is the client's own rewrite from the
+  // admin (Sep 2026): the shipped one ended "or browse the full FAQ", a page
+  // that is retired, and 20260910000100 makes this the column default too.
   faq: {
     enabled: true,
     eyebrow: "Questions",
     heading: "Things people often ask.",
-    body: "Can’t find what you’re looking for? Ask us directly, or browse the full FAQ.",
+    body: "Can’t find what you’re looking for? Reach out to our team directly.",
     primaryLabel: "Ask us directly",
     primaryHref: "/contact",
-    secondaryLabel: "View all questions",
-    secondaryHref: "/faq",
   },
 };
 
@@ -316,8 +315,6 @@ export async function getProjectsPageContent(): Promise<ProjectsPageContent> {
       body: settings?.faq_body ?? DEFAULT_PROJECTS_PAGE.faq.body,
       primaryLabel: settings?.faq_primary_label ?? DEFAULT_PROJECTS_PAGE.faq.primaryLabel,
       primaryHref: settings?.faq_primary_href ?? DEFAULT_PROJECTS_PAGE.faq.primaryHref,
-      secondaryLabel: settings?.faq_secondary_label ?? DEFAULT_PROJECTS_PAGE.faq.secondaryLabel,
-      secondaryHref: settings?.faq_secondary_href ?? DEFAULT_PROJECTS_PAGE.faq.secondaryHref,
       items: faqItems.length ? faqItems : BUNDLED_FAQ_ITEMS,
     },
     carousel: {

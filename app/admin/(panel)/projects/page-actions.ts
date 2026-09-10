@@ -323,8 +323,6 @@ export async function saveFaqSettings(
     faq_body: text(formData, "faq_body"),
     faq_primary_label: text(formData, "faq_primary_label"),
     faq_primary_href: text(formData, "faq_primary_href"),
-    faq_secondary_label: text(formData, "faq_secondary_label"),
-    faq_secondary_href: text(formData, "faq_secondary_href"),
   });
 }
 

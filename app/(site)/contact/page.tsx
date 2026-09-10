@@ -159,7 +159,7 @@ export default async function ContactPage() {
                 </Link>{" "}
                 or read the{" "}
                 <Link
-                  href="/faq"
+                  href="/projects#faq"
                   className="text-mist underline decoration-rose-deep/50 underline-offset-4 transition-colors hover:text-rose-deep"
                 >
                   frequently asked questions

@@ -28,7 +28,7 @@ Built to the official **Makro Developers Brand Identity Guide**:
 | `/projects` | Portfolio — index ledger, then On-going / Upcoming / Past groups, plus the FAQ |
 | `/projects/[slug]` | Individual development pages |
 | `/insights`, `/insights/[slug]` | Blog and buying guides |
-| `/approach` · `/sustainability` · `/careers` · `/faq` | Supporting pages |
+| `/approach` · `/sustainability` · `/careers` | Supporting pages (`/faq` redirects to the FAQ on `/projects`) |
 | `/contact` | Enquiry form — submissions land in the admin panel |
 | `/admin` | Dashboard, CRM, Inquiries, Projects, Email List (sign-in required) |
 

@@ -112,11 +112,15 @@ function Reorder({ ids, index }: { ids: string[]; index: number }) {
  * client already knows how the hero screen behaves, and a second, cleverer
  * pattern for the same job would only be a second thing to learn.
  *
- * Every visible string on the public section is here, including both link
- * labels AND their destinations — "the headings to everything", which is what
- * was asked for. The links each take a label and a href because a label the
- * client can rename pointing at a route they cannot is the kind of half
- * measure that becomes a support request.
+ * Every visible string on the public section is here, including the link's
+ * label AND its destination — "the headings to everything", which is what was
+ * asked for. The link takes a label and a href because a label the client can
+ * rename pointing at a route they cannot is the kind of half measure that
+ * becomes a support request.
+ *
+ * One link, not two (client, Sep 2026). The second was "View all questions",
+ * pointing at /faq — a page this screen could not edit, which is why it was
+ * retired and why the slot went with it rather than being left to re-point.
  */
 export default function FaqManager({
   enabled,
@@ -125,8 +129,6 @@ export default function FaqManager({
   body,
   primaryLabel,
   primaryHref,
-  secondaryLabel,
-  secondaryHref,
   items,
 }: {
   enabled: boolean;
@@ -135,8 +137,6 @@ export default function FaqManager({
   body: string;
   primaryLabel: string;
   primaryHref: string;
-  secondaryLabel: string;
-  secondaryHref: string;
   items: ProjectsPageFaqItemRow[];
 }) {
   const [settingsState, settingsAction, settingsPending] = useActionState(saveFaqSettings, IDLE);
@@ -164,17 +164,11 @@ export default function FaqManager({
           </Field>
 
           <div className="grid gap-5 md:grid-cols-2">
-            <Field label="First link — label" hint="Leave the label or the link blank to hide it.">
+            <Field label="Link — label" hint="Leave the label or the link blank to hide it.">
               <input name="faq_primary_label" defaultValue={primaryLabel} className={inputClass} />
             </Field>
-            <Field label="First link — destination" hint="A path on this site, like /contact.">
+            <Field label="Link — destination" hint="A path on this site, like /contact.">
               <input name="faq_primary_href" defaultValue={primaryHref} className={inputClass} />
-            </Field>
-            <Field label="Second link — label">
-              <input name="faq_secondary_label" defaultValue={secondaryLabel} className={inputClass} />
-            </Field>
-            <Field label="Second link — destination" hint="A path on this site, like /faq.">
-              <input name="faq_secondary_href" defaultValue={secondaryHref} className={inputClass} />
             </Field>
           </div>
 

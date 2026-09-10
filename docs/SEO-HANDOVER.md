@@ -31,12 +31,14 @@ makrodevelopers.com
 │   │   └── /projects/horizon-business-quarter     Commercial · Rajagiriya
 │
 ├── KNOWLEDGE PILLAR — search-traffic engine
-│   ├── /insights            Guides hub
-│   │   ├── /insights/buying-an-apartment-in-colombo-guide
-│   │   ├── /insights/sri-lanka-real-estate-investment-guide
-│   │   ├── /insights/grade-a-office-space-colombo
-│   │   └── /insights/how-to-choose-a-property-developer-in-sri-lanka
-│   └── /faq                 13 structured Q&As (rich-result eligible)
+│   └── /insights            Guides hub
+│       ├── /insights/buying-an-apartment-in-colombo-guide
+│       ├── /insights/sri-lanka-real-estate-investment-guide
+│       ├── /insights/grade-a-office-space-colombo
+│       └── /insights/how-to-choose-a-property-developer-in-sri-lanka
+│
+│   (/faq was retired in Sep 2026 and 308-redirects to /projects#faq —
+│    the FAQ now lives on /projects, edited from the admin)
 │
 ├── CONVERSION POINT
 │   └── /contact             Enquiry form + office details
@@ -64,7 +66,6 @@ Generated automatically at build time from `app/sitemap.ts`. Every page carries 
 | `/insights` | 0.7 | weekly | Editorial hub; signal freshness |
 | `/insights/*` | 0.6 | yearly | Evergreen guides (lastModified = publish date) |
 | `/sustainability` | 0.6 | monthly | Supporting content |
-| `/faq` | 0.6 | monthly | Rich-result surface |
 | `/careers` | 0.5 | monthly | Secondary audience |
 | `/privacy-policy`, `/terms-of-use` | 0.2 | yearly | Legal; lowest priority |
 
@@ -100,7 +101,6 @@ Titles follow the pattern `Page Title · Makro Developers` (the suffix is applie
 | `/approach` | **Our Approach to Property Development** | How Makro Developers creates lasting value in Sri Lankan real estate — feasibility-led planning, integrated design, compliance, disciplined construction and performance beyond handover. |
 | `/sustainability` | **Sustainable Property Development** | Sustainable property development in Sri Lanka — Makro Developers builds climate-conscious residential and commercial projects with passive cooling, solar-ready services and durable materials for lasting value. |
 | `/contact` | **Contact a Property Developer in Colombo** | Contact Makro Developers in Colombo, Sri Lanka — enquire about luxury apartments, villas, Grade-A commercial space or investment opportunities. Call, email or visit our Colombo 05 head office. |
-| `/faq` | **Frequently Asked Questions — Buying & Investing** | Answers to common questions about buying, investing and living in a Makro development — from apartment purchases in Colombo and foreign ownership in Sri Lanka to payment plans and after-handover support. |
 | `/insights` | **Property Insights & Buying Guides** | Guides and insights on Sri Lankan property — buying an apartment in Colombo, investing in real estate, Grade-A commercial space and how to choose a developer you can trust. |
 | `/careers` | **Careers in Property Development** | Build a career with Makro Developers — a growing Sri Lankan property developer backed by the Wheels Lanka Group. Opportunities across engineering, design management, sales and operations in Colombo. |
 | `/privacy-policy` | **Privacy Policy** | How Makro Developers collects, uses and protects the personal information you share with us — including enquiries made through this website. |
@@ -171,7 +171,7 @@ Every schema is emitted as JSON-LD `<script>` tags — the format Google explici
 | `ItemList` | `/projects` | Lists all six developments in order — helps Google understand and index the full portfolio. |
 | `RealEstateListing` | Each `/projects/*` page | The money schema: name, description, image, provider, and an `about` entity (`ApartmentComplex` for residential/mixed-use, `Place` for commercial) with postal address, unit counts and amenity features. |
 | `Article` | Each `/insights/*` page | Headline, description, image, publish date, author/publisher (the Organization), section and keywords — qualifies articles for rich article results. |
-| `FAQPage` | `/faq` | All 13 Q&As marked up as Question/Answer pairs — eligible for FAQ rich results and heavily used by AI search. |
+| `FAQPage` | `/projects` | The FAQ that closes the page — every published, answered question from the admin (Projects → FAQ), marked up as Question/Answer pairs; heavily used by AI search. Moved here when `/faq` was retired (Sep 2026). |
 | `ContactPage` | `/contact` | Typed page identity. |
 | `LocalBusiness` + `RealEstateAgent` | `/contact` | Local-SEO anchor: address, phone, email, opening hours (Mon–Fri 9:00–18:00), price range. Supports Google Business Profile and map-pack visibility. |
 | `WebPage` | `/approach`, `/sustainability`, `/careers`, legal pages | Baseline typed identity connected to the site entity. |
@@ -199,17 +199,15 @@ Every page is linked to and from other pages **by editorial intent, not randomly
   - Residential projects → *Buying an Apartment in Colombo*
   - Commercial projects → *What Grade-A Office Space Means*
   - Mixed-use projects → *Investing in Sri Lankan Real Estate*
-- **Contact → Projects + FAQ** ("prefer to browse first?")
+- **Contact → Projects + the FAQ on /projects** ("prefer to browse first?")
 
 ### Flow 3 — Knowledge engine (editorial passes authority to commercial pages)
-- **Insights hub → all 4 articles → Projects / FAQ**
+- **Insights hub → all 4 articles → Projects / the FAQ on /projects**
 - **Each article → 2 hand-picked related articles** (`related` field), **→ 2 relevant developments** (sidebar, `relatedProjects` field), **→ Contact** (in-article CTA)
-- **FAQ → Projects, Contact, Insights**
-- **Homepage FAQ section → /faq** ("View all questions")
 
 ### Global links (every page)
 - **Navbar:** Home, About, Projects, Approach, Sustainability, Insights, Contact (+ Enquire CTA)
-- **Footer:** Explore (6 main pages), Discover (FAQ, Careers, Insights), Connect (socials), Visit (contact details), legal row (Privacy, Terms), and a site-wide contact CTA
+- **Footer:** Explore (Home, About, Projects, Blog, Contact, Approach), Connect (WhatsApp hotline + socials), Visit (contact details), legal row (Privacy, Terms), and a site-wide contact CTA
 
 **Why it matters:** internal links are how search engines discover pages and decide which ones matter. This structure guarantees (a) no page is more than two clicks from the homepage, (b) the highest-value pages (projects, contact) receive the most links, and (c) editorial pages pass topical authority to the commercial pages they support.
 

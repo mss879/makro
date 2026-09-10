@@ -54,7 +54,9 @@
      2026; cream → grey, Aug 2026). Lighten further only on an explicit
      ask, and stop short of #fafafa.
 
-     The /projects routes override all three under `.surface-deep` below. */
+     The /projects routes override all three under `.surface-deep` below,
+     and `.surface-site` repeats these three values to hand one section
+     back — retune the two together. */
   --color-paper: #f5f4f2; /* page ground for light sections */
   --color-shell: #eae8e5; /* panels, cards, image wells on that ground */
   --color-shell-deep: #dfdcd8; /* one step further: hover / pressed tiles */
@@ -599,13 +601,35 @@
     --color-shell: #cdc9c3;
     --color-shell-deep: #c2beb7;
   }
-  .surface-deep .section-light {
+  .surface-deep .section-light:not(.surface-site) {
     /* Hairlines and muted copy step with the ground: what reads as a
        hairline on near-white disappears on a grey two shades down. */
     --color-hair: rgba(5, 2, 3, 0.16);
     --color-hair-strong: rgba(5, 2, 3, 0.3);
     --color-mist: #514e4a;
     --color-fog: #7d7973;
+  }
+
+  /* ---------- Back onto the site ground — .surface-site ----------
+     Client direction, Sep 2026: the FAQ that closes /projects should read
+     as a different section from the portfolio above it — "subtly". So it
+     steps off the deep grey and back onto the site-wide paper: the device
+     that sets /projects apart from the rest of the site, run in reverse at
+     the point where the page stops being about the developments.
+
+     Goes on the section itself, alongside `section-light`. It only does
+     anything inside `.surface-deep`; everywhere else these are the values
+     already in force.
+
+     The three surfaces repeat @theme's values because a custom property
+     cannot see past the wrapper that overrode it — retune the site ground
+     and this block moves with it. The hairline and muted-copy tokens need
+     no copy: the rule above skips `.surface-site`, so the plain
+     `.section-light` values apply. */
+  .surface-deep .surface-site {
+    --color-paper: #f5f4f2;
+    --color-shell: #eae8e5;
+    --color-shell-deep: #dfdcd8;
   }
 
   /* Markdown inside a chat bubble. The bubble sets the type; this only has

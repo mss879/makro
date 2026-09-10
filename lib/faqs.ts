@@ -1,8 +1,11 @@
 /* ============================================================
-   FAQ content — single source of truth.
-   The /faq page renders every group (and emits FAQPage schema
-   from the same data); the homepage shows HOME_FAQS, a standalone
-   set with shorter, home-specific answers.
+   FAQ content — the chat agent's reference answers.
+   No page renders this any more. It was the /faq page, which the
+   client retired in Sep 2026 because the admin could not edit it;
+   the site's one public FAQ is now the admin-driven block that
+   closes /projects (components/projects/Faq.tsx), and /faq
+   redirects there. What remains is read by lib/chat/knowledge.ts
+   as the agent's verbatim company positions.
    Answers are written to carry the site's target keywords
    naturally: Sri Lanka, Colombo, Dehiwala, Makro Heights,
    property developer, apartments, Wheels Lanka Group.
@@ -114,36 +117,5 @@ export const FAQ_GROUPS: FaqGroup[] = [
         a: "The monthly management fee covers the upkeep of shared facilities, common-area utilities, security, building insurance and the professional management of the condominium corporation. A detailed fee schedule is provided before handover so owners know exactly what to expect.",
       },
     ],
-  },
-];
-
-export const ALL_FAQS: FaqItem[] = FAQ_GROUPS.flatMap((g) => g.items);
-
-/** The six questions surfaced on the homepage accordion — standalone
-    copies with shorter, home-specific answers. */
-export const HOME_FAQS: FaqItem[] = [
-  {
-    q: "Where does Makro Developers build?",
-    a: "Makro Developers is committed exclusively to Sri Lanka, with our current flagship development, Makro Heights, located on Rohini Place in Dehiwala — moments from Colombo.",
-  },
-  {
-    q: "Is Makro part of a larger group?",
-    a: "Yes. Makro Developers is a wholly owned subsidiary of the Wheels Lanka Group, giving every development financial strength, governance and long-term stability.",
-  },
-  {
-    q: "Can I invest in a Makro development?",
-    a: "Yes. Beyond owner-occupiers, our developments attract investors seeking long-term rental demand and capital appreciation — our sales team can advise on investment-focused unit types.",
-  },
-  {
-    q: "How do I enquire about a specific project?",
-    a: "Use our contact form and select the project you're interested in, including Makro Heights, and our team will follow up with detailed information and availability.",
-  },
-  {
-    q: "What makes a Makro home different?",
-    a: "Every Makro home is measured against The Standard Above — the same discipline in planning, engineering and construction, regardless of budget or market segment.",
-  },
-  {
-    q: "Do you provide support after handover?",
-    a: "Yes. Our responsibility doesn't end at handover — it's when a long-term relationship begins, backed by structured after-sales support.",
   },
 ];

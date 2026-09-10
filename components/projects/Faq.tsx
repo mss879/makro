@@ -14,14 +14,14 @@ import type { ProjectsPageFaqItem } from "@/lib/projects-page-data";
  * Every string used to be a literal here and the questions came from
  * HOME_FAQS in lib/faqs.ts, which meant a typo in the heading was a deploy.
  * The client's direction was "the headings to everything" editable, so the
- * eyebrow, heading, standfirst and BOTH links are props now, links carrying
- * their destination as well as their label.
+ * eyebrow, heading, standfirst and the link are props now, the link carrying
+ * its destination as well as its label.
  *
- * lib/faqs.ts is deliberately still the source for /faq and its FAQPage
- * structured data. That page is canonical for the schema; this one is the
- * projects page's own short list, which is why it read HOME_FAQS rather than
- * FAQ_GROUPS to begin with. Merging them would put the same questions into two
- * schema graphs.
+ * THE SITE'S ONLY FAQ since Sep 2026. It used to sit beside a hard-coded /faq
+ * page, linked from here as "View all questions" — a page the client could not
+ * edit from the admin. The client retired it: the link went (and its admin
+ * field with it, 20260910000100), /faq redirects to #faq below, and the
+ * FAQPage structured data moved to app/(site)/projects/page.tsx.
  */
 export default function Faq({
   eyebrow,
@@ -29,8 +29,6 @@ export default function Faq({
   body,
   primaryLabel,
   primaryHref,
-  secondaryLabel,
-  secondaryHref,
   items,
 }: {
   eyebrow: string;
@@ -38,18 +36,31 @@ export default function Faq({
   body: string;
   primaryLabel: string;
   primaryHref: string;
-  secondaryLabel: string;
-  secondaryHref: string;
   items: ProjectsPageFaqItem[];
 }) {
   const [open, setOpen] = useState<number | null>(0);
 
-  // An admin can unpublish every question. The heading and its two links still
+  // An admin can unpublish every question. The heading and its link still
   // stand on their own — "ask us directly" is if anything MORE useful with no
   // list above it — so only the accordion column is conditional.
 
   return (
-    <section className="section-light relative overflow-hidden section-y md:py-32">
+    /* A DIFFERENT GROUND FROM THE PORTFOLIO ABOVE (client, Sep 2026: separate
+       the FAQ from the rest of the page, "as if to subtly say we are moving
+       into a different section"). `surface-site` steps this one section off
+       the route's deeper grey and back onto the site-wide paper — the same
+       device that sets /projects apart from the rest of the site, run in
+       reverse where the page stops being about the developments. A change of
+       ground rather than a rule or a label: full-bleed, and it needs no words.
+       See app/globals.css.
+
+       `id="faq"` is where the /faq redirect and the links that used to point
+       at that page land. scroll-mt keeps the edge clear of the fixed navbar
+       when the browser makes the jump itself. */
+    <section
+      id="faq"
+      className="section-light surface-site relative scroll-mt-[var(--nav-h)] overflow-hidden section-y md:py-32"
+    >
       <div className="pointer-events-none absolute -left-20 bottom-0 opacity-[0.06]">
         <PeakMark className="h-[34rem] w-auto text-rose-deep" strokeWidth={2} />
       </div>
@@ -82,7 +93,7 @@ export default function Faq({
               )}
               {/* A label with no destination is a dead control, and a
                   destination with no label is invisible — so both are required
-                  before either link renders. */}
+                  before the link renders. */}
               {primaryLabel && primaryHref && (
                 <Link
                   href={primaryHref}
@@ -93,20 +104,15 @@ export default function Faq({
                   <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
                 </Link>
               )}
-              {secondaryLabel && secondaryHref && (
-                <Link
-                  href={secondaryHref}
-                  className="group mt-4 flex w-fit items-center gap-3 font-body text-sm text-mist transition-colors hover:text-rose-deep"
-                >
-                  {secondaryLabel}
-                  <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-                </Link>
-              )}
             </Reveal>
           </div>
         </div>
 
-        {/* Accordion */}
+        {/* Accordion. A size down from where it started (client, Sep 2026:
+            "reduce the font size of the question/answers"). The questions were
+            30px — close enough to the heading beside them to compete with it;
+            at 20/24px they read as a list under that heading. The rows tighten
+            with the type so the proportions hold. */}
         <div className="lg:col-span-7 lg:col-start-6">
           <div className="flex flex-col">
             {items.map((item, i) => {
@@ -115,12 +121,12 @@ export default function Faq({
                 <Reveal key={item.id} delay={i * 0.05} className="border-t border-hair last:border-b">
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="flex w-full items-center justify-between gap-6 py-7 text-left"
+                    className="flex w-full items-center justify-between gap-6 py-6 text-left"
                     aria-expanded={isOpen}
                     aria-controls={`projects-faq-panel-${i}`}
                   >
                     <span
-                      className={`font-display text-2xl leading-tight transition-colors md:text-3xl ${
+                      className={`font-display text-xl leading-tight transition-colors md:text-2xl ${
                         isOpen ? "text-rose-deep" : "text-ink"
                       }`}
                     >
@@ -142,7 +148,7 @@ export default function Faq({
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="max-w-xl pb-7 font-body text-base leading-relaxed text-mist">
+                      <p className="max-w-xl pb-6 font-body text-[0.9375rem] leading-relaxed text-mist">
                         {item.answer}
                       </p>
                     </div>

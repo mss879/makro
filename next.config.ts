@@ -71,6 +71,16 @@ const contentSecurityPolicy = [
 const nextConfig: NextConfig = {
   // No reason to advertise the framework on every response.
   poweredByHeader: false,
+  /**
+   * /faq is retired (client, Sep 2026). It was a hard-coded page the client
+   * could not edit from the admin, sitting beside the admin-driven FAQ that
+   * closes /projects — so the site keeps the one they control, and the old
+   * address lands on it. Permanent, so search engines carry the URL's
+   * standing across instead of holding on to a dead page.
+   */
+  async redirects() {
+    return [{ source: "/faq", destination: "/projects#faq", permanent: true }];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     /**

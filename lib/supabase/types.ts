@@ -223,18 +223,17 @@ export type ProjectsPageSettingsRow = {
   carousel_enabled: boolean;
   carousel_eyebrow: string;
   carousel_heading: string;
-  /* FAQ — added in 20260830000100. The two links are label + href pairs, not
-     booleans over hard-coded routes: the client asked for the whole section to
+  /* FAQ — added in 20260830000100. The link is a label + href pair, not a
+     boolean over a hard-coded route: the client asked for the whole section to
      be editable, and a label they can change pointing at a destination they
-     cannot is a half measure. */
+     cannot is a half measure. There was a second pair until 20260910000100
+     dropped it along with the /faq page it pointed at. */
   faq_enabled: boolean;
   faq_eyebrow: string;
   faq_heading: string;
   faq_body: string;
   faq_primary_label: string;
   faq_primary_href: string;
-  faq_secondary_label: string;
-  faq_secondary_href: string;
   created_at: string;
   updated_at: string;
 }

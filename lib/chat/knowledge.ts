@@ -120,7 +120,7 @@ ${insightFacts()}
 - About: ${SITE.url}/about
 - Blog: ${SITE.url}/insights
 - Contact: ${SITE.url}/contact
-- FAQ: ${SITE.url}/faq
+- FAQ: ${SITE.url}/projects#faq
 
 Open the conversation only if spoken to first. Answer what was asked, then — if and only if there is genuine buying or investing interest — offer to connect them with the team.`;
 }

@@ -111,7 +111,7 @@ export default async function InsightsPage() {
                 <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
               </Link>
               <Link
-                href="/faq"
+                href="/projects#faq"
                 className="inline-flex items-center gap-3 border border-hair-strong px-7 py-4 font-body text-ink transition-colors hover:border-rose-deep hover:text-rose-deep"
               >
                 Quick answers

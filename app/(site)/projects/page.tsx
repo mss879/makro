@@ -2,7 +2,7 @@ import Link from "next/link";
 import { IMG } from "@/lib/images";
 import { getProjects } from "@/lib/projects-data";
 import { getProjectsPageContent } from "@/lib/projects-page-data";
-import { pageMetadata, breadcrumbSchema, webPageSchema, projectListSchema } from "@/lib/seo";
+import { pageMetadata, breadcrumbSchema, webPageSchema, projectListSchema, faqSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import ProjectsPageHero from "@/components/projects/ProjectsPageHero";
 import ProjectsIntro from "@/components/projects/ProjectsIntro";
@@ -46,6 +46,15 @@ export const metadata = pageMetadata({
 export default async function ProjectsPage() {
   const [projects, page] = await Promise.all([getProjects(), getProjectsPageContent()]);
 
+  // The FAQPage graph moved here with the FAQ itself when /faq was retired
+  // (Sep 2026). Answered entries only: the admin lets a question go live
+  // before its answer is written, and an empty acceptedAnswer is invalid.
+  const faqEntries = page.faq.enabled
+    ? page.faq.items
+        .filter((item) => item.answer.trim())
+        .map((item) => ({ q: item.question, a: item.answer }))
+    : [];
+
   return (
     <>
       <JsonLd
@@ -58,6 +67,7 @@ export default async function ProjectsPage() {
           }),
           projectListSchema(projects),
           breadcrumbSchema([{ name: "Projects", path: "/projects" }]),
+          ...(faqEntries.length ? [faqSchema(faqEntries)] : []),
         ]}
       />
       {/* The page, in the order the client asked for (Aug 2026): full-screen
@@ -105,10 +115,11 @@ export default async function ProjectsPage() {
       )}
 
       {/* Lives here rather than on the home page — the questions people ask
-          are almost always about the developments. The canonical FAQPage
-          schema stays on /faq; duplicating it here would conflict.
+          are almost always about the developments — and, since Sep 2026, ONLY
+          here: /faq is retired and redirects to this section (next.config.ts),
+          which is why this page now emits the FAQPage schema.
 
-          Every string is admin-controlled now (Projects → FAQ, added in
+          Every string is admin-controlled (Projects → FAQ, added in
           20260830000100), which is why the whole section sits behind its own
           switch like the three above it. */}
       {page.faq.enabled && (
@@ -118,8 +129,6 @@ export default async function ProjectsPage() {
           body={page.faq.body}
           primaryLabel={page.faq.primaryLabel}
           primaryHref={page.faq.primaryHref}
-          secondaryLabel={page.faq.secondaryLabel}
-          secondaryHref={page.faq.secondaryHref}
           items={page.faq.items}
         />
       )}
