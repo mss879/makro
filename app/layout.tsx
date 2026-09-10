@@ -99,6 +99,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${marcellus.variable} ${manrope.variable} antialiased`}
+      // The inline script in <head> adds `anim` to this element's classes
+      // before React hydrates, so the className React finds never matches the
+      // one it rendered — a hydration warning on every page. The difference is
+      // intended and React leaves the attribute as it is either way; this only
+      // silences the report, and only for this element's own attributes.
+      suppressHydrationWarning
     >
       <head>
         {/* Arms the reveal animations' "before" state — see the Reveal parking
