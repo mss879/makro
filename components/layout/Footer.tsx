@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CREATOR, NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS } from "@/lib/site";
+import { CREATOR, NAV, NAV_LEGAL, NAV_SECONDARY, SITE, SOCIALS, WHATSAPP_URL } from "@/lib/site";
 import { PeakMark } from "@/components/brand/PeakMark";
 import TextReveal from "@/components/anim/TextReveal";
 import Reveal from "@/components/anim/Reveal";
@@ -81,11 +81,10 @@ export default function Footer() {
                 than the main nav" that nothing had ever rendered. Wiring it up
                 is what that comment was promising.
 
-                It brings Sustainability, FAQ and Careers with it. All three
-                are real, indexed pages that were reachable from no navigation
-                anywhere on the site, which is the more useful half of this
-                change; if the client wants only Approach, the fix is to slice
-                this list rather than to hard-code one <Link>. */}
+                It used to bring Sustainability, FAQ and Careers with it. The
+                client asked for all three off the footer (Sep 2026), so the
+                list was sliced back to Approach in lib/site.ts — the change
+                belongs there, not in a hard-coded <Link> here. */}
             <ul className="mt-5 space-y-3">
               {[...NAV, ...NAV_SECONDARY].map((item) => (
                 <li key={item.href}>
@@ -103,6 +102,20 @@ export default function Footer() {
           <div>
             <p className="eyebrow text-fog">Connect</p>
             <ul className="mt-5 space-y-3">
+              {/* WhatsApp first (client, Sep 2026: "under connect can we
+                  include whatsapp?"). It is the one direct line in a list of
+                  follows, and it opens the chat in a new tab rather than
+                  taking the visitor off the site. */}
+              <li>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-body text-sm text-mist transition-colors hover:text-rose"
+                >
+                  WhatsApp
+                </a>
+              </li>
               {SOCIALS.map((s) => (
                 <li key={s.label}>
                   <a

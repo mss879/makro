@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PeakMark } from "@/components/brand/PeakMark";
+import { isStowedOnPhone, useStowedOnPhone } from "@/lib/stow-on-phone";
 
 /**
  * The Makro Assistant — a floating chat panel on every public page.
@@ -58,21 +59,6 @@ function writeStored(value: Stored) {
   } catch {
     /* see readStored */
   }
-}
-
-/**
- * True when the launcher should be out of the way: a phone-width viewport,
- * still inside the first screenful.
- *
- * 768px is Tailwind's `md`, the same breakpoint the button's own bottom/right
- * offsets switch at. 60% of a viewport height rather than the whole of one, so
- * the button is already arriving as the hero leaves rather than appearing from
- * nowhere once it has gone.
- */
-function isStowedNow(): boolean {
-  if (typeof window === "undefined") return false;
-  if (!window.matchMedia("(max-width: 767px)").matches) return false;
-  return window.scrollY < window.innerHeight * 0.6;
 }
 
 export default function ChatWidget() {
@@ -295,27 +281,20 @@ export default function ChatWidget() {
    * at false would flash the bubble over the hero for one frame on exactly the
    * screens this exists to keep it off.
    */
-  const [stowed, setStowed] = useState(isStowedNow);
+  // The scroll/resize bookkeeping lives in lib/stow-on-phone.ts, shared with
+  // the WhatsApp button that stands in the same corner.
+  const stowed = useStowedOnPhone(isStowedOnPhone);
 
+  // Tells that WhatsApp button to step aside while the panel is open: the
+  // panel rises out of this launcher, and the button sits directly above it
+  // (components/layout/WhatsAppFloat.tsx). An attribute on <html> rather than
+  // an event, so the button reads the right state whenever it mounts, and CSS
+  // alone can act on it.
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    // Cheap enough to run unthrottled: scrollY does not force layout, and
-    // React bails out of the re-render when the boolean has not changed, so a
-    // scroll through the hero costs one render, not one per event.
-    const check = () => setStowed(isStowedNow());
-
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    // Rotating a phone, or crossing the breakpoint on a resized desktop
-    // window, changes the answer without any scrolling.
-    window.addEventListener("resize", check);
-    mq.addEventListener("change", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-      mq.removeEventListener("change", check);
-    };
-  }, []);
+    const root = document.documentElement;
+    root.toggleAttribute("data-chat-open", open);
+    return () => root.removeAttribute("data-chat-open");
+  }, [open]);
 
   // Never stowed while the panel is open — the button is the close control at
   // that point, and hiding it would trap the conversation on screen.

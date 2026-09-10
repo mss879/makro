@@ -55,6 +55,12 @@ export const SITE = {
     "Thoughtfully planned residential and commercial developments in Colombo and across Sri Lanka, built for lasting value. A Wheels Lanka Group company.",
   email: "info@makrodevelopers.com",
   phone: "+94 707 21 21 21",
+  /**
+   * The WhatsApp hotline (client, Sep 2026) — the footer's Connect column and
+   * the floating button both open a chat with it. Its own field rather than a
+   * reading of `phone`, so the day the two numbers differ is a one-line change.
+   */
+  whatsapp: "+94 707 21 21 21",
   address: "10, Esther Avenue, Park Road, Colombo 05",
   /**
    * Canonical origin. Everything SEO-facing derives from this one string —
@@ -65,6 +71,9 @@ export const SITE = {
   url: canonicalOrigin(),
 };
 
+/** wa.me takes the full international number as bare digits: no +, no spaces. */
+export const WHATSAPP_URL = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`;
+
 export const NAV = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
@@ -73,13 +82,15 @@ export const NAV = [
   { label: "Contact", href: "/contact" },
 ];
 
-/** Secondary pages surfaced in the footer rather than the main nav. */
-export const NAV_SECONDARY = [
-  { label: "Approach", href: "/approach" },
-  { label: "Sustainability", href: "/sustainability" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Careers", href: "/careers" },
-];
+/**
+ * Secondary pages surfaced in the footer rather than the main nav.
+ *
+ * Approach only (client, Sep 2026: take Sustainability, FAQ and Careers off
+ * the footer). /faq is retired outright and redirects to the FAQ on
+ * /projects; Sustainability and Careers are still live, indexed pages — they
+ * are just no longer linked from here.
+ */
+export const NAV_SECONDARY = [{ label: "Approach", href: "/approach" }];
 
 export const NAV_LEGAL = [
   { label: "Privacy Policy", href: "/privacy-policy" },

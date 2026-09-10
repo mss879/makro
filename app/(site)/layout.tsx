@@ -7,6 +7,7 @@ import Preloader from "@/components/ui/Preloader";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import TrackPageview from "@/components/analytics/TrackPageview";
 import ChatMount from "@/components/chat/ChatMount";
+import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import { isChatConfigured } from "@/lib/chat/config";
 
 /**
@@ -41,6 +42,11 @@ export default function SiteLayout({
           present (lib/chat/config.ts). A launcher that opens onto a 503 is
           worse than no launcher. */}
       {isChatConfigured && <ChatMount />}
+      {/* The WhatsApp hotline, floating (client, Sep 2026). Outside
+          SmoothScroll for the same reason as the chat, and told whether the
+          launcher is there so it stacks above it rather than on it — the
+          launcher keeps the corner either way. */}
+      <WhatsAppFloat stacked={isChatConfigured} />
     </>
   );
 }
