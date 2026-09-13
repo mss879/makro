@@ -533,9 +533,10 @@
 
   /* ---------- Hero plate position ----------
      Bottom-LEFT of the hero, 4px off both edges (client, Aug 2026 — "as close
-     as possible to the edges"). One class so the five heroes cannot drift:
-     PageHero, the contact hero, the home hero, the project detail hero and the
-     /projects slideshow all hang their plate off this.
+     as possible to the edges"). One class so the heroes cannot drift:
+     PageHero, the home hero, the project detail hero and the /projects
+     slideshow all hang their plate off this. (The contact page had one too,
+     until its hero was removed in Sep 2026.)
 
      7px is deliberately not the page gutter. Everything else on the site is
      inset by container-edge — clamp(1.25rem, 5vw, 6.5rem) — and the whole
@@ -869,4 +870,26 @@
     transition: none !important;
     visibility: visible !important;
   }
+}
+
+/* ---------- Page transitions ----------
+   The dissolve between pages. components/providers/PageTransitions.tsx starts
+   it and explains why it is the whole screen rather than the page content.
+
+   Only the length and the curve are set here. The browser's own fade
+   keyframes and its plus-lighter pairing are what hold the navbar and the
+   floating buttons perfectly still while the page changes around them — so
+   both halves MUST share one curve: the two opacities then always sum to one,
+   and nothing dims through the middle of the fade.
+
+   A curve that moves at once and settles slowly, not a symmetric in-out. The
+   fade only begins after the click has already waited on the route, and an
+   in-out spends its first fifth barely changing the picture: measured, the
+   page sat visibly untouched for ~300ms after the click, which reads as the
+   site hesitating. This one is under way within a frame or two and spends its
+   length on the settle, which is where the smoothness is felt. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 700ms;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 }

@@ -17,12 +17,19 @@ export default function PageHero({
   intro,
   imageId,
   treatment = "mono",
+  imageAspect = 16 / 9,
 }: {
   eyebrow: string;
   title?: string;
   intro?: string;
   imageId: string;
-  treatment?: "warm" | "mono";
+  /** "none" for client renders that arrive graded — see BRAND in lib/images. */
+  treatment?: "warm" | "mono" | "none";
+  /**
+   * The art's width over its height. Only `sizes` reads it, so close is
+   * enough — it decides which candidate a phone fetches, nothing else.
+   */
+  imageAspect?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -97,8 +104,9 @@ export default function PageHero({
       /* One height for every inner-page hero (client, Aug 2026 — the blog,
          about, contact and approach heroes "need to be the same size"). They
          were not, because nothing set a height and the content decided it:
-         /approach and /careers pass a title and /about, /insights and /contact
-         do not, so a titled hero ran ~90px taller. Measured at 793px wide:
+         /approach and /careers passed a title and /about, /insights and
+         /contact did not, so a titled hero ran ~90px taller (/approach has
+         since lost its title — client, Sep 2026). Measured at 793px wide:
          contact and insights 377, about 407, approach 467.
 
          min-h rather than a fixed h — a floor makes them identical while the
@@ -109,9 +117,8 @@ export default function PageHero({
          a hero proportional to the viewport. The section is already
          justify-center, so the extra room is shared above and below.
 
-         The contact hero is hand-rolled (it renders its own JSON-LD and drift
-         mark) and repeats this box deliberately. Change one, change the
-         other. */
+         The contact page used to repeat this box by hand; it has had no hero
+         at all since Sep 2026. */
       /* justify-end, not justify-center: the plate is anchored to the bottom
          of the frame now. The top padding stays so the min-height still
          reserves room under the floating navbar. */
@@ -124,7 +131,14 @@ export default function PageHero({
           alt=""
           fill
           priority
-          sizes="100vw"
+          /* On a phone the frame is taller than it is wide — 32rem tall — so
+             object-cover paints landscape art at 32rem × its aspect, ×1.08 for
+             the scroll zoom it starts at. A bare "100vw" had a phone fetch
+             the 828w candidate for the About panorama and stretch it ~3.6×,
+             visibly soft. From md up the frame is nearly as wide as the art
+             is painted — within ~13% even for that panorama at 1512px — and
+             the candidate above 100vw already covers the difference. */
+          sizes={`(max-width: 767px) calc(32rem * ${(imageAspect * 1.08).toFixed(2)}), 100vw`}
           /* NO opacity-35 and NO gradient over it (client, Aug 2026 — "all
              the black overlays need to be removed from all the page hero
              sections"). Both were here and they compounded: a full-bleed
@@ -135,8 +149,11 @@ export default function PageHero({
 
              The `treatment` filter stays. img-warm and img-mono are colour
              grades chosen per page, not black laid over the art, and the
-             client's objection was to the overlays. */
-          className={`object-cover ${treatment === "mono" ? "img-mono" : "img-warm"}`}
+             client's objection was to the overlays. "none" is for the heroes
+             the client supplied themselves, which are already graded. */
+          className={`object-cover ${
+            treatment === "mono" ? "img-mono" : treatment === "warm" ? "img-warm" : ""
+          }`}
         />
       </div>
 

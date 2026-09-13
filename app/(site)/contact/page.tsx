@@ -6,7 +6,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import ContactForm from "@/components/contact/ContactForm";
 import { getProjects } from "@/lib/projects-data";
 import Reveal from "@/components/anim/Reveal";
-import Drift from "@/components/anim/Drift";
+import TextReveal from "@/components/anim/TextReveal";
 import { PeakMark } from "@/components/brand/PeakMark";
 import { SocialIcon } from "@/components/brand/SocialIcon";
 
@@ -53,53 +53,46 @@ export default async function ContactPage() {
 
   return (
     <>
-      {/* Box metrics deliberately mirror components/ui/PageHero — every other
-          inner page uses that component, and this one cannot (it has no
-          background image; the drifting peak watermark stands in for one), so
-          the sizing is matched by hand instead. Keep the two in step. */}
-      {/* min-h matches components/ui/PageHero exactly — see the note there for
-          why the inner-page heroes now share a height floor. */}
-      <section className="relative flex min-h-[max(32rem,60vh)] flex-col justify-end overflow-hidden bg-ink pt-[calc(var(--nav-h)+3rem)] md:pt-[calc(var(--nav-h)+4rem)]">
-        <JsonLd
-          data={[
-            webPageSchema({
-              type: "ContactPage",
-              name: "Contact Makro Developers",
-              description: DESCRIPTION,
-              path: "/contact",
-            }),
-            localBusinessSchema(),
-            breadcrumbSchema([{ name: "Contact", path: "/contact" }]),
-          ]}
-        />
-        <Drift className="pointer-events-none absolute -right-20 top-24 opacity-[0.05]">
-          <PeakMark className="h-[40rem] w-auto text-rose" strokeWidth={1.5} />
-        </Drift>
+      <JsonLd
+        data={[
+          webPageSchema({
+            type: "ContactPage",
+            name: "Contact Makro Developers",
+            description: DESCRIPTION,
+            path: "/contact",
+          }),
+          localBusinessSchema(),
+          breadcrumbSchema([{ name: "Contact", path: "/contact" }]),
+        ]}
+      />
 
-        {/* w-full because the section is now a flex container — without it the
-            content box shrink-wraps and container-edge stops centring. */}
-        <div className="hero-plate-anchor relative w-full">
-          {/* The same black glass plate as every other hero — this one is
-              hand-rolled rather than a PageHero, so it needs the class
-              directly. See .hero-plate in globals.css. */}
-          <div className="hero-plate w-fit max-w-3xl">
-            <div className="flex items-center gap-4">
-              <span className="line-hair w-12" />
-              <span className="eyebrow text-rose">Contact Us</span>
-            </div>
-            <Reveal delay={0.1}>
-              <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-mist">
-                Have a site, a vision or an idea worth exploring? Tell us what
-                you have in mind, and our team will be in touch.
-              </p>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+      {/* No hero (client, Sep 2026 — "not needed at all"). The page opens
+          straight onto its own content under a "Contact Us" heading.
 
-      <section className="section-light section-y section-y-open-t md:pb-32 md:pt-20">
+          The top padding clears the floating navbar rather than meeting a
+          section above it, so it is not `.section-y`: on a phone that class
+          sets padding-block from later in the cascade and would override a
+          top value set here. The bottom keeps the same dial through
+          --section-y. */}
+      <section className="section-light pb-[var(--section-y)] pt-[calc(var(--nav-h)+4.5rem)] md:pb-32 md:pt-[calc(var(--nav-h)+6rem)]">
         <div className="container-edge">
-          <div className="grid grid-cols-1 gap-14 lg:grid-cols-12">
+          <div className="flex items-center gap-4">
+            <span className="line-hair w-10" />
+            <span className="eyebrow text-rose-deep">Get in Touch</span>
+          </div>
+          <TextReveal
+            as="h1"
+            text="Contact Us"
+            className="mt-6 font-display display-lg text-ink"
+          />
+          <Reveal delay={0.1}>
+            <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-mist">
+              Have a site, a vision or an idea worth exploring? Tell us what you
+              have in mind, and our team will be in touch.
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid grid-cols-1 gap-14 md:mt-16 lg:grid-cols-12">
             {/* Details */}
             <div className="lg:col-span-4">
               <div className="grid grid-cols-1 gap-px border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-1">

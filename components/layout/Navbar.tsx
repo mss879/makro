@@ -7,6 +7,9 @@ import { usePathname } from "next/navigation";
 import { gsap, useGSAP, ScrollTrigger } from "@/lib/gsap";
 import { NAV, SITE } from "@/lib/site";
 
+/** Pages with no hero, whose first section is light — see `tinted` below. */
+const LIGHT_TOP_ROUTES = new Set(["/contact"]);
+
 /**
  * Cream navbar — logo left, links right, Contact as an outlined button.
  *
@@ -94,6 +97,13 @@ export default function Navbar() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  // Routes that open straight onto a light section instead of a hero (the
+  // contact page, since its hero was removed in Sep 2026). The unscrolled 50%
+  // tint only reads as dark glass over a dark hero; on paper it is a flat
+  // grey slab, so these start in the tint the bar wears over light content
+  // everywhere else. Exact paths, like the preloader's CURTAIN_ROUTES.
+  const tinted = scrolled || LIGHT_TOP_ROUTES.has(pathname);
+
   /**
    * Floating navbar — seated on top of the viewport across all pages,
    * retaining its glassmorphic floating panel design even when scrolling
@@ -119,7 +129,7 @@ export default function Navbar() {
                colour interpolation instead. Under an 80%-opaque bar the
                geometry change was not visible anyway. */
             className={`pointer-events-auto flex h-[var(--nav-h)] items-center justify-between transition-[background-color,border-color,box-shadow] duration-500 mt-2 border px-5 backdrop-blur-xl md:mt-3 md:px-7 ${
-              scrolled
+              tinted
                 ? "border-white/25 bg-ink/80 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)]"
                 : "border-white/20 bg-ink/50 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)]"
             }`}

@@ -57,8 +57,8 @@ export default async function InsightsPage() {
       <PageHero
         eyebrow="Blog"
         intro="Considered perspectives on Sri Lankan property — from the people who plan, build and deliver it."
-        imageId={BRAND.lifestyleLoft}
-        treatment="warm"
+        imageId={BRAND.blogHero}
+        treatment="none"
       />
 
       <section className="section-light relative section-y section-y-open-t md:py-32">

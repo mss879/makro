@@ -94,12 +94,16 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About Makro"
         intro="Our developments reflect considered design, quality craftsmanship and lasting value — creating spaces and landmarks where people can live, work and invest with confidence."
-        imageId={BRAND.monoGrid}
-        treatment="mono"
+        imageId={BRAND.aboutHero}
+        treatment="none"
+        imageAspect={2055 / 765}
       />
 
-      {/* Story */}
-      <section className="section-light relative section-y section-y-open-t md:py-32">
+      {/* Story — md:pb-16 mirrors the image's mt-16, so the plate sits in an
+          even 64px frame (client, Sep 2026: the gap under it was 256px, two
+          md:py-32 edges stacked, against 64px above). The Values section below
+          drops its desktop top padding to match. Phone rhythm is untouched. */}
+      <section className="section-light relative section-y section-y-open-t md:pb-16 md:pt-32">
         <div className="container-edge grid grid-cols-1 gap-14 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-4">
@@ -159,8 +163,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values / personality */}
-      <section className="section-light relative section-y md:py-32">
+      {/* Values / personality — no desktop top padding: the Story section's
+          md:pb-16 carries the whole gap above this one. */}
+      <section className="section-light relative section-y md:pb-32 md:pt-0">
         <div className="container-edge">
           <div className="flex items-center gap-4">
             <span className="line-hair w-10" />
@@ -190,12 +195,17 @@ export default function AboutPage() {
       {/* Wheels Lanka Group */}
       <section className="relative bg-ink section-y md:py-32">
         <div className="container-edge grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
+          {/* The plate's own ratio and a gentle zoom, not 4:3 at the default
+              1.18: the sign's apex and the model sit close to the top and
+              bottom edges, and either crop would have cut one of them. */}
           <ParallaxImage
             id={BRAND.aboutFoundation}
-            alt="Makro Developers leadership reviewing a scale model of a residential tower alongside drawings and material samples"
-            treatment="warm"
-            className="aspect-[4/3] w-full"
+            alt="Wheels Lanka Trading signage on a stone reception wall, with a scale model of Makro Heights on the counter"
+            treatment="none"
+            className="aspect-[1375/1144] w-full"
             sizes="(max-width: 1024px) 100vw, 50vw"
+            zoom={1.06}
+            parallax={3}
           />
           <div>
             <div className="flex items-center gap-4">

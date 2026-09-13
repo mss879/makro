@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import Preloader from "@/components/ui/Preloader";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import TrackPageview from "@/components/analytics/TrackPageview";
+import PageTransitions from "@/components/providers/PageTransitions";
 import ChatMount from "@/components/chat/ChatMount";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import { isChatConfigured } from "@/lib/chat/config";
@@ -28,6 +29,10 @@ export default function SiteLayout({
       <Preloader />
       <ScrollProgress />
       <TrackPageview />
+      {/* The dissolve between pages. Here and not in the root layout for the
+          same reason as everything else in this file: /admin is a tool, and
+          its navigations should stay instant. */}
+      <PageTransitions />
       <SmoothScroll>
         <Navbar />
         <main>{children}</main>
