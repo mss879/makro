@@ -104,11 +104,11 @@ export default function ApproachPage() {
           breadcrumbSchema([{ name: "Approach", path: "/approach" }]),
         ]}
       />
-      {/* No title — "Where lasting value begins." was cut (client, Sep 2026),
-          so this hero now opens on the eyebrow like About and Blog. */}
+      {/* The glass plate holds just the page's name, like About and Blog
+          (client, Sep 2026). "Where lasting value begins." and the intro
+          sentence were both cut. */}
       <PageHero
-        eyebrow="Our Approach"
-        intro="A disciplined approach that brings together commercial judgement, specialist expertise and rigorous execution to create developments built for lasting value."
+        heading="Our Approach"
         imageId={BRAND.approachHero}
         treatment="none"
       />

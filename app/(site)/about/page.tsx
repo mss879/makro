@@ -92,8 +92,7 @@ export default function AboutPage() {
         ]}
       />
       <PageHero
-        eyebrow="About Makro"
-        intro="Our developments reflect considered design, quality craftsmanship and lasting value — creating spaces and landmarks where people can live, work and invest with confidence."
+        heading="About Makro"
         imageId={BRAND.aboutHero}
         treatment="none"
         imageAspect={2055 / 765}
