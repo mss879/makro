@@ -200,7 +200,7 @@ export default function AboutPage() {
               bottom edges, and either crop would have cut one of them. */}
           <ParallaxImage
             id={BRAND.aboutFoundation}
-            alt="Wheels Lanka Trading signage on a stone reception wall, with a scale model of Makro Heights on the counter"
+            alt="Wheels Lanka Group signage on a light stone reception wall, with a scale model of Makro Heights on the marble counter"
             treatment="none"
             className="aspect-[1375/1144] w-full"
             sizes="(max-width: 1024px) 100vw, 50vw"

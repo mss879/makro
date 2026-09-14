@@ -54,12 +54,14 @@ export const BRAND = {
   // frame it sits in wants a landscape aspect. The subject sits left of centre,
   // which a narrow centre-crop would cut out entirely.
   aboutLifestyle: "/brand/about-lifestyle.webp", // client-supplied — About page editorial plate
-  // 1375×1144, a little under 6:5 — the Wheels Lanka sign above a Makro Heights
-  // model (client, Sep 2026; replaced the 3:2 about-foundation.webp). The logo's
+  // 1375×1144, a little under 6:5 — the Wheels Lanka Group sign above a Makro
+  // Heights model on a light stone wall (client, 15 Sep 2026; replaced the dark
+  // "Wheels Lanka Trading" plate, itself a swap for the 3:2 about-foundation.webp).
+  // A new filename, not an overwrite, so no cache serves the old plate. The logo's
   // apex sits ~10% from the top and the model near the bottom edge, so its frame
   // on /about takes this exact ratio: the old 4:3 frame, under the default
   // parallax zoom, would have cut both.
-  aboutFoundation: "/brand/about-foundation-wheels-lanka.webp", // client-supplied — About "Our Foundation"
+  aboutFoundation: "/brand/about-foundation-wheels-lanka-group.webp", // client-supplied — About "Our Foundation"
   // Client-supplied page heroes (Sep 2026), each named by the client for its
   // slot. Shown with treatment "none": like the project renders, they arrive
   // already graded, and img-warm/img-mono would regrade them.
