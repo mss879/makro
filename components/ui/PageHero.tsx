@@ -216,6 +216,9 @@ export default function PageHero({
                so on About, Approach and Blog the plate now holds just the
                name, large and in white, and the intro sentence is gone.
                Same size as the plate titles on Careers and Sustainability.
+               Stepped down from clamp(2rem,3.8vw,3.6rem) — 1.4rem on a phone — the client found
+               the plate too big (Sep 2026) — and set in Marcellus via
+               font-display, the brand's display face.
 
                TextReveal spaces every word with a 0.26em right margin, the
                last one included; the negative margin cancels it, so the
@@ -223,7 +226,7 @@ export default function PageHero({
             <TextReveal
               as="h1"
               text={heading}
-              className="-mr-[0.26em] font-display text-[clamp(2rem,3.8vw,3.6rem)] leading-[1.14] text-bone"
+              className="-mr-[0.26em] font-display text-[clamp(1.4rem,2.8vw,2.6rem)] leading-[1.1] text-bone"
               delay={0.15}
             />
           ) : (
@@ -236,7 +239,7 @@ export default function PageHero({
                 <TextReveal
                   as="h1"
                   text={title}
-                  className="mt-6 max-w-4xl font-display text-[clamp(2rem,3.8vw,3.6rem)] leading-[1.14] text-bone"
+                  className="mt-6 max-w-4xl font-display text-[clamp(1.4rem,2.8vw,2.6rem)] leading-[1.1] text-bone"
                   delay={0.15}
                 />
               )}

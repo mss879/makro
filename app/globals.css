@@ -514,20 +514,22 @@
      Safari, which still needs it. */
   .hero-plate {
     --hero-plate-tint: 0.3;
-    /* Padding was 1.75/2.25rem and the client's read was that the containers
-       "feel too big". The plate should frame the copy, not seat it in a room
-       of its own. */
+    /* Padding was 1.75/2.25rem, then 1.25/1.5rem, and both times the client's
+       read was that the containers "feel too big". Sep 2026: the plate should
+       fit the text "as close as possible", so the padding is now just enough
+       that the glyphs clear the hairline. Less top/bottom than left/right:
+       Marcellus's line box already carries air above and below the letters. */
     border: 1px solid rgb(255 255 255 / 0.2);
     background: rgb(5 2 3 / var(--hero-plate-tint));
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
     box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.35);
-    padding: 1.25rem;
+    padding: 0.3rem 0.55rem;
   }
 
   @media (min-width: 768px) {
     .hero-plate {
-      padding: 1.5rem;
+      padding: 0.4rem 0.7rem;
     }
   }
 
