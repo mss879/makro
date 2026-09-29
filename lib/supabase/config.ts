@@ -29,6 +29,9 @@ export const PROJECT_IMAGE_BUCKET = "project-images";
 /** Hero art for the /projects page. Separate from the per-project galleries. */
 export const PROJECTS_PAGE_IMAGE_BUCKET = "projects-page-images";
 export const SELECTED_WORK_IMAGE_BUCKET = "selected-work-images";
+/** The home page hero's videos and stills. The only bucket that takes video —
+    those arrive by signed upload URL, not through the upload route. */
+export const HOME_HERO_MEDIA_BUCKET = "home-hero-media";
 export const BLOG_IMAGE_BUCKET = "blog-images";
 /** Project catalogue PDFs. Separate from the image buckets: nothing here is
     converted, and the bucket itself refuses anything that is not a PDF. */

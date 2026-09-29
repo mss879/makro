@@ -305,6 +305,37 @@ export type BlogSection = {
 }
 
 /**
+ * Singleton row — the home page hero (20260929000100_home_hero.sql).
+ *
+ * The shape is inferred, not stored: a video present makes a video hero with
+ * `image` as the still painted under it while it buffers; no video makes
+ * `image` the hero itself. Each `_mobile` column is the portrait partner for
+ * phones and falls back to its desktop half — and the other way round. The
+ * database rejects only a row with none of the four, and an empty headline.
+ */
+export type HomeHeroSettingsRow = {
+  id: string;
+  /** Full public URL or a bundled /public path, never a bare storage key. */
+  video: string | null;
+  video_mobile: string | null;
+  /** The video's first frame, or the hero itself when there is no video. */
+  image: string | null;
+  image_mobile: string | null;
+  /** Read only when the image IS the hero — a video hero is decoration. */
+  alt: string;
+  /** string[] — one entry per line of the <h1>, never empty. */
+  heading_lines: string[];
+  body: string;
+  /** An empty label hides that button. */
+  primary_label: string;
+  primary_href: string;
+  secondary_label: string;
+  secondary_href: string;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
  * Singleton row — the public site's on/off switch and the "Coming soon" gate
  * it is replaced by.
  *
@@ -439,6 +470,7 @@ export interface Database {
         ]
       >;
       projects_page_faq_items: Table<ProjectsPageFaqItemRow>;
+      home_hero_settings: Table<HomeHeroSettingsRow>;
       selected_work_settings: Table<SelectedWorkSettingsRow>;
       selected_work_cards: Table<SelectedWorkCardRow>;
       site_lock_settings: Table<SiteLockSettingsRow>;

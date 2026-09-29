@@ -53,10 +53,11 @@ export default function ImageField({
   /**
    * Which upload target (and therefore which bucket) this field writes to.
    * Defaults to selected-work so every existing caller is unchanged; the
-   * /projects hero passes "projects-page", and a project's own hero passes
-   * "project" so its art sits in the same bucket as that project's gallery.
+   * /projects hero passes "projects-page", a project's own hero passes
+   * "project" so its art sits in the same bucket as that project's gallery,
+   * and the home page hero's stills pass "home-hero".
    */
-  target?: "selected-work" | "projects-page" | "project";
+  target?: "selected-work" | "projects-page" | "project" | "home-hero";
   /**
    * Which half of a hero pair this field is (client, Sep 2026 — the two
    * full-screen heroes take a landscape file for desktop and a portrait one
@@ -89,7 +90,11 @@ export default function ImageField({
   const spec: ImageSpecKey =
     target === "selected-work"
       ? "selectedWork"
-      : target === "projects-page"
+      : target === "home-hero"
+        ? variant === "mobile"
+          ? "homeHeroMobile"
+          : "homeHero"
+        : target === "projects-page"
         ? variant === "mobile"
           ? "projectsPageHeroMobile"
           : "projectsPageHero"
@@ -157,13 +162,17 @@ export default function ImageField({
       {/* The preview is cropped to whatever the destination actually crops to:
           the Selected Work rail is a tall 4:5 panel, a project or /projects
           hero is full-bleed and lands nearer 16:10. Showing the wrong frame
-          here is worse than showing none — it is a promise about the crop. */}
+          here is worse than showing none — it is a promise about the crop.
+          The home hero's phone frame is 4:5, not 9:16: on a phone its picture
+          sits above the copy rather than filling the screen. */}
       <div
         className={`group relative w-full overflow-hidden border border-panel-line bg-panel-high ${
           target === "selected-work"
             ? "aspect-[4/5]"
             : variant === "mobile"
-              ? "aspect-[9/16]"
+              ? target === "home-hero"
+                ? "aspect-[4/5]"
+                : "aspect-[9/16]"
               : "aspect-[16/10]"
         }`}
       >

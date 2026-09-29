@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { createAdminSupabase, getSessionUser } from "@/lib/supabase/server";
 import {
   BLOG_IMAGE_BUCKET,
+  HOME_HERO_MEDIA_BUCKET,
   MAX_PROJECT_IMAGES,
   PROJECT_CATALOGUE_BUCKET,
   PROJECT_IMAGE_BUCKET,
@@ -37,6 +38,9 @@ const TARGETS = {
   // Hero art for /projects. Its own bucket so it can be purged without
   // touching a single project gallery.
   "projects-page": { bucket: PROJECTS_PAGE_IMAGE_BUCKET, prefix: "projects-page", kind: "image" },
+  // The home page hero's stills. Its VIDEOS never come through here — see
+  // app/api/admin/video-upload/route.ts for why they cannot.
+  "home-hero": { bucket: HOME_HERO_MEDIA_BUCKET, prefix: "home-hero", kind: "image" },
   // The gated download. Stored byte-for-byte — see the kind note above.
   catalogue: { bucket: PROJECT_CATALOGUE_BUCKET, prefix: "catalogues", kind: "pdf" },
 } as const;

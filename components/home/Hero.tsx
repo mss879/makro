@@ -1,12 +1,72 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { PRELOADER_DONE } from "@/components/ui/Preloader";
+import ArtDirectedImage from "@/components/ui/ArtDirectedImage";
+import type { HomeHero } from "@/lib/home-hero-data";
 
-export default function Hero() {
+/**
+ * The home page's opening. Every word and file in it comes from the admin
+ * (Home Hero, Sep 2026) through lib/home-hero-data.ts, which falls back to the
+ * hero this component used to hard-code — so the layout below is fixed, and
+ * what fills it is the client's.
+ */
+
+/** The `type` hint on a <source>, so a browser skips a format it cannot play without fetching it. */
+function videoType(src: string): string | undefined {
+  const path = src.split(/[?#]/)[0].toLowerCase();
+  if (path.endsWith(".webm")) return "video/webm";
+  if (path.endsWith(".mp4") || path.endsWith(".m4v")) return "video/mp4";
+  return undefined;
+}
+
+/**
+ * A button's link, whichever kind the admin typed. A page on this site goes
+ * through next/link, which is what the page dissolve (PageTransitions) replays
+ * the click on; another site opens in a new tab so the visitor keeps their
+ * place here; mail and phone links are left to the operating system.
+ */
+function HeroLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className: string;
+  children: ReactNode;
+}) {
+  if (href.startsWith("/") && !href.startsWith("//")) {
+    return (
+      <Link href={href} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  const external = /^https?:\/\//i.test(href);
+  return (
+    <a
+      href={href}
+      className={className}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
+      {children}
+    </a>
+  );
+}
+
+export default function Hero({ hero }: { hero: HomeHero }) {
   const root = useRef<HTMLDivElement>(null);
+
+  // The fallback runs both ways, as ArtDirectedImage's does: either video on
+  // its own is a complete hero at every width.
+  const desktopVideo = hero.video || hero.videoMobile;
+  const mobileVideo = hero.videoMobile || hero.video;
+  const hasStill = Boolean(hero.image || hero.imageMobile);
+  const videoKey = desktopVideo ? `${desktopVideo}|${mobileVideo}` : "";
+  // One grade for the whole picture, never per file — see HomeHero.warm.
+  const grade = hero.warm ? "img-warm " : "";
 
   // Two jobs, one effect, because they share ownership of "why is this
   // paused": browsers pause muted autoplay in background tabs and it has to
@@ -14,6 +74,10 @@ export default function Hero() {
   // carrying a three-function CSS filter should not keep decoding and running
   // a shader pass per frame once it is eight sections off screen, which is
   // most of this page.
+  //
+  // Keyed on the files: a different pair of videos is a different <video>
+  // element (see its `key`), and this has to follow it. An image hero has no
+  // video and nothing to do here.
   useEffect(() => {
     const v = root.current?.querySelector<HTMLVideoElement>("video[data-hero-img]");
     if (!v) return;
@@ -53,7 +117,7 @@ export default function Hero() {
       document.removeEventListener("visibilitychange", resume);
       io.disconnect();
     };
-  }, []);
+  }, [videoKey]);
 
   useGSAP(
     () => {
@@ -66,6 +130,12 @@ export default function Hero() {
         gsap.set(img, { scale: 1, yPercent: 0 });
       }
 
+      const words = el.querySelectorAll("[data-h-word]");
+      // The paragraph and the buttons are both optional now — the admin can
+      // leave either out — and GSAP warns about every tween handed an empty
+      // list, so the fades are only built when there is something to fade.
+      const fades = el.querySelectorAll("[data-h-fade]");
+
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -73,17 +143,19 @@ export default function Hero() {
         // immediately it would play out behind the preloader and the visitor
         // would only ever meet the finished state.
         const tl = gsap.timeline({ paused: true });
-        tl.from(el.querySelectorAll("[data-h-word]"), {
+        tl.from(words, {
           yPercent: 150,
           duration: 1.1,
           ease: "power4.out",
           stagger: 0.09,
-        })
-          .from(
-            el.querySelectorAll("[data-h-fade]"),
+        });
+        if (fades.length) {
+          tl.from(
+            fades,
             { opacity: 0, y: 24, duration: 0.9, ease: "power3.out", stagger: 0.12 },
             "-=0.6"
           );
+        }
 
         // The curtain only mounts on a full page load. On a client-side
         // navigation back to the home page there is none, so start straight
@@ -124,8 +196,8 @@ export default function Hero() {
       // Reduced motion — the finished frame, stated explicitly: headline
       // seated, copy and CTAs opaque, no scroll-away drift.
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(el.querySelectorAll("[data-h-word]"), { yPercent: 0 });
-        gsap.set(el.querySelectorAll("[data-h-fade]"), { opacity: 1, y: 0 });
+        gsap.set(words, { yPercent: 0 });
+        if (fades.length) gsap.set(fades, { opacity: 1, y: 0 });
         gsap.set(el.querySelector("[data-hero-content]"), { y: 0, opacity: 1 });
       });
 
@@ -176,25 +248,73 @@ export default function Hero() {
         {/* Hero video — the frame's whole remaining height below md, the
             frame itself above it. */}
         <div className="relative min-h-0 w-full flex-1 overflow-hidden md:absolute md:inset-0 md:h-full md:flex-none">
-          {/* The poster is the real first paint: it decodes in a fraction of
-              the time the 2.9 MB loop takes, so a slow connection sees the
-              composed hero instead of a black rectangle. It is frame 0 of the
-              loop, so there is no visible jump when playback starts — regenerate
-              it from the video if the video is ever swapped. */}
-          <video
-            data-hero-img
-            src="/hero-architectural-1080.mp4"
-            poster="/brand/hero-architectural-poster.webp"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            className="img-warm absolute inset-0 h-full w-full object-cover"
-          />
-          {/* NOTHING OVER THE VIDEO. The render is shown exactly as shot —
-              no flat wash, no gradient, no scrim of any kind.
+          {/* THE STILL. With a video it is the real first paint: it decodes
+              in a fraction of the time the loop takes, so a slow connection
+              sees the composed hero instead of a black rectangle. It is the
+              video's first frame — the admin takes it from the file on
+              upload — so nothing jumps when playback starts. With no video,
+              it IS the hero.
+
+              It is painted UNDER the video rather than set as its `poster`,
+              for two reasons. A poster is one URL for every screen, and the
+              phone has a still of its own. And a poster is fetched raw — for
+              an admin upload, a 3840px master on a phone — where this goes
+              through the image optimiser at the size the screen needs. A
+              <video> with no poster paints nothing until its first frame
+              decodes, so the still shows through until then and the frame
+              lands exactly over it (both object-cover, same box).
+
+              Decorative under a video: the video is aria-hidden and the
+              headline says what the page is. Alone, it carries the admin's
+              alt text. */}
+          {hasStill && (
+            <ArtDirectedImage
+              desktop={hero.image}
+              mobile={hero.imageMobile}
+              alt={desktopVideo ? "" : hero.alt}
+              // The LCP element on this route, video or not.
+              priority
+              sizes="100vw"
+              className={`${grade}object-cover`}
+              {...(desktopVideo ? { "aria-hidden": "true" } : { "data-hero-img": "" })}
+            />
+          )}
+
+          {/* THE VIDEO, over its still. The phone's file is chosen by `media`
+              on its <source> — the one way a <video> picks a file BEFORE
+              downloading one; two elements with `hidden md:block` would fetch
+              both. Source order is the fallback: a browser that ignores
+              `media` on video sources (Chrome and Firefox before 120) plays
+              the first one it can, which is the desktop file — exactly what
+              every phone got before the phone video existed.
+
+              Keyed on the files because a <video> does not re-run source
+              selection when its <source> children change: without the key a
+              refreshed page would keep looping the old video. */}
+          {desktopVideo && (
+            <video
+              key={videoKey}
+              data-hero-img
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              className={`${grade}absolute inset-0 h-full w-full object-cover`}
+            >
+              {mobileVideo && mobileVideo !== desktopVideo ? (
+                <>
+                  <source media="(min-width: 768px)" src={desktopVideo} type={videoType(desktopVideo)} />
+                  <source src={mobileVideo} type={videoType(mobileVideo)} />
+                </>
+              ) : (
+                <source src={desktopVideo} type={videoType(desktopVideo)} />
+              )}
+            </video>
+          )}
+          {/* NOTHING OVER THE PICTURE. It is shown exactly as shot — no flat
+              wash, no gradient, no scrim of any kind.
 
               Three were tried and all three failed the same brief. A flat
               ink/22 wash plus a tall gradient dimmed the whole picture, which
@@ -355,17 +475,19 @@ export default function Hero() {
                   band is a light surface, so the whole copy inverts — this is
                   the same contract `.section-light` has everywhere else on the
                   site, just applied to one block rather than a section. */}
+              {/* One reveal-mask per line, and the lines are the admin's: the
+                  break between them is chosen in the Home Hero screen, one
+                  line per row, rather than left to wherever the browser
+                  wraps. The index is a safe key — the list is only ever
+                  replaced whole, never reordered in place. */}
               <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-ink md:text-bone">
-                <span className="reveal-mask">
-                  <span data-h-word className="inline-block">
-                    The Future,
+                {hero.headingLines.map((line, i) => (
+                  <span key={i} className="reveal-mask">
+                    <span data-h-word className="inline-block">
+                      {line}
+                    </span>
                   </span>
-                </span>
-                <span className="reveal-mask">
-                  <span data-h-word className="inline-block">
-                    Built to Endure.
-                  </span>
-                </span>
+                ))}
               </h1>
 
               {/* Full white, not the bone/85 this was: there is no plate
@@ -373,13 +495,14 @@ export default function Hero() {
                   on a moving render is the first thing to go soft. The
                   overlay buys the contrast; spending it back on a tint
                   would be pointless. */}
-              <p
-                data-h-fade
-                className="max-w-md font-body text-sm leading-relaxed text-ink/80 sm:text-base md:text-lg md:text-bone"
-              >
-                Thoughtfully planned residential and commercial developments,
-                built for lasting value.
-              </p>
+              {hero.body && (
+                <p
+                  data-h-fade
+                  className="max-w-md font-body text-sm leading-relaxed text-ink/80 sm:text-base md:text-lg md:text-bone"
+                >
+                  {hero.body}
+                </p>
+              )}
 
               {/* No magnetic hover on these two (client direction, Aug 2026):
                   the buttons hold their position and answer with colour only.
@@ -391,70 +514,73 @@ export default function Hero() {
                   most of the plate's height on the screen where the plate was
                   already too tall.
 
-                  whitespace-nowrap on the labels is what keeps the single row
-                  honest: without it the ROW obeys and the WORDS wrap instead,
-                  trading two short buttons for two tall ones and losing on
-                  both counts.
+                  whitespace-nowrap on the labels is what keeps each button one
+                  line tall: without it a squeezed row keeps its shape and the
+                  WORDS wrap instead, trading two short buttons for two tall
+                  ones.
 
-                  THE BREAKPOINT IS 360px, NOT sm. Measured, not guessed: the
-                  pair needs ~270px. The plate that used to bound this row is
-                  gone (Sep 2026) and container-edge is wider than it was —
-                  viewport - 8px frame - 40px gutter, so 312px on a 360px
-                  Android and 342px on a 390px iPhone — but 320px is still the
-                  case that decides this: 272px there, which two buttons clear
-                  only just, and nothing at all once a label grows. So the
-                  breakpoint stays where it was measured. Below 360px they wrap
-                  as they always did, and at 360px and up they sit side by side.
-                  A hard flex-nowrap would have looked right on the phone it was
-                  checked on and pushed the second button off the screen on the
-                  narrow ones.
+                  THE ROW WRAPS AT EVERY WIDTH. It used to be pinned to one row
+                  from 360px up (`min-[360px]:flex-nowrap`), which was safe only
+                  because both labels were fixed and measured: the pair needed
+                  ~270px against 312px of row on a 360px Android. Since Sep
+                  2026 the labels are the client's to change in the admin, and
+                  a pinned row with a longer label pushes the second button off
+                  the side of the screen. Wrapping costs nothing while they fit
+                  — two buttons that fit still sit side by side, as they do
+                  with the shipped labels at every width down to 320px — and
+                  drops the second one underneath when they do not.
 
-                  If a label ever gets longer than "Book a Consultation", raise
-                  that 360 rather than shrinking the type — 0.78rem on a 44px
-                  target is already the floor. */}
-              <div
-                data-h-fade
-                className="flex flex-wrap items-center justify-center gap-2 min-[360px]:flex-nowrap sm:gap-3 md:justify-start"
-              >
-                {/* [text-shadow:none] ON BOTH LABELS (client, Sep 2026 — "in the
-                    Explore button, the text, does it have a shadow? If it does
-                    remove it").
-
-                    There is none below md and never was; what the client was
-                    looking at is white-on-black through screenshot compression.
-                    But the block above DOES set a text-shadow at md, and it is
-                    inherited — so on desktop the two labels really did carry a
-                    halo with no job to do. That shadow exists to hold the
-                    headline and the paragraph off a moving picture; a label
-                    sitting on a solid fill has its own ground already, and the
-                    halo only softens it. Killed on the buttons at every width,
-                    which answers the note and fixes the case it was pointing
-                    at. */}
-                <Link
-                  href="/projects"
-                  className="group inline-flex items-center gap-2 whitespace-nowrap bg-ink px-3 py-3 font-body text-[0.78rem] text-bone [text-shadow:none] transition-colors hover:bg-ink-600 sm:gap-3 sm:px-7 sm:py-4 sm:text-base md:bg-rose md:text-ink md:hover:bg-rose-soft"
+                  Either button, or both, can be switched off by clearing its
+                  label, so the row is only drawn when it has something in it. */}
+              {(hero.primary || hero.secondary) && (
+                <div
+                  data-h-fade
+                  className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:justify-start"
                 >
-                  Explore Projects
-                  {/* The arrow is the first thing to go: it is decoration
-                      beside a label that already says where the link leads,
-                      and on this row it is the ~20px that decides whether the
-                      two buttons fit on one line. */}
-                  <span className="hidden transition-transform duration-500 group-hover:translate-x-1 sm:inline-block">
-                    →
-                  </span>
-                </Link>
-                {/* /55, between the /40 this wore against the plate's dark
-                    glass and the /70 it briefly needed against the bare
-                    render. This button is nothing BUT its border, so it
-                    tracks whatever is behind it, and the overlay leaves that
-                    ground a little lighter than the plate was. */}
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 whitespace-nowrap border border-ink/30 px-3 py-3 font-body text-[0.78rem] text-ink [text-shadow:none] transition-colors hover:border-ink sm:gap-3 sm:px-7 sm:py-4 sm:text-base md:border-bone/55 md:text-bone md:hover:border-rose md:hover:text-rose"
-                >
-                  Book a Consultation
-                </Link>
-              </div>
+                  {/* [text-shadow:none] ON BOTH LABELS (client, Sep 2026 — "in the
+                      Explore button, the text, does it have a shadow? If it does
+                      remove it").
+
+                      There is none below md and never was; what the client was
+                      looking at is white-on-black through screenshot compression.
+                      But the block above DOES set a text-shadow at md, and it is
+                      inherited — so on desktop the two labels really did carry a
+                      halo with no job to do. That shadow exists to hold the
+                      headline and the paragraph off a moving picture; a label
+                      sitting on a solid fill has its own ground already, and the
+                      halo only softens it. Killed on the buttons at every width,
+                      which answers the note and fixes the case it was pointing
+                      at. */}
+                  {hero.primary && (
+                    <HeroLink
+                      href={hero.primary.href}
+                      className="group inline-flex items-center gap-2 whitespace-nowrap bg-ink px-3 py-3 font-body text-[0.78rem] text-bone [text-shadow:none] transition-colors hover:bg-ink-600 sm:gap-3 sm:px-7 sm:py-4 sm:text-base md:bg-rose md:text-ink md:hover:bg-rose-soft"
+                    >
+                      {hero.primary.label}
+                      {/* The arrow is the first thing to go: it is decoration
+                          beside a label that already says where the link leads,
+                          and on this row it is the ~20px that decides whether the
+                          two buttons fit on one line. */}
+                      <span className="hidden transition-transform duration-500 group-hover:translate-x-1 sm:inline-block">
+                        →
+                      </span>
+                    </HeroLink>
+                  )}
+                  {/* /55, between the /40 this wore against the plate's dark
+                      glass and the /70 it briefly needed against the bare
+                      render. This button is nothing BUT its border, so it
+                      tracks whatever is behind it, and the overlay leaves that
+                      ground a little lighter than the plate was. */}
+                  {hero.secondary && (
+                    <HeroLink
+                      href={hero.secondary.href}
+                      className="inline-flex items-center gap-2 whitespace-nowrap border border-ink/30 px-3 py-3 font-body text-[0.78rem] text-ink [text-shadow:none] transition-colors hover:border-ink sm:gap-3 sm:px-7 sm:py-4 sm:text-base md:border-bone/55 md:text-bone md:hover:border-rose md:hover:text-rose"
+                    >
+                      {hero.secondary.label}
+                    </HeroLink>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

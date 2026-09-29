@@ -38,8 +38,8 @@ openssl rand -hex 32
 ### 1.3 Apply the migrations
 Every table, policy, guard trigger, storage bucket and seed row lives in
 [`supabase/migrations/`](../supabase/migrations). Apply **every file, in
-filename order**, from `20260803000100_foundation.sql` through to
-`20260828000500_project_catalogue.sql`.
+filename order**, from `20260803000100_foundation.sql` through to the newest,
+currently `20260929000100_home_hero.sql`.
 
 With the Supabase CLI, against a linked project:
 
@@ -48,7 +48,7 @@ supabase db push
 ```
 
 Without the CLI: open **SQL Editor → New query**, then paste and run each file
-one at a time, working down the list in filename order. Fourteen files, fourteen runs.
+one at a time, working down the list in filename order — one run per file.
 
 **The order is mandatory, not a convention.** The files are numbered in
 dependency order and each one assumes the ones before it have already run —
@@ -100,6 +100,7 @@ audited and reasoned about in a single file.
 | `20260828000400_project_status_values.sql` | 6. Projects | **Data migration.** Narrows the four project statuses to Upcoming / On-going / Delivered and rewrites existing rows. |
 | `20260828000500_project_catalogue.sql` | 6. Projects + 7. Email List | `projects.catalogue_url` / `.catalogue_name`, `newsletter_subscribers.source`, and the `project-catalogues` bucket — the email-gated catalogue download. |
 | `20260831000100_site_lock.sql` | 9. Settings | `site_lock_settings` (singleton: the site-wide lock, the access code, and the Coming soon page's copy). The only table in the schema with **column-level grants** — see §5. |
+| `20260929000100_home_hero.sql` | Home Hero | `home_hero_settings` (singleton: the home page hero's video, still image, headline, copy and two buttons — each with an optional portrait partner for phones), the `home-hero-media` bucket (the only one that takes video: MP4/WebM, plus WebP stills), and a seed row reproducing the hero as it shipped. |
 
 `20260828000400_project_status_values.sql` is a DATA migration, not a schema
 one, and its three statements must stay in their written order: drop the old
@@ -152,6 +153,7 @@ repeated inline in each file instead. That repetition is the point.
 | **Dashboard** | `/admin` | The **Notes** panel, inquiry / lead / subscriber counts, the 30-day page-view chart, top pages, recent inquiries, and a preview card for each of the other tabs. |
 | **Inquiries** | `/admin/inquiries` | Everything submitted through the contact form. Select rows and **Transfer to CRM**. |
 | **CRM** | `/admin/crm` | Kanban pipelines. Drag leads between stages, create additional pipelines with their own stages, view and edit each lead. |
+| **Home Hero** | `/admin/home-hero` | The home page's full-screen opening: a looping video (or just an image), the still shown while it loads, portrait versions of both for phones, the headline (one line per row, up to three), the line under it, and the two buttons. |
 | **Selected Work** | `/admin/selected-work` | The black side-scrolling rail on the home page: one on/off switch for the whole section, the intro and end-cap copy, and card CRUD with drag reorder. |
 | **Blogs** | `/admin/blog` | CRUD for the `/insights` articles — cover art, excerpt and SEO copy, body sections, related links, draft/publish and ordering. |
 | **Projects** | `/admin/projects` | Full CRUD for developments, with up to 5 images each. |
@@ -256,6 +258,18 @@ of three fixed rows:
 | `project` (the default when the field is absent) | `project-images` | `projects/<project-slug>/<uuid>.webp` |
 | `selected-work` | `selected-work-images` | `selected-work/<card-id>/<uuid>.webp` |
 | `blog` | `blog-images` | `blog/<post-slug>/<uuid>.webp` |
+| `home-hero` | `home-hero-media` | `home-hero/still/<uuid>.webp` |
+
+**Home hero videos do not use this route.** A serverless request body is capped
+by the host (~6 MB on Netlify, ~4.5 MB on Vercel), which is smaller than most
+hero videos. Instead the admin asks `POST /api/admin/video-upload` for a signed
+upload URL — the route checks the session and mints it with the service-role
+key — and the browser uploads the file straight to Storage, under
+`home-hero/video-<desktop|mobile>/<uuid>.<mp4|webm>`. Videos are stored byte for
+byte, so the bucket's `allowed_mime_types` (MP4, WebM, WebP) is what refuses
+anything else. The admin also reads the video's first frame in the browser and
+uploads it through the image route as the still, so the hero never jumps when
+playback starts. That frame capture is why the CSP's `media-src` allows `blob:`.
 
 Each bucket is created by the migration that owns the screen writing to it, and
 all three are **public-read, authenticated-write**. The folder segment is
@@ -291,6 +305,7 @@ Three `server-only` modules, one per content area, each with a bundled fallback:
 | `lib/projects-data.ts` | published `projects` + their images | the `PROJECTS` array in `lib/projects.ts` |
 | `lib/blog-data.ts` | published `blog_posts` | the `INSIGHTS` array in `lib/insights.ts` |
 | `lib/selected-work-data.ts` | `selected_work_settings` + published `selected_work_cards` | the bundled defaults in that same file |
+| `lib/home-hero-data.ts` | the `home_hero_settings` row | the shipped hero (the 1080p loop in `/public` and its first frame), defined in that same file |
 
 The fallback fires when Supabase is **unconfigured or erroring** — not when it
 answers with zero rows. Once the database is answering it is the source of

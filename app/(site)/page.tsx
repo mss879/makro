@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { preload } from "react-dom";
 import { FEATURES, SITE } from "@/lib/site";
 import { BRAND, ogImage } from "@/lib/images";
 import { webPageSchema } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
+import { getHomeHero } from "@/lib/home-hero-data";
 import { getSelectedWork } from "@/lib/selected-work-data";
 import Hero from "@/components/home/Hero";
 import BrandStatement from "@/components/home/BrandStatement";
@@ -51,13 +51,17 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // The poster is what the visitor actually sees first, so it gets the
-  // high-priority preload. The video is deliberately NOT link-preloaded —
-  // the hero's <video preload="auto"> already fetches it, and a duplicate
-  // link preload makes Safari download the file twice.
-  preload("/brand/hero-architectural-poster.webp", { as: "image", fetchPriority: "high" });
-
-  const selectedWork = await getSelectedWork();
+  // No preload() here any more. The hero's still used to be the video's
+  // `poster`, fetched as the raw file, so a link preload of that same URL
+  // was free. It is now an <img> through the image optimiser (the admin
+  // uploads a 3840px master; a phone should not download that), which asks
+  // for a /_next/image URL per breakpoint — a preload of the raw file would
+  // be a second download of the same picture. The <img> is in the server
+  // HTML with fetchpriority="high", so the browser finds it as early as a
+  // preload would have. The video is still deliberately NOT link-preloaded:
+  // its own preload="auto" fetches it, and a duplicate link preload makes
+  // Safari download the file twice.
+  const [selectedWork, hero] = await Promise.all([getSelectedWork(), getHomeHero()]);
 
   return (
     <>
@@ -73,7 +77,9 @@ export default async function Home() {
           path: "/",
         })}
       />
-      <Hero />
+      {/* Admin-driven since Sep 2026 (Home Hero). Falls back to the shipped
+          hero, so this line never renders an empty opening. */}
+      <Hero hero={hero} />
       <BrandStatement />
       {/* Hidden at the client's request — the component is kept so the band
           can be switched back on from lib/site once the numbers are agreed. */}

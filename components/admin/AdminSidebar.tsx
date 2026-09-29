@@ -17,6 +17,8 @@ const NAV = [
   { href: "/admin/inquiries", label: "Inquiries" },
   { href: "/admin/chat", label: "Chat" },
   { href: "/admin/crm", label: "CRM" },
+  // The two home page sections, in the order the page shows them.
+  { href: "/admin/home-hero", label: "Home Hero" },
   { href: "/admin/selected-work", label: "Selected Work" },
   { href: "/admin/blog", label: "Blogs" },
   { href: "/admin/projects", label: "Projects" },

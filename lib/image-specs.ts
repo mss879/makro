@@ -103,6 +103,65 @@ export const IMAGE_SPECS = {
     renderedBy: "components/projects/ProjectsPageHero.tsx",
   },
 
+  /* ---------------------------------------------------------------------
+     The HOME hero (Sep 2026) — components/home/Hero.tsx. Four slots: a video
+     and its still for desktop, and the same pair for phones. The videos share
+     this table because the guidance panel is the same component; nothing
+     re-encodes them, so their numbers are the file itself rather than a
+     next/image candidate.
+
+     The still is ArtDirectedImage with sizes="100vw" at every width, so the
+     desktop numbers are the same derivation as the two heroes above.
+
+     The PHONE slot is not full screen, and that is why it asks for 4:5 rather
+     than the 9:16 of the other two. Below md the hero is a column — the
+     picture takes whatever height the copy band under it leaves — so the
+     frame is shorter than the screen. Measured at 375x812: 375x581, about
+     2:3, and a real phone with its browser bars showing is shorter still and
+     nearer square. 4:5 sits in the middle of that range and loses the least
+     at either end of it; a 9:16 file would lose a third of its height.
+     --------------------------------------------------------------------- */
+
+  homeHero: {
+    label: "Home page hero still",
+    recommended: "3840 × 2160",
+    minimum: "2560 × 1440",
+    aspect: "16:9 landscape",
+    crops:
+      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way it fills the screen on desktop, cropped to the window's shape, with the headline over its bottom-left corner.",
+    renderedBy: "components/home/Hero.tsx",
+  },
+
+  homeHeroMobile: {
+    label: "Home page hero still — mobile",
+    recommended: "1440 × 1800",
+    minimum: "1080 × 1350",
+    aspect: "4:5 portrait",
+    crops:
+      "Shown on phones instead of the landscape still, in the frame above the headline — roughly 4:5, a little taller on long phones. Filled in automatically from the phone video if you upload one. Leave it empty and the landscape still is used, cropped to the narrow frame.",
+    renderedBy: "components/home/Hero.tsx",
+  },
+
+  homeHeroVideo: {
+    label: "Home page hero video",
+    recommended: "1920 × 1080",
+    minimum: "1280 × 720",
+    aspect: "16:9 landscape",
+    crops:
+      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. It fills the screen on desktop, cropped to the window's shape, so keep the subject central and the bottom-left quiet for the headline.",
+    renderedBy: "components/home/Hero.tsx",
+  },
+
+  homeHeroVideoMobile: {
+    label: "Home page hero video — mobile",
+    recommended: "1080 × 1350",
+    minimum: "720 × 900",
+    aspect: "4:5 portrait",
+    crops:
+      "Optional. Played on phones instead of the landscape video, in the frame above the headline. Same format as the desktop video — MP4, no sound, looping — and smaller is better here: phones are often on mobile data. Leave it empty and the landscape video plays on phones too, cropped to the narrow frame.",
+    renderedBy: "components/home/Hero.tsx",
+  },
+
   /**
    * FeaturedProjects panel — aspect-[4/5], object-cover,
    * sizes="(max-width: 1024px) 80vw, 30vw". 80vw of a 1024 viewport at 3x is

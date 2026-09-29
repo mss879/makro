@@ -51,7 +51,11 @@ const contentSecurityPolicy = [
   `img-src 'self' data: blob: https://images.unsplash.com ${SUPABASE_ORIGIN}`,
   "font-src 'self' data:",
   // The hero video ships from /public; uploaded media comes from Storage.
-  `media-src 'self' ${SUPABASE_ORIGIN}`,
+  // blob: is the admin's Home Hero screen reading a picked video's first
+  // frame locally, from an object URL, before the file is uploaded — see
+  // components/admin/home-hero/VideoField.tsx. An object URL can only be
+  // minted by script already running on this origin, so it widens nothing.
+  `media-src 'self' blob: ${SUPABASE_ORIGIN}`,
   // The admin panel's browser client signs in and reads through Supabase
   // directly; wss covers Realtime if it is ever switched on.
   `connect-src 'self' ${SUPABASE_ORIGIN} wss://*.supabase.co`,
