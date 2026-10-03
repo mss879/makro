@@ -60,7 +60,51 @@ export default function ProjectsCarousel({
     // counter has to be recomputed even though nothing scrolled.
     const ro = new ResizeObserver(sync);
     ro.observe(el);
-    return () => ro.disconnect();
+
+    // NEVER AT REST BETWEEN TWO CARDS (client, Oct 2026, with a screenshot of
+    // exactly that: half of one development beside half of the next).
+    // snap-mandatory is meant to make that state impossible, and it does —
+    // as long as the browser sees the whole gesture. One that was interrupted
+    // part-way can end on whatever offset it had reached, so once the track
+    // has come to a stop this finishes the job and settles it on the nearer
+    // card. A gesture that snapped properly ends within a pixel of a card and
+    // is left alone, so this only ever acts on the broken case.
+    //
+    // Heard on WINDOW, in the capture phase, not on the track. Lenis puts a
+    // capturing `scrollend` listener on window and stops propagation of every
+    // native one while it is idle (it dispatches its own instead), so on this
+    // site a listener on the track never hears a thing — measured: zero events.
+    // A second listener on window still runs, because stopPropagation only
+    // stops the event travelling on to OTHER nodes; this one sees every
+    // scrollend on the page and acts on the track's alone.
+    //
+    // And it WAITS before acting, so it can never race the browser's own snap,
+    // which heads for the next card in the direction of travel rather than
+    // necessarily the nearer one. If the track moves again within 200ms — the
+    // browser snapping, or the visitor scrolling on — the correction is
+    // dropped; only a track that has genuinely stopped between two cards is
+    // touched. Traced in Chrome: across ordinary swipes, wheel ticks and arrow
+    // clicks it never fires at all.
+    let pending = 0;
+    const settleSoon = (event: Event) => {
+      if (event.target !== el) return;
+      window.clearTimeout(pending);
+      pending = window.setTimeout(() => {
+        if (!el.clientWidth) return;
+        const target = Math.round(el.scrollLeft / el.clientWidth) * el.clientWidth;
+        if (Math.abs(el.scrollLeft - target) > 1) el.scrollTo({ left: target, behavior: "smooth" });
+      }, 200);
+    };
+    const moved = () => window.clearTimeout(pending);
+    window.addEventListener("scrollend", settleSoon, { capture: true });
+    el.addEventListener("scroll", moved, { passive: true });
+
+    return () => {
+      ro.disconnect();
+      window.clearTimeout(pending);
+      window.removeEventListener("scrollend", settleSoon, { capture: true });
+      el.removeEventListener("scroll", moved);
+    };
   }, [sync, projects.length]);
 
   /**
@@ -140,6 +184,22 @@ export default function ProjectsCarousel({
             <div
               ref={trackRef}
               onScroll={sync}
+              /* SIDEWAYS GESTURES BELONG TO THE TRACK, NOT TO LENIS. Lenis
+                 (components/providers/SmoothScroll.tsx) takes every wheel and
+                 trackpad event that has any vertical movement at all, cancels
+                 it and scrolls the PAGE instead — and no real swipe is ever
+                 perfectly level. Measured in Chrome at phone width: a level
+                 swipe paged the carousel, while the same swipe drifting 20px
+                 down left it exactly where it was and moved the page 20px.
+                 That is the "switching projects is broken" report.
+
+                 This attribute hands every gesture that is MORE sideways than
+                 vertical back to the browser, so the track scrolls and snaps
+                 natively. Mostly-vertical ones still go to Lenis, so scrolling
+                 the page with the pointer over a card stays smooth. Touch was
+                 never affected (Lenis leaves it to the browser); a trackpad or
+                 a wheel was, at every desktop width. */
+              data-lenis-prevent-horizontal=""
               /* No `scroll-smooth` class: it would also smooth the browser's own
                  scroll restoration and any anchor landing inside the track. The
                  arrows pass their own behaviour, which is the only case that
@@ -148,17 +208,35 @@ export default function ProjectsCarousel({
             >
               {projects.map((project) => (
                 /* The track is a flex row, so every slide already stretches to
-                   the tallest one. Passing that height down with lg:h-full is what
+                   the tallest one. Passing that height down with h-full is what
                    makes the cards MATCH (client, Aug 2026) at every width, even
                    when one project is given a longer summary than the next — the
                    3/4 frame below sets the height, this stops any card from
-                   breaking rank. The extra height lands in the copy column, which
-                   centres its contents, so a shorter card reads as more generously
-                   set rather than as one with a gap at the bottom. */
-                <div key={project.slug} className="w-full shrink-0 snap-center">
+                   breaking rank.
+
+                   WHERE THE SPARE HEIGHT GOES differs by layout, and getting it
+                   wrong on a phone is what made switching projects look broken
+                   (client, Oct 2026). From lg up it lands in the copy column
+                   beside the art, which centres its contents. Stacked below lg
+                   it used to be shared out by the grid between BOTH rows: at
+                   375px wide Makro Heights is 150px shorter than 121
+                   Residencies, so it grew a 75px gap between its photograph and
+                   its copy and sat its text 37px lower inside a padded box — and
+                   swiping from one card to the next, the headings jumped by
+                   that much. Now the image row hugs the image (`auto`), the
+                   copy row takes the rest (`1fr`) and starts at its top, so
+                   every card's chip, name and summary sit at the same height
+                   and the difference falls below the link — the client's
+                   standing rule for card rows: top-align the content and let
+                   the heights equalise underneath it. lg:grid-rows-none puts
+                   the side-by-side card back on its single implicit row. */
+                /* snap-always: a fast fling stops at the next card instead of
+                   flying past it — the arrows and the counter both promise one
+                   development at a time. */
+                <div key={project.slug} className="w-full shrink-0 snap-center snap-always">
                   {/* `relative` is load-bearing: it is what the stretched link
                     at the bottom of the copy column anchors to. */}
-                <article className="relative mx-auto grid h-full max-w-lg grid-cols-1 border border-hair bg-paper lg:max-w-none lg:grid-cols-2">
+                <article className="relative mx-auto grid h-full max-w-lg grid-cols-1 grid-rows-[auto_1fr] border border-hair bg-paper lg:max-w-none lg:grid-cols-2 lg:grid-rows-none">
                     {/* PORTRAIT frame, left. ONE fixed 3/4 for every card, and
                         the crop taken off the BOTTOM.
 
@@ -239,10 +317,13 @@ export default function ProjectsCarousel({
                         the copy had to stop short of them. They are outside the
                         card now, so the padding is even again.
 
-                        justify-center, never justify-between: the spec block and
-                        the link stay attached to the copy above them instead of
-                        being flung to the card's bottom edge. */}
-                    <div className="flex flex-col justify-center p-8 lg:p-12">
+                        Never justify-between: the spec block and the link stay
+                        attached to the copy above them instead of being flung to
+                        the card's bottom edge. Top-aligned when the card stacks
+                        (see the slide note above — that is what keeps the text
+                        level from card to card on a phone), centred beside the
+                        art from lg up. */}
+                    <div className="flex flex-col justify-start p-8 lg:justify-center lg:p-12">
                       <div className="flex flex-wrap items-center gap-3">
                         {/* The stage a development is at, kept on the card now
                             that the status-grouped index that used to carry it
