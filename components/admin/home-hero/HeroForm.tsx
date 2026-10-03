@@ -192,8 +192,8 @@ export default function HeroForm({ initial }: { initial: HeroFormValues }) {
         <div>
           <h2 className="font-display text-xl text-panel-text">Headline and copy</h2>
           <p className="mt-1 font-body text-xs text-panel-faint">
-            On desktop this sits on a glass panel in the bottom-left corner of the
-            picture; on a phone, in the band under it.
+            Set in a band under the picture, at every width — on desktop the
+            headline on the left, the text and buttons on the right.
           </p>
         </div>
 

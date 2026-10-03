@@ -128,7 +128,7 @@ export const IMAGE_SPECS = {
     minimum: "2560 × 1440",
     aspect: "16:9 landscape",
     crops:
-      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way it fills the screen on desktop, cropped to the window's shape, with the headline over its bottom-left corner.",
+      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way, on desktop it fills the frame above the headline band — about 2:1 on a laptop screen — so keep the subject central: the top and bottom are what get cropped.",
     renderedBy: "components/home/Hero.tsx",
   },
 
@@ -148,7 +148,7 @@ export const IMAGE_SPECS = {
     minimum: "1280 × 720",
     aspect: "16:9 landscape",
     crops:
-      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. It fills the screen on desktop, cropped to the window's shape, so keep the subject central and the bottom-left quiet for the headline.",
+      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. On desktop it fills the frame above the headline band — about 2:1 on a laptop screen — so keep the subject central: the top and bottom are what get cropped.",
     renderedBy: "components/home/Hero.tsx",
   },
 
