@@ -2,7 +2,7 @@
 
 import { SocialIcon } from "@/components/brand/SocialIcon";
 import { WHATSAPP_URL } from "@/lib/site";
-import { useStowedOnPhone } from "@/lib/stow-on-phone";
+import { useStowedOverHero } from "@/lib/stow-over-hero";
 
 /**
  * The floating WhatsApp button (client, Sep 2026: "a whatsapp icon floating
@@ -21,14 +21,14 @@ import { useStowedOnPhone } from "@/lib/stow-on-phone";
  * disc legible over the site's black bands.
  *
  * Out of the way in the two situations the launcher is:
- *  - over the hero on a phone (lib/stow-on-phone.ts);
+ *  - over the hero, at every width (lib/stow-over-hero.ts);
  *  - while the chat panel is open, which ChatWidget flags on <html> — the
  *    panel rises out of the launcher, and this would sit on top of its input.
  */
 export default function WhatsAppFloat({ stacked }: { stacked: boolean }) {
   // Stowed on the server AND on the client's first render, so hydration
   // matches; the hook's first check brings it in wherever it belongs.
-  const stowed = useStowedOnPhone(true);
+  const stowed = useStowedOverHero(true);
 
   return (
     <a

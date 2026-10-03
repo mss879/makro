@@ -54,7 +54,8 @@ export default function ProjectHero({ project }: { project: Project }) {
        scrub; with vh it sits taller than the visible area and the headline is
        cropped behind the browser chrome. Matches ProjectsPageHero, which was
        already 100svh and already fit. */
-    <section ref={ref} className="relative flex min-h-[100svh] items-end overflow-hidden pt-40">
+    // data-hero: the floating buttons keep off it — lib/stow-over-hero.ts.
+    <section ref={ref} data-hero className="relative flex min-h-[100svh] items-end overflow-hidden pt-40">
       {/* No art yet means NO image, not a stand-in. This used to fall through
           to a shared placeholder, which is fine until a second project exists
           — then every imageless development wears the first one's building as

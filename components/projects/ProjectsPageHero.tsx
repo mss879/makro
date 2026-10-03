@@ -53,6 +53,8 @@ export default function ProjectsPageHero({
   return (
     <section
       ref={rootRef}
+      // The floating buttons keep off whatever carries this — lib/stow-over-hero.ts.
+      data-hero
       aria-roledescription={count > 1 ? "carousel" : undefined}
       aria-label={count > 1 ? "Project highlights" : undefined}
       // Full viewport height so the hero fills the screen completely under the floating navbar

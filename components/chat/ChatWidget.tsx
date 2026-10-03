@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PeakMark } from "@/components/brand/PeakMark";
-import { isStowedOnPhone, useStowedOnPhone } from "@/lib/stow-on-phone";
+import { isStowedOverHero, useStowedOverHero } from "@/lib/stow-over-hero";
 
 /**
  * The Makro Assistant — a floating chat panel on every public page.
@@ -257,33 +257,34 @@ export default function ChatWidget() {
   }, [input, sending, absorb]);
 
   /**
-   * KEEP THE LAUNCHER OFF THE HERO ON A PHONE (client, Aug 2026 — "as the user
-   * enters hide the chat icon so it's not messy").
+   * KEEP THE LAUNCHER OFF THE HERO — phones since Aug 2026 ("as the user
+   * enters hide the chat icon so it's not messy"), every width since Oct 2026
+   * ("hide the WhatsApp button and the AI agent widget in the hero, make them
+   * appear as the user scrolls past the hero section").
    *
-   * Every hero on this site seats its glass plate in the BOTTOM-left corner,
-   * and this button is fixed to the bottom-right. On a desktop those are two
-   * ends of a wide frame and they never meet. On a 375px screen the plate is
-   * most of the width, so the bubble lands on the corner of it — the first
-   * thing a visitor sees is a hero with something stuck to it.
+   * This button is fixed to the bottom-right, which is exactly where the
+   * heroes put their copy: a phone's hero copy is most of the screen's width,
+   * and the home hero's band now runs right across the foot of the screen on
+   * desktop too. The first thing a visitor saw was a hero with something stuck
+   * to it.
    *
-   * So on mobile it waits until the first screenful has been scrolled past.
-   * Nothing is removed: by the time anyone is reading the page the button is
-   * there, and it is there immediately for a visitor who arrives deep-linked
-   * part-way down. Desktop is untouched.
+   * So it waits until the hero is mostly scrolled past. Nothing is removed: by
+   * the time anyone is reading the page the button is there, and it is there
+   * immediately for a visitor who arrives deep-linked part-way down, or on a
+   * page that has no hero at all.
    *
    * Applied on EVERY route rather than only the home page. The brief named the
-   * home page, but the collision is the shared hero geometry, not that hero —
-   * and a launcher that vanishes on one route and not the others reads as a
-   * bug rather than as restraint.
+   * home page, but a launcher that vanishes on one route and not the others
+   * reads as a bug rather than as restraint.
    *
    * The initial value is computed rather than defaulted to false: this widget
    * is mounted with ssr:false, so there is no hydration to match, and starting
    * at false would flash the bubble over the hero for one frame on exactly the
    * screens this exists to keep it off.
    */
-  // The scroll/resize bookkeeping lives in lib/stow-on-phone.ts, shared with
-  // the WhatsApp button that stands in the same corner.
-  const stowed = useStowedOnPhone(isStowedOnPhone);
+  // The bookkeeping lives in lib/stow-over-hero.ts, shared with the WhatsApp
+  // button that stands in the same corner.
+  const stowed = useStowedOverHero(isStowedOverHero);
 
   // Tells that WhatsApp button to step aside while the panel is open: the
   // panel rises out of this launcher, and the button sits directly above it

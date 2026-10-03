@@ -122,6 +122,8 @@ export default function PageHero({
   return (
     <section
       ref={ref}
+      // The floating buttons keep off whatever carries this — lib/stow-over-hero.ts.
+      data-hero
       /* One height for every inner-page hero (client, Aug 2026 — the blog,
          about, contact and approach heroes "need to be the same size"). They
          were not, because nothing set a height and the content decided it:

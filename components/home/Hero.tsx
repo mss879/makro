@@ -200,6 +200,8 @@ export default function Hero({ hero }: { hero: HomeHero }) {
   return (
     <section
       ref={root}
+      // The floating buttons keep off whatever carries this — lib/stow-over-hero.ts.
+      data-hero
       className="relative h-[100svh] bg-ink p-0 md:py-[var(--hero-inset)]"
     >
       {/* ONE COMPOSITION AT EVERY WIDTH: the picture on top, the copy in a
