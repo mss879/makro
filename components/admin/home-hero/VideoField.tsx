@@ -334,7 +334,7 @@ export default function VideoField({
         if (variant === "mobile" && info.width > info.height) {
           next.push({
             tone: "warn",
-            text: "This video is landscape, so phones will show a narrow slice of it — the same as leaving this empty. A portrait (4:5) video is what this slot is for.",
+            text: "This video is landscape, so phones will show a narrow slice of it — the same as leaving this empty. A portrait (9:16) video is what this slot is for.",
           });
         }
       }
@@ -382,11 +382,10 @@ export default function VideoField({
   return (
     <div className="grid gap-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
       {/* Cropped to what the hero crops to, like ImageField's preview: the
-          desktop frame is the screen, the phone frame is the 4:5 space above
-          the copy. */}
+          screen, landscape on desktop and 9:16 on a phone. */}
       <div
         className={`relative w-full overflow-hidden border border-panel-line bg-panel-high ${
-          variant === "mobile" ? "aspect-[4/5]" : "aspect-[16/10]"
+          variant === "mobile" ? "aspect-[9/16]" : "aspect-[16/10]"
         }`}
       >
         {value ? (

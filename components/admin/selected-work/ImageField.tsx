@@ -163,16 +163,13 @@ export default function ImageField({
           the Selected Work rail is a tall 4:5 panel, a project or /projects
           hero is full-bleed and lands nearer 16:10. Showing the wrong frame
           here is worse than showing none — it is a promise about the crop.
-          The home hero's phone frame is 4:5, not 9:16: on a phone its picture
-          sits above the copy rather than filling the screen. */}
+          Every hero's phone frame is the full screen, 9:16. */}
       <div
         className={`group relative w-full overflow-hidden border border-panel-line bg-panel-high ${
           target === "selected-work"
             ? "aspect-[4/5]"
             : variant === "mobile"
-              ? target === "home-hero"
-                ? "aspect-[4/5]"
-                : "aspect-[9/16]"
+              ? "aspect-[9/16]"
               : "aspect-[16/10]"
         }`}
       >

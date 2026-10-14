@@ -9,7 +9,7 @@ import type { ProjectsPageHeroSlide } from "@/lib/projects-page-data";
  * (Projects → Hero).
  *
  * A slide is any of three shapes and the component infers which from the data
- * rather than from a stored flag: image only, image with copy along the bottom,
+ * rather than from a stored flag: image only, image with copy over a fade,
  * or copy on the brand's ink with no image at all. That is the client's brief,
  * and it is why `image`, `heading` and `body` are each optional.
  *
@@ -77,16 +77,10 @@ export default function ProjectsPageHero({
               active ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            {/* The slide is the image alone now. It used to be a fragment of
-                image + scrim: a from-ink via-ink/30 gradient, narrowed to the
-                bottom of the frame so an image-only slide was not darkened
-                across its whole height. Both it and img-warm are gone — the
-                client's rule (Aug 2026) is that nothing is added over project
-                imagery, and a gradient confined to two thirds of the plate is
-                still a gradient over the plate, just as a colour grade is
-                still a grade. Legibility for the heading and body moved onto
-                the copy itself as a text-shadow, exactly as it did on the
-                project detail hero. */}
+            {/* The image, as uploaded: no colour grade (client, Aug 2026 —
+                nothing added over project imagery). The one exception is the
+                fade below, which the client asked for in Oct 2026 and which
+                only runs under copy. */}
             {(slide.image || slide.imageMobile) && (
               <ArtDirectedImage
                 desktop={slide.image}
@@ -103,18 +97,31 @@ export default function ProjectsPageHero({
               />
             )}
 
+            {/* THE FADE, only under copy (client, Oct 2026): the same ink
+                fade as the home hero, in from the left and gone by half the
+                width — see .hero-fade. It replaced the glass plate. An
+                image-only slide gets none, so a picture with nothing on it is
+                still shown exactly as shot, and a text-only slide is already
+                on ink. */}
+            {(slide.image || slide.imageMobile) && (slide.heading || slide.body) && (
+              <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0" />
+            )}
+
+            {/* The copy sits where the home hero's does: along the foot below
+                lg, on the left and centred in the height from lg, in a column
+                capped so it ends inside the fade. The bottom padding below lg
+                clears the slide dots. */}
             {(slide.heading || slide.body) && (
-              <div className="absolute inset-x-0 bottom-0 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
-                <div className="hero-plate-anchor">
-                  {/* Same plate as every other hero — see .hero-plate. */}
-                  <div className="hero-plate w-fit max-w-3xl">
+              <div className="absolute inset-0 flex items-end lg:items-center">
+                <div className="container-edge w-full pb-16 sm:pb-20 lg:pb-0 lg:pt-[var(--nav-h)]">
+                  <div className="max-w-xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] lg:max-w-[min(34rem,36vw)]">
                     {slide.heading && (
-                      <h1 className="font-display display-lg text-bone">
+                      <h1 className="font-display text-[clamp(2.2rem,5.5vw,5rem)] leading-[1.12] text-bone lg:text-[clamp(2.5rem,4.2vw,3.8rem)]">
                         {slide.heading}
                       </h1>
                     )}
                     {slide.body && (
-                      <p className="mt-6 max-w-xl font-body text-base leading-relaxed text-bone/80 sm:text-lg">
+                      <p className={`max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg lg:max-w-[min(26rem,28vw)] text-pretty ${slide.heading ? "mt-6" : ""}`}>
                         {slide.body}
                       </p>
                     )}

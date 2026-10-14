@@ -63,7 +63,7 @@ export const IMAGE_SPECS = {
     minimum: "2560 × 1440",
     aspect: "16:9 landscape",
     crops:
-      "Full screen, so it is cropped to the visitor's window shape. Keep the subject central. If the slide carries a heading, leave the bottom third quiet — the type sits there.",
+      "Full screen, so it is cropped to the visitor's window shape. If the slide carries a heading, it sits on the left over a fade that is gone by the middle — keep the subject in the centre or right half.",
     renderedBy: "components/projects/ProjectsPageHero.tsx",
   },
 
@@ -99,7 +99,7 @@ export const IMAGE_SPECS = {
     minimum: "1080 × 1920",
     aspect: "9:16 portrait",
     crops:
-      "Shown full screen on phones instead of the landscape slide above. Keep the subject central; if the slide carries a heading, leave the bottom third quiet. Leave this empty and the landscape image is used on phones too.",
+      "Shown full screen on phones instead of the landscape slide above. If the slide carries a heading, it sits along the bottom over a fade — keep the subject in the upper two thirds. Leave this empty and the landscape image is used on phones too.",
     renderedBy: "components/projects/ProjectsPageHero.tsx",
   },
 
@@ -113,13 +113,10 @@ export const IMAGE_SPECS = {
      The still is ArtDirectedImage with sizes="100vw" at every width, so the
      desktop numbers are the same derivation as the two heroes above.
 
-     The PHONE slot is not full screen, and that is why it asks for 4:5 rather
-     than the 9:16 of the other two. Below md the hero is a column — the
-     picture takes whatever height the copy band under it leaves — so the
-     frame is shorter than the screen. Measured at 375x812: 375x581, about
-     2:3, and a real phone with its browser bars showing is shorter still and
-     nearer square. 4:5 sits in the middle of that range and loses the least
-     at either end of it; a 9:16 file would lose a third of its height.
+     The PHONE slot is full screen, 9:16 like the other two heroes. It asked
+     for 4:5 while the hero was a column with the copy in a band under the
+     picture (Sep–Oct 2026); since the copy went back over the picture, the
+     picture is the whole screen again.
      --------------------------------------------------------------------- */
 
   homeHero: {
@@ -128,17 +125,17 @@ export const IMAGE_SPECS = {
     minimum: "2560 × 1440",
     aspect: "16:9 landscape",
     crops:
-      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way, on desktop it fills the frame above the headline band — about 2:1 on a laptop screen — so keep the subject central: the top and bottom are what get cropped.",
+      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way it fills the whole screen, with the headline on the left over a fade that is gone by the middle — so keep the subject in the centre or right half, and expect the top and bottom to be cropped on wide screens.",
     renderedBy: "components/home/Hero.tsx",
   },
 
   homeHeroMobile: {
     label: "Home page hero still — mobile",
-    recommended: "1440 × 1800",
-    minimum: "1080 × 1350",
-    aspect: "4:5 portrait",
+    recommended: "1440 × 2560",
+    minimum: "1080 × 1920",
+    aspect: "9:16 portrait",
     crops:
-      "Shown on phones instead of the landscape still, in the frame above the headline — roughly 4:5, a little taller on long phones. Filled in automatically from the phone video if you upload one. Leave it empty and the landscape still is used, cropped to the narrow frame.",
+      "Shown full screen on phones instead of the landscape still, with the headline along the bottom over a fade — keep the subject in the upper two thirds. Filled in automatically from the phone video if you upload one. Leave it empty and the landscape still is used, cropped to the tall frame.",
     renderedBy: "components/home/Hero.tsx",
   },
 
@@ -148,17 +145,17 @@ export const IMAGE_SPECS = {
     minimum: "1280 × 720",
     aspect: "16:9 landscape",
     crops:
-      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. On desktop it fills the frame above the headline band — about 2:1 on a laptop screen — so keep the subject central: the top and bottom are what get cropped.",
+      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. It fills the whole screen, with the headline on the left over a fade that is gone by the middle — so keep the subject in the centre or right half.",
     renderedBy: "components/home/Hero.tsx",
   },
 
   homeHeroVideoMobile: {
     label: "Home page hero video — mobile",
-    recommended: "1080 × 1350",
-    minimum: "720 × 900",
-    aspect: "4:5 portrait",
+    recommended: "1080 × 1920",
+    minimum: "720 × 1280",
+    aspect: "9:16 portrait",
     crops:
-      "Optional. Played on phones instead of the landscape video, in the frame above the headline. Same format as the desktop video — MP4, no sound, looping — and smaller is better here: phones are often on mobile data. Leave it empty and the landscape video plays on phones too, cropped to the narrow frame.",
+      "Optional. Played full screen on phones instead of the landscape video, with the headline along the bottom. Same format as the desktop video — MP4, no sound, looping — and smaller is better here: phones are often on mobile data. Leave it empty and the landscape video plays on phones too, cropped to the tall frame.",
     renderedBy: "components/home/Hero.tsx",
   },
 

@@ -101,7 +101,7 @@ function SlideEditor({ slide }: { slide?: ProjectsPageHeroSlideRow }) {
         <input name="alt" defaultValue={slide?.alt ?? ""} className={inputClass} />
       </Field>
 
-      <Field label="Heading" hint="Sits along the bottom of the slide. Leave blank for an image-only slide.">
+      <Field label="Heading" hint="Sits on the left of the slide over a soft dark fade (along the bottom on phones). Leave blank for an image-only slide — it then gets no fade.">
         <input name="heading" defaultValue={slide?.heading ?? ""} className={inputClass} />
       </Field>
 
