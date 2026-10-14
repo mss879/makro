@@ -580,15 +580,21 @@
      slope to nothing at the far end: a straight line would have a corner
      there, and the eye finds that corner as a vertical line down the picture.
 
-     BELOW lg THE SAME FADE RISES FROM THE BOTTOM. A phone or a portrait tablet
-     is narrower than the copy is wide, so half the width cannot hold it; the
-     copy sits along the foot instead and the fade comes up behind it, gone by
-     62% of the height, which leaves the top of the picture clear.
+     FROM md (768px) UP IT COMES FROM THE LEFT — tablets and small laptops
+     included (client: "make sure it's also there in medium size screens").
+     BELOW md THE SAME FADE RISES FROM THE BOTTOM: half a phone's width cannot
+     hold the copy, so the fade comes up behind it instead, gone by 62% of the
+     height, which leaves the top of the picture clear.
+
+     Strength 0.86 from the side, 0.84 from the foot — a step up from 0.8
+     (client: "slightly stronger ... but not too strong"). It stays below 0.9
+     on purpose: at the very edge the ramp is at full strength, and past about
+     0.9 that first strip stops reading as shade and starts reading as black.
 
      --hero-fade-strength is the darkness at the edge and the one dial: every
      stop is a fraction of it. */
   .hero-fade {
-    --hero-fade-strength: 0.78;
+    --hero-fade-strength: 0.84;
     background: linear-gradient(
       to top,
       rgb(5 2 3 / calc(var(--hero-fade-strength) * 1)) 0%,
@@ -614,9 +620,9 @@
       rgb(5 2 3 / 0) 62%
     );
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     .hero-fade {
-      --hero-fade-strength: 0.8;
+      --hero-fade-strength: 0.86;
       background: linear-gradient(
         to right,
         rgb(5 2 3 / calc(var(--hero-fade-strength) * 1)) 0%,

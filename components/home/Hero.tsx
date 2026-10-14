@@ -282,29 +282,31 @@ export default function Hero({ hero }: { hero: HomeHero }) {
           </video>
         )}
 
-        {/* The fade. From lg it comes in from the left and is gone by half
-            the width; below lg it rises from the foot instead, because there
+        {/* The fade. From md it comes in from the left and is gone by half
+            the width; on phones it rises from the foot instead, because there
             the copy runs nearly edge to edge. Its own layer, never baked into
             the picture: the admin's upload is shown as shot everywhere the
             fade has run out. */}
         <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0" />
 
-        {/* THE COPY — along the foot below lg, on the left and centred in the
-            height from lg, where the fade is darkest. lg:pt-[var(--nav-h)]
-            centres it in the part of the screen the navbar does not cover.
+        {/* THE COPY — BOTTOM-LEFT AT EVERY WIDTH (client, Oct 2026: "the
+            hero elements on the bottom left"). It sat centred in the height
+            on desktop for a day and was moved down. lg:pb-16 matches the
+            distance the copy kept from the foot of the frame when it last
+            sat on the picture.
 
             container-edge lines it up with the page gutter, every section
-            below and the navbar. The column is capped at min(34rem, 36vw) so
-            the copy ends around a third of the way across, inside the fade,
-            at every desktop width: the headline's lg size is set to the same
-            proportion so its longest line still fits the column at 1024.
+            below and the navbar. From md the column is capped (40vw on
+            tablets, 36vw from lg, never past 34rem) so the copy ends inside
+            the fade, and the headline's md size is set to the same proportion
+            so its longest line still fits the column at 768.
 
             The soft glow is the one the /projects hero has always used. It is
             not an outline (the client turned one down in Sep 2026); it only
             keeps glyph edges clean over a bright patch of picture. */}
-        <div className="absolute inset-0 flex items-end lg:items-center">
-          <div className="container-edge w-full pb-10 sm:pb-14 lg:pb-0 lg:pt-[var(--nav-h)]">
-            <div className="flex max-w-xl flex-col items-start gap-4 text-left [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] sm:gap-6 lg:max-w-[min(34rem,36vw)]">
+        <div className="absolute inset-0 flex items-end">
+          <div className="container-edge w-full pb-10 sm:pb-14 lg:pb-16">
+            <div className="flex max-w-xl flex-col items-start gap-4 text-left [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] sm:gap-6 md:max-w-[min(34rem,40vw)] lg:max-w-[min(34rem,36vw)]">
               {/* One reveal-mask per line, and the lines are the admin's: the
                   break between them is chosen in the Home Hero screen, one
                   line per row, rather than left to wherever the browser
@@ -313,11 +315,11 @@ export default function Hero({ hero }: { hero: HomeHero }) {
                   rows. The index is a safe key — the list is only ever
                   replaced whole, never reordered in place.
 
-                  Below lg: display-fluid's clamp a step down (client, Aug
-                  2026 — "reduce the heading font a bit"), min 1.75rem for
-                  phones. From lg it scales with the column it sits in, so the
-                  line never outgrows the fade. */}
-              <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-bone lg:text-[clamp(2.5rem,4.2vw,3.8rem)]">
+                  On phones: display-fluid's clamp a step down (client, Aug
+                  2026 — "reduce the heading font a bit"), min 1.75rem. From
+                  md it scales with the column it sits in, so the line never
+                  outgrows the fade. */}
+              <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-bone md:text-[clamp(2rem,4.2vw,3.8rem)]">
                 {hero.headingLines.map((line, i) => (
                   <span key={i} className="reveal-mask">
                     <span data-h-word className="inline-block">
@@ -330,7 +332,7 @@ export default function Hero({ hero }: { hero: HomeHero }) {
               {hero.body && (
                 <p
                   data-h-fade
-                  className="max-w-md font-body text-sm leading-relaxed text-bone/85 sm:text-base md:text-lg lg:max-w-[min(26rem,28vw)] text-pretty"
+                  className="max-w-md font-body text-sm leading-relaxed text-bone/85 sm:text-base md:max-w-[min(26rem,34vw)] lg:max-w-[min(26rem,28vw)] lg:text-lg text-pretty"
                 >
                   {hero.body}
                 </p>
@@ -348,7 +350,7 @@ export default function Hero({ hero }: { hero: HomeHero }) {
                   THE ROW WRAPS AT EVERY WIDTH. The labels are the client's to
                   change in the admin, and a pinned row with a longer label
                   would push the second button off the side of the screen —
-                  or, from lg, out past the fade.
+                  or, from md, out past the fade.
 
                   Rose and a light outline: the pair the hero had the last time
                   its copy sat on the picture. Either button, or both, can be

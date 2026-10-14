@@ -97,31 +97,31 @@ export default function ProjectsPageHero({
               />
             )}
 
-            {/* THE FADE, only under copy (client, Oct 2026): the same ink
-                fade as the home hero, in from the left and gone by half the
-                width — see .hero-fade. It replaced the glass plate. An
-                image-only slide gets none, so a picture with nothing on it is
-                still shown exactly as shot, and a text-only slide is already
-                on ink. */}
-            {(slide.image || slide.imageMobile) && (slide.heading || slide.body) && (
+            {/* THE FADE, on every image slide (client, Oct 2026): the same
+                ink fade as the home hero, in from the left and gone by half
+                the width — see .hero-fade. It replaced the glass plate. It
+                runs whether or not the slide carries copy: the client wants
+                the two heroes to match, and an image-only slide without it
+                read as the fade missing. A text-only slide is already on ink,
+                so it gets none. */}
+            {(slide.image || slide.imageMobile) && (
               <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0" />
             )}
 
-            {/* The copy sits where the home hero's does: along the foot below
-                lg, on the left and centred in the height from lg, in a column
-                capped so it ends inside the fade. The bottom padding below lg
-                clears the slide dots. */}
+            {/* The copy sits where the home hero's does: bottom-left at every
+                width, in a column capped so it ends inside the fade. The
+                bottom padding clears the slide dots. */}
             {(slide.heading || slide.body) && (
-              <div className="absolute inset-0 flex items-end lg:items-center">
-                <div className="container-edge w-full pb-16 sm:pb-20 lg:pb-0 lg:pt-[var(--nav-h)]">
-                  <div className="max-w-xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] lg:max-w-[min(34rem,36vw)]">
+              <div className="absolute inset-0 flex items-end">
+                <div className="container-edge w-full pb-16 sm:pb-20">
+                  <div className="max-w-xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] md:max-w-[min(34rem,40vw)] lg:max-w-[min(34rem,36vw)]">
                     {slide.heading && (
-                      <h1 className="font-display text-[clamp(2.2rem,5.5vw,5rem)] leading-[1.12] text-bone lg:text-[clamp(2.5rem,4.2vw,3.8rem)]">
+                      <h1 className="font-display text-[clamp(2.2rem,5.5vw,5rem)] leading-[1.12] text-bone md:text-[clamp(2rem,4.2vw,3.8rem)]">
                         {slide.heading}
                       </h1>
                     )}
                     {slide.body && (
-                      <p className={`max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg lg:max-w-[min(26rem,28vw)] text-pretty ${slide.heading ? "mt-6" : ""}`}>
+                      <p className={`max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg md:max-w-[min(26rem,34vw)] lg:max-w-[min(26rem,28vw)] text-pretty ${slide.heading ? "mt-6" : ""}`}>
                         {slide.body}
                       </p>
                     )}

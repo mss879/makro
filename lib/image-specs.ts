@@ -63,7 +63,7 @@ export const IMAGE_SPECS = {
     minimum: "2560 × 1440",
     aspect: "16:9 landscape",
     crops:
-      "Full screen, so it is cropped to the visitor's window shape. If the slide carries a heading, it sits on the left over a fade that is gone by the middle — keep the subject in the centre or right half.",
+      "Full screen, so it is cropped to the visitor's window shape. A dark fade comes in from the left and is gone by the middle, and any heading sits at the bottom left over it — keep the subject in the centre or right half.",
     renderedBy: "components/projects/ProjectsPageHero.tsx",
   },
 
@@ -125,7 +125,7 @@ export const IMAGE_SPECS = {
     minimum: "2560 × 1440",
     aspect: "16:9 landscape",
     crops:
-      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way it fills the whole screen, with the headline on the left over a fade that is gone by the middle — so keep the subject in the centre or right half, and expect the top and bottom to be cropped on wide screens.",
+      "With a video, this is its first frame — shown the instant the page opens, while the video loads — and it is filled in for you when you upload the video, so nothing jumps when playback starts. With no video, this image is the hero. Either way it fills the whole screen, with the headline at the bottom left over a fade that is gone by the middle — so keep the subject in the centre or right half, and expect the top and bottom to be cropped on wide screens.",
     renderedBy: "components/home/Hero.tsx",
   },
 
@@ -145,7 +145,7 @@ export const IMAGE_SPECS = {
     minimum: "1280 × 720",
     aspect: "16:9 landscape",
     crops:
-      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. It fills the whole screen, with the headline on the left over a fade that is gone by the middle — so keep the subject in the centre or right half.",
+      "An MP4 (H.264) exported for the web, with no sound track, 10–20 seconds that loop cleanly. Keep it under about 10 MB: every visitor downloads it before the hero starts to move. It fills the whole screen, with the headline at the bottom left over a fade that is gone by the middle — so keep the subject in the centre or right half.",
     renderedBy: "components/home/Hero.tsx",
   },
 
