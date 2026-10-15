@@ -22,7 +22,15 @@ import { useEffect, useRef, useState } from "react";
  * throws, reveals immediately; the parked state itself only exists while the
  * `.anim` class is on <html>, which only an inline script puts there.
  */
-export function useReveal<T extends HTMLElement>() {
+/**
+ * `rootMargin` defaults to revealing a little before the element's top edge
+ * clears the bottom 12% of the screen. A heading that is ABOVE THE FOLD but
+ * sits inside that bottom 12% on load — the project hero's name on a phone,
+ * low in the band under the picture — would never cross that line without a
+ * scroll, and stay parked and invisible; such a caller passes "0px" so any
+ * pixel on screen counts.
+ */
+export function useReveal<T extends HTMLElement>(rootMargin = "0px 0px -12% 0px") {
   const ref = useRef<T>(null);
   const [revealed, setRevealed] = useState(false);
 
@@ -42,7 +50,7 @@ export function useReveal<T extends HTMLElement>() {
         // A little before the element's top edge arrives, so the transition is
         // already under way by the time it is properly in view rather than
         // starting the instant it appears.
-        { rootMargin: "0px 0px -12% 0px" }
+        { rootMargin }
       );
       observer.observe(el);
     } catch {
@@ -59,7 +67,7 @@ export function useReveal<T extends HTMLElement>() {
     }
 
     return () => observer.disconnect();
-  }, [revealed]);
+  }, [revealed, rootMargin]);
 
   return { ref, revealed };
 }

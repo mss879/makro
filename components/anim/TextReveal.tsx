@@ -9,6 +9,8 @@ type Props = {
   delay?: number;
   stagger?: number;
   start?: string;
+  /** Passed to useReveal — see there. Leave unset for the usual trigger line. */
+  rootMargin?: string;
 };
 
 /**
@@ -46,8 +48,9 @@ export default function TextReveal({
   className,
   as = "h2",
   delay = 0,
+  rootMargin,
 }: Props) {
-  const { ref, revealed } = useReveal<HTMLElement>();
+  const { ref, revealed } = useReveal<HTMLElement>(rootMargin);
 
   const words = text.split(" ");
 
