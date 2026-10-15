@@ -79,8 +79,7 @@ export default function ProjectsPageHero({
           >
             {/* The image, as uploaded: no colour grade (client, Aug 2026 —
                 nothing added over project imagery). The one exception is the
-                fade below, which the client asked for in Oct 2026 and which
-                only runs under copy. */}
+                fade below, from md up only. */}
             {(slide.image || slide.imageMobile) && (
               <ArtDirectedImage
                 desktop={slide.image}
@@ -97,37 +96,66 @@ export default function ProjectsPageHero({
               />
             )}
 
-            {/* THE FADE, on every image slide (client, Oct 2026): the same
-                ink fade as the home hero, in from the left and gone by half
-                the width — see .hero-fade. It replaced the glass plate. It
-                runs whether or not the slide carries copy: the client wants
-                the two heroes to match, and an image-only slide without it
-                read as the fade missing. A text-only slide is already on ink,
-                so it gets none. */}
+            {/* THE FADE, md and up, on every image slide (client, Oct 2026):
+                the same ink fade as the home hero, in from the left and gone
+                by half the width — see .hero-fade. It runs whether or not the
+                slide carries copy: the client wants the two heroes to match,
+                and an image-only slide without it read as the fade missing. A
+                text-only slide is already on ink, so it gets none. Phones keep
+                the slide exactly as it was — no fade (client: the change is
+                for desktop and medium screens only). */}
             {(slide.image || slide.imageMobile) && (
-              <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0" />
+              <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0 hidden md:block" />
             )}
 
-            {/* The copy sits where the home hero's does: bottom-left at every
-                width, in a column capped so it ends inside the fade. The
-                bottom padding clears the slide dots. */}
+            {/* THE COPY, TWICE — one for phones, one from md, each hidden at
+                the other's widths. The phone keeps the glass plate it always
+                had (`.hero-plate`, shared with every other hero); from md the
+                copy sits bottom-left over the fade with no plate. Two blocks
+                rather than one with responsive classes because the plate is a
+                hand-written class in globals.css, and those take no `md:`
+                variant. display:none keeps the hidden one out of the
+                accessibility tree, so a screen reader still meets one h1. */}
             {(slide.heading || slide.body) && (
-              <div className="absolute inset-0 flex items-end">
-                <div className="container-edge w-full pb-16 sm:pb-20">
-                  <div className="max-w-xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] md:max-w-[min(34rem,40vw)] lg:max-w-[min(34rem,36vw)]">
-                    {slide.heading && (
-                      <h1 className="font-display text-[clamp(2.2rem,5.5vw,5rem)] leading-[1.12] text-bone md:text-[clamp(2rem,4.2vw,3.8rem)]">
-                        {slide.heading}
-                      </h1>
-                    )}
-                    {slide.body && (
-                      <p className={`max-w-md font-body text-base leading-relaxed text-bone/85 sm:text-lg md:max-w-[min(26rem,34vw)] lg:max-w-[min(26rem,28vw)] text-pretty ${slide.heading ? "mt-6" : ""}`}>
-                        {slide.body}
-                      </p>
-                    )}
+              <>
+                {/* Phones — exactly as before Oct 2026. */}
+                <div className="absolute inset-x-0 bottom-0 [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] md:hidden">
+                  <div className="hero-plate-anchor">
+                    <div className="hero-plate w-fit max-w-3xl">
+                      {slide.heading && (
+                        <h1 className="font-display display-lg text-bone">
+                          {slide.heading}
+                        </h1>
+                      )}
+                      {slide.body && (
+                        <p className="mt-6 max-w-xl font-body text-base leading-relaxed text-bone/80 sm:text-lg">
+                          {slide.body}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+
+                {/* md and up — where the home hero's copy is: bottom-left, in
+                    a column capped so it ends inside the fade. The bottom
+                    padding clears the slide dots. */}
+                <div className="absolute inset-0 hidden items-end md:flex">
+                  <div className="container-edge w-full pb-20">
+                    <div className="max-w-[min(34rem,40vw)] [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] lg:max-w-[min(34rem,36vw)]">
+                      {slide.heading && (
+                        <h1 className="font-display text-[clamp(2rem,4.2vw,3.8rem)] leading-[1.12] text-bone">
+                          {slide.heading}
+                        </h1>
+                      )}
+                      {slide.body && (
+                        <p className={`max-w-[min(26rem,34vw)] text-pretty font-body text-lg leading-relaxed text-bone/85 lg:max-w-[min(26rem,28vw)] ${slide.heading ? "mt-6" : ""}`}>
+                          {slide.body}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         );

@@ -206,107 +206,142 @@ export default function Hero({ hero }: { hero: HomeHero }) {
       data-hero
       className="relative h-[100svh] bg-ink p-0 md:py-[var(--hero-inset)]"
     >
-      {/* THE PICTURE FILLS THE HERO AND THE COPY SITS ON IT (client, Oct
-          2026), over an ink fade from the left that is gone by half the width
-          — see .hero-fade. It replaced the composition where the picture sat
-          above a paper band holding the copy, which began on phones in Sep
-          2026 and went to every width; the client asked for that to go.
+      {/* TWO COMPOSITIONS, SPLIT AT md — and the phone one is not to be
+          touched (client, Oct 2026: the new hero is for desktop and medium
+          screens only; "leave the mobile view as it is").
 
-          md AND UP keeps the frame's top and bottom: --hero-inset is 4px of
-          ink above the picture and below it, closing the hero against the
-          section that follows. No side frame, as before. */}
-      <div className="relative h-full overflow-hidden">
-        {/* THE STILL. With a video it is the real first paint: it decodes
-            in a fraction of the time the loop takes, so a slow connection
-            sees the composed hero instead of a black rectangle. It is the
-            video's first frame — the admin takes it from the file on upload —
-            so nothing jumps when playback starts. With no video, it IS the
-            hero.
+          PHONES (below md): the picture on top, the copy in a paper band
+          underneath, both on screen at once — the composition signed off in
+          Sep 2026 ("the whole video to fit in a horizontal way and then the
+          text part under it"; a version where the visitor had to scroll to
+          reach the words was rejected). `flex-1` on the picture and
+          `shrink-0` on the band keep the split self-adjusting: the band is
+          exactly as tall as its type and the picture takes the rest. min-h-0
+          is what lets the picture give way — without it a flex item refuses to
+          shrink below its content and pushes the band off the screen.
 
-            It is painted UNDER the video rather than set as its `poster`, for
-            two reasons. A poster is one URL for every screen, and the phone
-            has a still of its own. And a poster is fetched raw — for an admin
-            upload, a 3840px master on a phone — where this goes through the
-            image optimiser at the size the screen needs. A <video> with no
-            poster paints nothing until its first frame decodes, so the still
-            shows through until then and the frame lands exactly over it (both
-            object-cover, same box).
+          md AND UP (Oct 2026): the picture fills the hero and the copy sits on
+          it, bottom-left, over an ink fade from the left that is gone by half
+          the width — see .hero-fade. The band is lifted out of the flow over
+          the picture and drops its paper and rules, so ONE copy element
+          serves both compositions. md+ keeps the frame's top and bottom:
+          --hero-inset is 4px of ink above and below the picture. */}
+      <div className="relative flex h-full flex-col overflow-hidden">
+        {/* The picture — every pixel the band leaves on a phone, the whole
+            hero from md. */}
+        <div className="relative min-h-0 w-full flex-1 overflow-hidden md:absolute md:inset-0">
+          {/* THE STILL. With a video it is the real first paint: it decodes
+              in a fraction of the time the loop takes, so a slow connection
+              sees the composed hero instead of a black rectangle. It is the
+              video's first frame — the admin takes it from the file on
+              upload — so nothing jumps when playback starts. With no video,
+              it IS the hero.
 
-            Decorative under a video: the video is aria-hidden and the
-            headline says what the page is. Alone, it carries the admin's alt
-            text. */}
-        {hasStill && (
-          <ArtDirectedImage
-            desktop={hero.image}
-            mobile={hero.imageMobile}
-            alt={desktopVideo ? "" : hero.alt}
-            // The LCP element on this route, video or not.
-            priority
-            sizes="100vw"
-            className={`${grade}object-cover`}
-            {...(desktopVideo ? { "aria-hidden": "true" } : { "data-hero-img": "" })}
-          />
-        )}
+              It is painted UNDER the video rather than set as its `poster`,
+              for two reasons. A poster is one URL for every screen, and the
+              phone has a still of its own. And a poster is fetched raw — for
+              an admin upload, a 3840px master on a phone — where this goes
+              through the image optimiser at the size the screen needs. A
+              <video> with no poster paints nothing until its first frame
+              decodes, so the still shows through until then and the frame
+              lands exactly over it (both object-cover, same box).
 
-        {/* THE VIDEO, over its still. The phone's file is chosen by `media` on
-            its <source> — the one way a <video> picks a file BEFORE
-            downloading one; two elements with `hidden md:block` would fetch
-            both. Source order is the fallback: a browser that ignores `media`
-            on video sources (Chrome and Firefox before 120) plays the first
-            one it can, which is the desktop file — exactly what every phone
-            got before the phone video existed.
+              Decorative under a video: the video is aria-hidden and the
+              headline says what the page is. Alone, it carries the admin's
+              alt text. */}
+          {hasStill && (
+            <ArtDirectedImage
+              desktop={hero.image}
+              mobile={hero.imageMobile}
+              alt={desktopVideo ? "" : hero.alt}
+              // The LCP element on this route, video or not.
+              priority
+              sizes="100vw"
+              className={`${grade}object-cover`}
+              {...(desktopVideo ? { "aria-hidden": "true" } : { "data-hero-img": "" })}
+            />
+          )}
 
-            Keyed on the files because a <video> does not re-run source
-            selection when its <source> children change: without the key a
-            refreshed page would keep looping the old video. */}
-        {desktopVideo && (
-          <video
-            key={videoKey}
-            data-hero-img
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            className={`${grade}absolute inset-0 h-full w-full object-cover`}
-          >
-            {mobileVideo && mobileVideo !== desktopVideo ? (
-              <>
-                <source media="(min-width: 768px)" src={desktopVideo} type={videoType(desktopVideo)} />
-                <source src={mobileVideo} type={videoType(mobileVideo)} />
-              </>
-            ) : (
-              <source src={desktopVideo} type={videoType(desktopVideo)} />
-            )}
-          </video>
-        )}
+          {/* THE VIDEO, over its still. The phone's file is chosen by `media`
+              on its <source> — the one way a <video> picks a file BEFORE
+              downloading one; two elements with `hidden md:block` would fetch
+              both. Source order is the fallback: a browser that ignores
+              `media` on video sources (Chrome and Firefox before 120) plays
+              the first one it can, which is the desktop file — exactly what
+              every phone got before the phone video existed.
 
-        {/* The fade. From md it comes in from the left and is gone by half
-            the width; on phones it rises from the foot instead, because there
-            the copy runs nearly edge to edge. Its own layer, never baked into
-            the picture: the admin's upload is shown as shot everywhere the
-            fade has run out. */}
-        <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0" />
+              Keyed on the files because a <video> does not re-run source
+              selection when its <source> children change: without the key a
+              refreshed page would keep looping the old video. */}
+          {desktopVideo && (
+            <video
+              key={videoKey}
+              data-hero-img
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              className={`${grade}absolute inset-0 h-full w-full object-cover`}
+            >
+              {mobileVideo && mobileVideo !== desktopVideo ? (
+                <>
+                  <source media="(min-width: 768px)" src={desktopVideo} type={videoType(desktopVideo)} />
+                  <source src={mobileVideo} type={videoType(mobileVideo)} />
+                </>
+              ) : (
+                <source src={desktopVideo} type={videoType(desktopVideo)} />
+              )}
+            </video>
+          )}
 
-        {/* THE COPY — BOTTOM-LEFT AT EVERY WIDTH (client, Oct 2026: "the
-            hero elements on the bottom left"). It sat centred in the height
-            on desktop for a day and was moved down. lg:pb-16 matches the
-            distance the copy kept from the foot of the frame when it last
-            sat on the picture.
+          {/* The fade, md and up only. On a phone the copy is not on the
+              picture, so the picture is shown exactly as shot. Its own layer,
+              never baked into the picture. */}
+          <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0 hidden md:block" />
+        </div>
 
-            container-edge lines it up with the page gutter, every section
-            below and the navbar. From md the column is capped (40vw on
-            tablets, 36vw from lg, never past 34rem) so the copy ends inside
-            the fade, and the headline's md size is set to the same proportion
-            so its longest line still fits the column at 768.
+        {/* THE BAND on a phone; from md, the layer that puts the copy over the
+            picture.
 
-            The soft glow is the one the /projects hero has always used. It is
-            not an outline (the client turned one down in Sep 2026); it only
-            keeps glyph edges clean over a bright patch of picture. */}
-        <div className="absolute inset-0 flex items-end">
-          <div className="container-edge w-full pb-10 sm:pb-14 lg:pb-16">
-            <div className="flex max-w-xl flex-col items-start gap-4 text-left [text-shadow:0_2px_20px_rgba(5,2,3,0.55)] sm:gap-6 md:max-w-[min(34rem,40vw)] lg:max-w-[min(34rem,36vw)]">
+            On a phone it is --color-paper, the same off-white grey every
+            light section stands on (client, Sep 2026 — "the off grey
+            background colour ... instead of the rose gold"), between 3px
+            SOLID ink rules top and bottom. The rules went 1px → 2px → 3px over
+            three client notes; they were translucent first, and each time the
+            client saw the bottom rule but not the top one, because a
+            translucent line over the foot of a dark picture is nothing at
+            all. No frame on a phone: the band is edge to edge, exactly as wide
+            as the section under it ("there's a gap on the left and right
+            side").
+
+            From md it covers the hero, transparent and unruled, and seats the
+            copy at its foot. */}
+        <div className="relative shrink-0 border-y-[3px] border-ink bg-paper md:absolute md:inset-0 md:flex md:items-end md:border-0 md:bg-transparent">
+          {/* container-edge lines the copy up with the page gutter, every
+              section below and the navbar.
+
+              Phones: 20px top / 24px bottom, taken down over two client notes
+              in Sep 2026 ("reduce the padding on the container from the top
+              and bottom", then "reduce it a bit"). Asymmetric on purpose: the
+              top edge meets the picture, where the eye wants the type close.
+
+              md and up: off the foot of the frame by 56px, 64px from lg. */}
+          <div className="container-edge w-full pb-6 pt-5 md:pb-14 md:pt-0 lg:pb-16">
+            {/* CENTRED ON A PHONE, LEFT-ALIGNED FROM md.
+
+                On a phone the copy is a centred block under the picture —
+                w-full is what makes `text-center` mean anything.
+
+                From md the column is capped (40vw on tablets, 36vw from lg,
+                never past 34rem) so the copy ends inside the fade, and the
+                headline's md size is set to the same proportion so its
+                longest line still fits the column at 768. The soft glow is the
+                one the /projects hero has always used — not an outline (the
+                client turned one down in Sep 2026); it only keeps glyph edges
+                clean over a bright patch of picture. */}
+            <div className="flex w-full flex-col items-center gap-4 text-center sm:gap-6 md:max-w-[min(34rem,40vw)] md:items-start md:text-left md:[text-shadow:0_2px_20px_rgba(5,2,3,0.55)] lg:max-w-[min(34rem,36vw)]">
               {/* One reveal-mask per line, and the lines are the admin's: the
                   break between them is chosen in the Home Hero screen, one
                   line per row, rather than left to wherever the browser
@@ -315,11 +350,11 @@ export default function Hero({ hero }: { hero: HomeHero }) {
                   rows. The index is a safe key — the list is only ever
                   replaced whole, never reordered in place.
 
-                  On phones: display-fluid's clamp a step down (client, Aug
-                  2026 — "reduce the heading font a bit"), min 1.75rem. From
-                  md it scales with the column it sits in, so the line never
-                  outgrows the fade. */}
-              <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-bone md:text-[clamp(2rem,4.2vw,3.8rem)]">
+                  Phones: display-fluid's clamp a step down (client, Aug 2026
+                  — "reduce the heading font a bit"), min 1.75rem, in ink on
+                  the paper band. From md: bone on the picture, sized to the
+                  column. */}
+              <h1 className="flex flex-col font-display text-[clamp(1.75rem,6.4vw,3.8rem)] leading-[1.05] text-ink md:text-[clamp(2rem,4.2vw,3.8rem)] md:text-bone">
                 {hero.headingLines.map((line, i) => (
                   <span key={i} className="reveal-mask">
                     <span data-h-word className="inline-block">
@@ -332,7 +367,7 @@ export default function Hero({ hero }: { hero: HomeHero }) {
               {hero.body && (
                 <p
                   data-h-fade
-                  className="max-w-md font-body text-sm leading-relaxed text-bone/85 sm:text-base md:max-w-[min(26rem,34vw)] lg:max-w-[min(26rem,28vw)] lg:text-lg text-pretty"
+                  className="max-w-md font-body text-sm leading-relaxed text-ink/80 sm:text-base md:max-w-[min(26rem,34vw)] md:text-bone/85 md:text-pretty lg:max-w-[min(26rem,28vw)] lg:text-lg"
                 >
                   {hero.body}
                 </p>
@@ -343,24 +378,28 @@ export default function Hero({ hero }: { hero: HomeHero }) {
 
                   SIDE BY SIDE ON A PHONE (client, Aug 2026 — "smaller on
                   mobile and placed next to each other"), at px-3 py-3 on
-                  0.78rem type. whitespace-nowrap keeps each button one line
-                  tall: without it a squeezed row keeps its shape and the WORDS
-                  wrap instead, trading two short buttons for two tall ones.
+                  0.78rem type, ink on the paper band. whitespace-nowrap keeps
+                  each button one line tall: without it a squeezed row keeps
+                  its shape and the WORDS wrap instead.
 
                   THE ROW WRAPS AT EVERY WIDTH. The labels are the client's to
                   change in the admin, and a pinned row with a longer label
-                  would push the second button off the side of the screen —
-                  or, from md, out past the fade.
+                  would push the second button off the side of the screen — or,
+                  from md, out past the fade.
 
-                  Rose and a light outline: the pair the hero had the last time
-                  its copy sat on the picture. Either button, or both, can be
-                  switched off by clearing its label. */}
+                  From md, over the picture: rose and a light outline, the pair
+                  the hero had the last time its copy sat on the picture.
+                  Either button, or both, can be switched off by clearing its
+                  label. */}
               {(hero.primary || hero.secondary) && (
-                <div data-h-fade className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div
+                  data-h-fade
+                  className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:justify-start"
+                >
                   {hero.primary && (
                     <HeroLink
                       href={hero.primary.href}
-                      className="group inline-flex items-center gap-2 whitespace-nowrap bg-rose px-3 py-3 font-body text-[0.78rem] text-ink [text-shadow:none] transition-colors hover:bg-rose-soft sm:gap-3 sm:px-7 sm:py-4 sm:text-base"
+                      className="group inline-flex items-center gap-2 whitespace-nowrap bg-ink px-3 py-3 font-body text-[0.78rem] text-bone [text-shadow:none] transition-colors hover:bg-ink-600 sm:gap-3 sm:px-7 sm:py-4 sm:text-base md:bg-rose md:text-ink md:hover:bg-rose-soft"
                     >
                       {hero.primary.label}
                       {/* The arrow is the first thing to go: it is decoration
@@ -375,7 +414,7 @@ export default function Hero({ hero }: { hero: HomeHero }) {
                   {hero.secondary && (
                     <HeroLink
                       href={hero.secondary.href}
-                      className="inline-flex items-center gap-2 whitespace-nowrap border border-bone/55 px-3 py-3 font-body text-[0.78rem] text-bone [text-shadow:none] transition-colors hover:border-rose hover:text-rose sm:gap-3 sm:px-7 sm:py-4 sm:text-base"
+                      className="inline-flex items-center gap-2 whitespace-nowrap border border-ink/30 px-3 py-3 font-body text-[0.78rem] text-ink [text-shadow:none] transition-colors hover:border-ink sm:gap-3 sm:px-7 sm:py-4 sm:text-base md:border-bone/55 md:text-bone md:hover:border-rose md:hover:text-rose"
                     >
                       {hero.secondary.label}
                     </HeroLink>

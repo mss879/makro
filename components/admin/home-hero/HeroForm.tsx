@@ -146,7 +146,7 @@ export default function HeroForm({ initial }: { initial: HeroFormValues }) {
         <div className="space-y-6 border-t border-panel-line pt-6">
           <BlockLabel
             title="Phones — portrait"
-            hint="Optional. On a phone the picture fills the screen, a tall 9:16, so a landscape file loses most of its width there."
+            hint="Optional. On a phone the picture sits in the frame above the headline, roughly 4:5, so a landscape file loses most of its width there."
           />
 
           <Media label="Video">

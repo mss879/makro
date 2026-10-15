@@ -62,13 +62,13 @@ export default function ProjectHero({ project }: { project: Project }) {
           if it were its own, including in social previews. An empty frame is
           honest; a borrowed one is not.
 
-          NO SCRIM over the photograph (client, Aug 2026). There used to be a
-          full-bleed `from-ink via-ink/50 to-ink/30` gradient here, carrying the
-          headline's legibility across the whole plate — which meant darkening
-          the entire image to serve one corner of it. Legibility now lives in
-          the copy's own text-shadow (see below), so the render is shown as
-          shot. On the imageless path this leaves the section on the body's
-          ink ground, which white copy reads against just as well. */}
+          NO FULL-BLEED SCRIM over the photograph (client, Aug 2026): a
+          `from-ink via-ink/50 to-ink/30` gradient used to darken the whole
+          plate to serve one corner of it. What there is from md (Oct 2026) is
+          the hero fade below — the home hero's, in from the left and gone by
+          half the width. On a phone the render is shown as shot. On the
+          imageless path the section sits on the body's ink ground, which
+          white copy reads against just as well. */}
       <div className="absolute inset-0">
         {project.heroImage && (
           <ArtDirectedImage
@@ -99,24 +99,26 @@ export default function ProjectHero({ project }: { project: Project }) {
         )}
       </div>
 
-      <div className="hero-plate-anchor relative w-full">
-        {/* NO PLATE behind the copy either (client, Aug 2026). A black
-            glassmorphism panel used to sit here — the navbar's material,
-            borrowed so the two frosted surfaces read as one system down the
-            page. The client's objection to it is the same one that removed
-            the full-bleed gradient above: it is still an overlay on the
-            render, just confined to a rectangle instead of covering the whole
-            plate. Nothing darkens the art now, on this development or on any
-            added later — the hero is one shared component, so there is no
-            per-project setting for a future project to be missing.
+      {/* THE FADE, md and up (client, Oct 2026: the same fade as the home
+          hero, "no containers"). A sibling of the image box, not inside it, so
+          the cover's scroll-scrubbed zoom does not stretch the fade with it.
+          Only with art: on the imageless ink ground there is nothing to fade.
+          Phones keep the hero as it was — see .hero-open-md. */}
+      {project.heroImage && (
+        <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0 hidden md:block" />
+      )}
 
-            Legibility moves onto the copy itself, as a text-shadow. A halo
-            tight to the glyphs does not read as a shape over the photograph
-            the way a filled box does, and it is the only guard left for art
-            that is uploaded from the admin: a bright daytime render would
-            otherwise put white type on a pale sky with nothing behind it, and
-            nobody checks contrast at upload time. */}
-        <div className="hero-plate w-fit max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
+      <div className="hero-plate-anchor hero-open-md relative w-full">
+        {/* THE PLATE ON A PHONE, NO CONTAINER FROM md (client, Oct 2026: "we
+            don't want the containers" — the home hero's fade with the text at
+            the bottom). `hero-open-md` strips the glass box from md up and
+            caps the column so the copy ends inside the fade; below md the
+            plate is exactly what it was. See app/globals.css.
+
+            The text-shadow is a halo tight to the glyphs, not a shape over the
+            photograph, and it is still worth having over the fade: art comes
+            from the admin, and nobody checks contrast at upload time. */}
+        <div className="hero-plate hero-open-md w-fit max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
           <div className="flex flex-wrap items-center gap-3">
             {/* The chips keep their ink fill and hairline border — they are
                 labels rather than a panel, and at this size the fill is what
@@ -142,7 +144,7 @@ export default function ProjectHero({ project }: { project: Project }) {
             className="mt-6 font-display display-fluid text-bone"
             delay={0.1}
           />
-          <p className="mt-6 font-body text-xl text-rose-soft">
+          <p className="mt-6 font-body text-xl text-rose-soft md:text-pretty">
             {project.tagline}
           </p>
         </div>

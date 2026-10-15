@@ -565,88 +565,99 @@
   }
 
   /* ---------- Hero fade ----------
-     The home hero and the /projects hero (client, Oct 2026): the picture runs
-     full-bleed, and an ink fade comes in from the LEFT, lightening as it goes
-     and gone by HALF the width. The copy sits on the dark side; the other half
-     of the picture is untouched. It replaced the paper band under the picture.
+     The home hero and the /projects hero from md (768px) up — tablets,
+     laptops and desktops (client, Oct 2026). The picture runs full-bleed and
+     an ink fade comes in from the LEFT, lightening as it goes and gone by
+     HALF the width; the copy sits bottom-left on the dark side, the other
+     half of the picture is untouched.
 
-     IT LIGHTENS STEADILY FROM THE VERY EDGE (client, Oct 2026: "it starts
-     darker and then it gets lighter very consistently"). An earlier cut held
-     full strength for the first eighth of the width and then fell away, and
-     that held block read as a patch on the left. The stops now trace
-     (1 - t)^1.2 — darkest at the edge, nearly linear all the way across, so
-     every step lightens by about as much as the last — with 21 stops so the
-     ramp has no visible facets. The small exponent is what flattens the
-     slope to nothing at the far end: a straight line would have a corner
-     there, and the eye finds that corner as a vertical line down the picture.
+     PHONES DO NOT GET IT. The client's brief was desktop and medium screens
+     only, with the phone left exactly as it was: the home hero's picture over
+     a paper band, the /projects copy on its glass plate. The components show
+     this layer `hidden md:block`; there is no phone variant here on purpose.
 
-     FROM md (768px) UP IT COMES FROM THE LEFT — tablets and small laptops
-     included (client: "make sure it's also there in medium size screens").
-     BELOW md THE SAME FADE RISES FROM THE BOTTOM: half a phone's width cannot
-     hold the copy, so the fade comes up behind it instead, gone by 62% of the
-     height, which leaves the top of the picture clear.
-
-     Strength 0.86 from the side, 0.84 from the foot — a step up from 0.8
-     (client: "slightly stronger ... but not too strong"). It stays below 0.9
-     on purpose: at the very edge the ramp is at full strength, and past about
-     0.9 that first strip stops reading as shade and starts reading as black.
+     IT LIGHTENS STEADILY FROM THE VERY EDGE (client: "it starts darker and
+     then it gets lighter very consistently"). A cut that held full strength
+     for the first eighth of the width read as a patch on the left. The stops
+     trace (1 - t)^1.2 — darkest at the edge, nearly linear all the way
+     across — with 21 stops so the ramp has no visible facets. The small
+     exponent flattens the slope to nothing at the far end: a straight line
+     would have a corner there, and the eye finds that corner as a vertical
+     line down the picture.
 
      --hero-fade-strength is the darkness at the edge and the one dial: every
-     stop is a fraction of it. */
+     stop is a fraction of it. 0.86 is a step up from the first cut's 0.8
+     (client: "slightly stronger ... but not too strong"); past about 0.9 the
+     strip at the edge stops reading as shade and starts reading as black. */
   .hero-fade {
-    --hero-fade-strength: 0.84;
+    --hero-fade-strength: 0.86;
     background: linear-gradient(
-      to top,
+      to right,
       rgb(5 2 3 / calc(var(--hero-fade-strength) * 1)) 0%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.94)) 3.1%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.881)) 6.2%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.823)) 9.3%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.765)) 12.4%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.708)) 15.5%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.652)) 18.6%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.596)) 21.7%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.542)) 24.8%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.488)) 27.9%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.435)) 31%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.384)) 34.1%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.333)) 37.2%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.284)) 40.3%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.236)) 43.4%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.189)) 46.5%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.145)) 49.6%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.103)) 52.7%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.063)) 55.8%,
-      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.027)) 58.9%,
-      rgb(5 2 3 / 0) 62%
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.94)) 2.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.881)) 5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.823)) 7.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.765)) 10%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.708)) 12.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.652)) 15%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.596)) 17.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.542)) 20%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.488)) 22.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.435)) 25%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.384)) 27.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.333)) 30%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.284)) 32.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.236)) 35%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.189)) 37.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.145)) 40%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.103)) 42.5%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.063)) 45%,
+      rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.027)) 47.5%,
+      rgb(5 2 3 / 0) 50%
     );
   }
+
+  /* ---------- Hero plate, opened from md ----------
+     The project detail hero (client, Oct 2026: "no containers" — the same
+     fade and bottom-left copy as the home hero). From md the glass plate and
+     its anchor shed the box — no fill, border, blur, shadow or padding — and
+     the copy sits on .hero-fade instead. PHONES KEEP THE PLATE exactly as it
+     was: the client's brief for this redesign is desktop and medium screens
+     only, so every rule here is inside a min-width query.
+
+     A modifier on the shared classes rather than a second copy of the markup:
+     .hero-plate is hand-written and takes no `md:` variant, and this keeps the
+     page to one h1. Compound selectors so they outrank both the plate's own
+     md padding and the Tailwind max-w on the element.
+
+     The anchor's side padding is container-edge's gutter, repeated because
+     that class takes no `md:` variant either — keep the two in step. The
+     column cap and the md headline size keep the copy inside the fade, which
+     is gone by half the width: display-fluid on its own reaches 4.6rem by
+     ~920px, wider than half a tablet. */
   @media (min-width: 768px) {
-    .hero-fade {
-      --hero-fade-strength: 0.86;
-      background: linear-gradient(
-        to right,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 1)) 0%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.94)) 2.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.881)) 5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.823)) 7.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.765)) 10%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.708)) 12.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.652)) 15%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.596)) 17.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.542)) 20%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.488)) 22.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.435)) 25%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.384)) 27.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.333)) 30%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.284)) 32.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.236)) 35%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.189)) 37.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.145)) 40%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.103)) 42.5%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.063)) 45%,
-        rgb(5 2 3 / calc(var(--hero-fade-strength) * 0.027)) 47.5%,
-        rgb(5 2 3 / 0) 50%
-      );
+    .hero-plate-anchor.hero-open-md {
+      padding: 0 clamp(1.25rem, 5vw, 6.5rem) 3.5rem;
+    }
+    .hero-plate.hero-open-md {
+      border: 0;
+      background: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      box-shadow: none;
+      padding: 0;
+      max-width: min(38rem, 44vw);
+    }
+    .hero-plate.hero-open-md .display-fluid {
+      font-size: clamp(2.5rem, 5vw, 4.6rem);
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero-plate-anchor.hero-open-md {
+      padding-bottom: 4rem;
+    }
+    .hero-plate.hero-open-md {
+      max-width: min(38rem, 40vw);
     }
   }
 
