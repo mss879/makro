@@ -64,9 +64,9 @@ export default function ProjectHero({ project }: { project: Project }) {
 
           NO FULL-BLEED SCRIM over the photograph (client, Aug 2026): a
           `from-ink via-ink/50 to-ink/30` gradient used to darken the whole
-          plate to serve one corner of it. What there is from md (Oct 2026) is
-          the hero fade below — the home hero's, in from the left and gone by
-          half the width. On a phone the render is shown as shot. On the
+          plate to serve one corner of it. What there is (Oct 2026) is the
+          hero fade below — from md the home hero's, in from the left and gone
+          by half the width; on a phone the same ramp from the foot. On the
           imageless path the section sits on the body's ink ground, which
           white copy reads against just as well. */}
       <div className="absolute inset-0">
@@ -99,26 +99,30 @@ export default function ProjectHero({ project }: { project: Project }) {
         )}
       </div>
 
-      {/* THE FADE, md and up (client, Oct 2026: the same fade as the home
-          hero, "no containers"). A sibling of the image box, not inside it, so
+      {/* THE FADE (client, Oct 2026: the same fade as the home hero, "no
+          containers"). From md it comes in from the left (.hero-fade); on a
+          phone, where the copy runs most of the way across, it rises from the
+          foot (.hero-fade-up). Siblings of the image box, not inside it, so
           the cover's scroll-scrubbed zoom does not stretch the fade with it.
-          Only with art: on the imageless ink ground there is nothing to fade.
-          Phones keep the hero as it was — see .hero-open-md. */}
+          Only with art: on the imageless ink ground there is nothing to fade. */}
       {project.heroImage && (
-        <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0 hidden md:block" />
+        <>
+          <div aria-hidden="true" className="hero-fade-up pointer-events-none absolute inset-0 md:hidden" />
+          <div aria-hidden="true" className="hero-fade pointer-events-none absolute inset-0 hidden md:block" />
+        </>
       )}
 
-      <div className="hero-plate-anchor hero-open-md relative w-full">
-        {/* THE PLATE ON A PHONE, NO CONTAINER FROM md (client, Oct 2026: "we
-            don't want the containers" — the home hero's fade with the text at
-            the bottom). `hero-open-md` strips the glass box from md up and
-            caps the column so the copy ends inside the fade; below md the
-            plate is exactly what it was. See app/globals.css.
+      <div className="hero-plate-anchor hero-open relative w-full">
+        {/* NO CONTAINER, AT EVERY WIDTH (client, Oct 2026: "we don't want
+            the containers" — the home hero's fade with the text at the
+            bottom; phones included, on this hero only). `hero-open` strips the
+            glass box and, from md, caps the column so the copy ends inside
+            the side fade. See app/globals.css.
 
             The text-shadow is a halo tight to the glyphs, not a shape over the
             photograph, and it is still worth having over the fade: art comes
             from the admin, and nobody checks contrast at upload time. */}
-        <div className="hero-plate hero-open-md w-fit max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
+        <div className="hero-plate hero-open w-fit max-w-3xl [text-shadow:0_2px_20px_rgba(5,2,3,0.55)]">
           <div className="flex flex-wrap items-center gap-3">
             {/* The chips keep their ink fill and hairline border — they are
                 labels rather than a panel, and at this size the fill is what
